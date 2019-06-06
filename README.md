@@ -1,6 +1,6 @@
 # Sooty
 
-A tool used to automate part of the role for a SOC analyst. 
+A CLI tool used to automate part of the role for a SOC analyst. 
 
 Currently:
   - Sanitises URL's to be safe to send in emails
