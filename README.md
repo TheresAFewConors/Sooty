@@ -7,3 +7,7 @@ Currently:
   - Performs reverse DNS and DNS lookups
   - Performs reputation checks from IPDB.com
   - Decodes Proofpoint URL's
+ 
+Contributors:
+
+Aaron J Copley for his code to decode ProofPoint URL's
