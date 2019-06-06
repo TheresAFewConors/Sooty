@@ -10,4 +10,4 @@ Currently:
  
 Contributors:
 
-Aaron J Copley for his code to decode ProofPoint URL's
+[Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
