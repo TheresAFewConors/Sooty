@@ -8,6 +8,6 @@ Currently:
   - Performs reputation checks from IPDB.com
   - Decodes Proofpoint URL's
  
-Contributors:
+### Contributors:
 
 [Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
