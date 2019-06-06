@@ -53,6 +53,7 @@ while int(menuChoice) == 0:
                 urlencodedurl = match.group(1)
                 htmlencodedurl = urllib.parse.unquote(urlencodedurl)
                 url = html.unescape(htmlencodedurl)
+                url = re.sub("http://", "", url)
                 print(url)
             else:
                 print('Error parsing URL')
@@ -65,6 +66,7 @@ while int(menuChoice) == 0:
                 urlencodedurl = specialencodedurl.translate(trans)
                 htmlencodedurl = urllib.parse.unquote(urlencodedurl)
                 url = html.unescape(htmlencodedurl)
+                url = re.sub("http://", "", url)
                 print("\n" + url)
             else:
                 print('Error parsing URL')
