@@ -27,7 +27,7 @@ while int(menuChoice) == 0:
     print("\n OPTION 1: Sanitise URL For emails ")
     print(" OPTION 2: Decode ProofPoint URLs ")
     print(" OPTION 3: Reputation Checker")
-    print(" OPTION 4: Reverse DNS LookUp")
+    print(" OPTION 4: DNS Tools")
     print(" OPTION 0: Exit Tool")
 
     menuChoice = input()
@@ -86,6 +86,8 @@ while int(menuChoice) == 0:
                 print('Unrecognized version in: ', rewrittenurl)
         else:
             print('No valid URL found in input: ', rewrittenurl)
+
+        menuChoice = 0
 
     if menuChoice == "3":
         print("\n --------------------------------- ")
@@ -167,6 +169,7 @@ while int(menuChoice) == 0:
 
             if dnsMenuChoice == "0":
                 menuChoice = 0
+                break
 
             menuChoice = 0
 
