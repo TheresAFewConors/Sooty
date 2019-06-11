@@ -214,8 +214,10 @@ while int(menuChoice) == 0:
                                 if value['detected'] == True:
                                     count = count + 1
                             print("VirusTotal Rank: " + str(count) + " detections found")
+                            hashMenuChoice = 0
                     except:
                         print("No Malware Detected")
+                        hashMenuChoice = 0
 
                 except:
                     print("Invalid API Key")
