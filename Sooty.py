@@ -1,23 +1,23 @@
 """
 Small Script developed to aid SOC analysts with sanitising and decoding urls, perform
 dns / reverse dns lookups and automate reputation checks from ipdb.com via webscraping
-
-Author: Connor Jackson
-
-Contribuitors: Aaron J Copley for his ProofPoint Decoder code
-    Proofpoint URL Decoder code: https://gist.github.com/aaronjcopley/65a5198bf7b35361fdd315e786be9b9d
 """
 
-import urllib.parse
+import hashlib
 import html.parser
 import re
 import socket
-from bs4 import BeautifulSoup
-import requests
-import sys
-import lxml
+import urllib.parse
 
+import requests
+from bs4 import BeautifulSoup
+
+from tkinter import *
+from tkinter import filedialog
+
+API_KEY = 'API'
 menuChoice = 0
+
 while int(menuChoice) == 0:
     print("\n --------------------------------- ")
     print("\n           S  O  O  T  Y           ")
@@ -28,6 +28,7 @@ while int(menuChoice) == 0:
     print(" OPTION 2: Decode ProofPoint URLs ")
     print(" OPTION 3: Reputation Checker")
     print(" OPTION 4: DNS Tools")
+    print(" OPTION 5: Hashing Function")
     print(" OPTION 0: Exit Tool")
 
     menuChoice = input()
@@ -35,8 +36,8 @@ while int(menuChoice) == 0:
 
     if menuChoice == "1":
         print("\n --------------------------------- ")
-        print("\n U R L   S A N I T I S E   T O O L ")
-        print("\n --------------------------------- ")
+        print(" U R L   S A N I T I S E   T O O L ")
+        print(" --------------------------------- ")
         print("Enter URL to sanitize: ")
         url = input()
         x = re.sub("\.", "[.]", url)
@@ -72,8 +73,8 @@ while int(menuChoice) == 0:
                 print('Error parsing URL')
 
         print("\n --------------------------------- ")
-        print("\n P R O O F P O I N T D E C O D E R ")
-        print("\n --------------------------------- ")
+        print(" P R O O F P O I N T D E C O D E R ")
+        print(" --------------------------------- ")
         print("Enter Proofpoint URL: ")
         rewrittenurl = input()
         match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
@@ -91,8 +92,8 @@ while int(menuChoice) == 0:
 
     if menuChoice == "3":
         print("\n --------------------------------- ")
-        print("\n R E P U T A T I O N     C H E C K ")
-        print("\n --------------------------------- ")
+        print(" R E P U T A T I O N     C H E C K ")
+        print(" --------------------------------- ")
 
         try:
             ip = input(" Enter IP: ")
@@ -141,8 +142,8 @@ while int(menuChoice) == 0:
         dnsMenuChoice = 0
         while int(dnsMenuChoice) == 0:
             print("\n --------------------------------- ")
-            print("\n R E V E R S E    D N S    T O O L ")
-            print("\n --------------------------------- ")
+            print(" R E V E R S E    D N S    T O O L ")
+            print(" --------------------------------- ")
             print(" What would you like to do? ")
             print(" OPTION 1: Reverse DNS Lookup")
             print(" OPTION 2: Get Website IP ")
@@ -173,12 +174,56 @@ while int(menuChoice) == 0:
 
             menuChoice = 0
 
+    if menuChoice == "5":
+        hashMenuChoice = 0
+        while int(hashMenuChoice) == 0:
+            print("\n --------------------------------- ")
+            print(" H A S H I N G   F U N C T I O N S ")
+            print(" --------------------------------- ")
+            print(" What would you like to do? ")
+            print(" OPTION 1: Hash a file")
+            print(" OPTION 2: Check a hash for known malicious activity")
+            print(" OPTION 0: Exit")
+            hashMenuChoice = input("")
+
+            if hashMenuChoice == "1":
+                root = Tk()
+                root.filename = filedialog.askopenfilename(initialdir="/", title="Select file")
+                hasher = hashlib.md5()
+                with open(root.filename, 'rb') as afile:
+                    buf = afile.read()
+                    hasher.update(buf)
+                print(" MD5 Hash: " + hasher.hexdigest())
+                hashMenuChoice = 0
+
+            if hashMenuChoice == "2":
+                count = 0
+                # VT Hash Checker
+                fileHash = input("Enter Hash of file: ")
+                url = 'https://www.virustotal.com/vtapi/v2/file/report'
+
+                params = {'apikey': API_KEY, 'resource': fileHash}
+                response = requests.get(url, params=params)
+
+                try:    # EAFP
+                    result = response.json()
+                    try:
+                        if result['positives'] != 0:
+                            print("Malware Detection")
+                            for key, value in result['scans'].items():
+                                if value['detected'] == True:
+                                    count = count + 1
+                            print("VirusTotal Rank: " + str(count) + " detections found")
+                    except:
+                        print("No Malware Detected")
+
+                except:
+                    print("Invalid API Key")
+                    hashMenuChoice = 0
+
+            if hashMenuChoice == "0":
+                menuChoice = 0
+                break
+
     if (menuChoice == "0"):
         break
-
-
-
-
-
-
-
