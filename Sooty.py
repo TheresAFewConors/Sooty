@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import filedialog
 
-API_KEY = 'API'
+API_KEY = 'Enter API key here'
 menuChoice = 0
 
 while int(menuChoice) == 0:
