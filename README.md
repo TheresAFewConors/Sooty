@@ -12,10 +12,10 @@
 The SOC Analysts CLI tool to automate and speed up workflow. 
 
 ### Sooty can Currently:
-  - Sanitises URL's to be safe to send in emails
-  - Performs reverse DNS and DNS lookups
-  - Performs reputation checks from [abuseIPDB.com](https://www.abuseipdb.com)
-  - Decodes Proofpoint URL's
+  - Sanitise URL's to be safe to send in emails
+  - Perform reverse DNS and DNS lookups
+  - Perform reputation checks from [abuseIPDB.com](https://www.abuseipdb.com)
+  - Decode Proofpoint URL's and  UTF-8 encoded URLS
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
  
 #### Requirements

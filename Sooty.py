@@ -8,14 +8,14 @@ import html.parser
 import re
 import socket
 import urllib.parse
-
+from urllib.parse import unquote
 import requests
-from bs4 import BeautifulSoup
 
+from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import filedialog
 
-API_KEY = 'Enter API key here'
+API_KEY = 'Enter API Key Here'
 menuChoice = 0
 
 while int(menuChoice) == 0:
@@ -25,7 +25,7 @@ while int(menuChoice) == 0:
 
     print(" What would you like to do? ")
     print("\n OPTION 1: Sanitise URL For emails ")
-    print(" OPTION 2: Decode ProofPoint URLs ")
+    print(" OPTION 2: Decoders (PP, URL) ")
     print(" OPTION 3: Reputation Checker")
     print(" OPTION 4: DNS Tools")
     print(" OPTION 5: Hashing Function")
@@ -73,20 +73,35 @@ while int(menuChoice) == 0:
                 print('Error parsing URL')
 
         print("\n --------------------------------- ")
-        print(" P R O O F P O I N T D E C O D E R ")
+        print("           D E C O D E R S        ")
         print(" --------------------------------- ")
-        print("Enter Proofpoint URL: ")
-        rewrittenurl = input()
-        match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
-        if match:
-            if match.group(1) == 'v1':
-                decodev1(rewrittenurl)
-            elif match.group(1) == 'v2':
-                decodev2(rewrittenurl)
+        print(" What would you like to do? ")
+        print(" OPTION 1: ProofPoint Decoder")
+        print(" OPTION 2: URL Decoder")
+        print(" OPTION 0: Exit")
+        urlMenuChoice = input()
+
+        if urlMenuChoice == "1":
+            rewrittenurl = input()
+            match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
+            if match:
+                if match.group(1) == 'v1':
+                    decodev1(rewrittenurl)
+                elif match.group(1) == 'v2':
+                    decodev2(rewrittenurl)
+                else:
+                    print('Unrecognized version in: ', rewrittenurl)
             else:
-                print('Unrecognized version in: ', rewrittenurl)
-        else:
-            print('No valid URL found in input: ', rewrittenurl)
+                print('No valid URL found in input: ', rewrittenurl)
+            menuChoice = 0
+
+        if urlMenuChoice == "2":
+            url = input('url: ')
+            decodedUrl = unquote(url)
+            print(decodedUrl)
+
+        if urlMenuChoice == "0":
+            menuChoice = 0
 
         menuChoice = 0
 
