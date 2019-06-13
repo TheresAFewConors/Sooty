@@ -82,7 +82,7 @@ while int(menuChoice) == 0:
         urlMenuChoice = input()
 
         if urlMenuChoice == "1":
-            rewrittenurl = input()
+            rewrittenurl = input(" Enter ProofPoint Link: ")
             match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
             if match:
                 if match.group(1) == 'v1':
@@ -96,7 +96,7 @@ while int(menuChoice) == 0:
             menuChoice = 0
 
         if urlMenuChoice == "2":
-            url = input('url: ')
+            url = input('Enter url: ')
             decodedUrl = unquote(url)
             print(decodedUrl)
 
