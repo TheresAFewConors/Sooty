@@ -25,3 +25,4 @@ The SOC Analysts CLI tool to automate and speed up workflow.
 #### Contributors:
 
  - [Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
+ - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
