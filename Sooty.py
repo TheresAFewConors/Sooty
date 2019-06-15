@@ -248,8 +248,10 @@ while int(menuChoice) == 0:
                     hasher.update(buf)
                 print(" MD5 Hash: " + hasher.hexdigest())
                 count = 0
+
                 # VT Hash Checker
                 fileHash = hasher.hexdigest()
+
                 url = 'https://www.virustotal.com/vtapi/v2/file/report'
  
                 params = {'apikey': API_KEY, 'resource': fileHash}
@@ -265,6 +267,9 @@ while int(menuChoice) == 0:
                                     count = count + 1
                             print("VirusTotal Rank: " + str(count) + " detections found")
                             hashMenuChoice = 0
+                        else:
+                            print("No malware detected")
+                            hashMenuChoice = 0
                     except:
                         print("No Malware Detected")
                         hashMenuChoice = 0
@@ -276,6 +281,8 @@ while int(menuChoice) == 0:
             if hashMenuChoice == "0":
                 menuChoice = 0
                 break
+
+        menuChoice = 0
  
     if (menuChoice == "0"):
         break
