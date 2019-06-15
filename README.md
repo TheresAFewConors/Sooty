@@ -9,7 +9,7 @@
 
 # Sooty
 
-The SOC Analysts all-in-one tool to automate and speed up workflow. 
+The SOC Analysts all-in-one CLI tool to automate and speed up workflow. 
 
 ### Sooty can Currently:
   - Sanitise URL's to be safe to send in emails
