@@ -112,44 +112,48 @@ while int(menuChoice) == 0:
  
         try:
             ip = input(" Enter IP: ")
+            ip = ip.replace(" ", "")
             url = 'https://www.abuseipdb.com/check/' + ip
             response = requests.get(url)
-            content = BeautifulSoup(response.text, 'lxml')
- 
-            links = content.findAll('b')
-            links2 = content.findAll('td')
-            links3 = content.findAll('time')
- 
-            # REGEX
-            report_count = str(links[6])
-            report_count = report_count.split('<b>')[-1]
-            report_count = report_count.split('</b>')[0]
-            abuse_conf = str(links[7])
-            abuse_conf = abuse_conf.split('<b>')[-1]
-            abuse_conf = abuse_conf.split('</b>')[0]
-            city = str(links2[5])
-            city = city.split('<td>')[-1]
-            city = city.split('</td>')[0]
-            city = re.sub(r"(?<=[a-z])\r?\n", "", city)
-            country = (str(links2[4]))
-            country = country.split('src="/img/blank.gif"/>')[-1]
-            country = country.split('</td>')[0]
-            country = re.sub(r"(?<=[a-z])\r?\n", "", country)
-            time1 = str(links3[0])
-            time1 = time1.split('</time>')[0]
-            time1 = time1.split('">')[-1]
-            time2 = str(links[10])
-            time2 = time2.split('</time>')[0]
-            time2 = time2.split('">')[-1]
- 
-            print(" Country: " + country)
-            print(" City: " + city)
-            print(" IP Reported: " + report_count + " times")
-            print(" Abuse Confidence: " + abuse_conf)
-            print(" First Reported: " + time1)
-            print(" Last Reported: " + time2)
+            if response.status_code == 200:
+                content = BeautifulSoup(response.text, 'lxml')
+
+                links = content.findAll('b')
+                links2 = content.findAll('td')
+                links3 = content.findAll('time')
+
+                # REGEX
+                report_count = str(links[6])
+                report_count = report_count.split('<b>')[-1]
+                report_count = report_count.split('</b>')[0]
+                abuse_conf = str(links[7])
+                abuse_conf = abuse_conf.split('<b>')[-1]
+                abuse_conf = abuse_conf.split('</b>')[0]
+                city = str(links2[5])
+                city = city.split('<td>')[-1]
+                city = city.split('</td>')[0]
+                city = re.sub(r"(?<=[a-z])\r?\n", "", city)
+                country = (str(links2[4]))
+                country = country.split('src="/img/blank.gif"/>')[-1]
+                country = country.split('</td>')[0]
+                country = re.sub(r"(?<=[a-z])\r?\n", "", country)
+                time1 = str(links3[0])
+                time1 = time1.split('</time>')[0]
+                time1 = time1.split('">')[-1]
+                time2 = str(links[10])
+                time2 = time2.split('</time>')[0]
+                time2 = time2.split('">')[-1]
+
+                print(" Country: " + country)
+                print(" City: " + city)
+                print(" IP Reported: " + report_count + " times")
+                print(" Abuse Confidence: " + abuse_conf)
+                print(" First Reported: " + time1)
+                print(" Last Reported: " + time2)
+            else:
+                print(" IP not valid")
         except:
-            print(" IP not valid")
+            print(" IP not in database")
  
         menuChoice = 0
  
