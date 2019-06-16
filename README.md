@@ -11,6 +11,8 @@
 
 The SOC Analysts all-in-one CLI tool to automate and speed up workflow. 
 
+![](readmeimages/vt_repcheck.gif)
+
 ### Sooty can Currently:
   - Sanitise URL's to be safe to send in emails
   - Perform reverse DNS and DNS lookups
