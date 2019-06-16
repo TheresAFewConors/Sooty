@@ -19,12 +19,21 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
   - Perform reputation checks from [VirusTotal](https://www.virustotal.com)
   - Decode Proofpoint URL's and  UTF-8 encoded URLS
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
+  
+
  
-#### Requirements
+### Requirements
  - Python 3.x
  - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key in the code with your own key.
  
-#### Contributors:
+
+ 
+### Contributors:
 
  - [Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
  - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
+
+
+
+
+ ![](readmeimages/vt_hashchecker.gif)
