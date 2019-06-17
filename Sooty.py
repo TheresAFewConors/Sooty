@@ -172,9 +172,9 @@ def repChecker():
             if tot != 0:
                 print("   No of Reportings: " + str(tot))
                 print("   Average Score:    " + str(pos / tot))
-                input("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
+                print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
             else:
-                input("   No of Reportings: " + str(tot))
+                print("   No of Reportings: " + str(tot))
         except:
             try: #EAFP
                 url = 'https://www.virustotal.com/vtapi/v2/url/report'
@@ -183,14 +183,14 @@ def repChecker():
                 result = response.json()
                 print("\n VirusTotal Report:")
                 print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
-                input("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
+                print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
             except:
-                input(" Not found in database")
+                print(" Not found in database")
     else:
-        input(" There's been an error - check your API key, or VirusTotal is possible down")
+        print(" There's been an error - check your API key, or VirusTotal is possible down\n\n")
 
 
-
+    print("Checking TOR node status...")
     TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
     req = requests.get(TOR_URL)
     print("\n TOR Exit Node Report: ")
