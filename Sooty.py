@@ -190,7 +190,7 @@ def repChecker():
         print(" There's been an error - check your API key, or VirusTotal is possible down\n\n")
 
 
-    print("Checking TOR node status...")
+    print(" Checking TOR node status...")
     TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
     req = requests.get(TOR_URL)
     print("\n TOR Exit Node Report: ")
