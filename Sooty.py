@@ -7,14 +7,13 @@ import urllib.parse
 from urllib.parse import unquote
 import requests
 from ipwhois import IPWhois
-
+from os import system, name
 from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import filedialog
 
 API_KEY = 'Enter API Key Here'
 menuChoice = 0
-
 
 def switchMenu(choice):
     if choice == '1':
@@ -30,6 +29,14 @@ def switchMenu(choice):
 
     if choice == '0':
         exit()
+
+def clear():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+    # for everything else
+    else:
+        _ = system('clear')
 
 def decoderSwitch(choice):
     if choice == '1':
@@ -85,6 +92,7 @@ def decodev2(rewrittenurl):
         print('Error parsing URL')
 
 def mainMenu():
+    clear()
     print("\n --------------------------------- ")
     print("\n           S  O  O  T  Y           ")
     print("\n --------------------------------- ")
@@ -106,7 +114,7 @@ def urlSanitise():
     x = re.sub("\.", "[.]", url)
     x = re.sub("http://", "hxxp://", x)
     x = re.sub("https://", "hxxps://", x)
-    print("\n" + x)
+    input("\n" + x)
     mainMenu()
 
 def decoderMenu():
