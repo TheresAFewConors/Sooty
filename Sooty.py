@@ -177,6 +177,23 @@ def repChecker():
     else:
         print(" There's been an error - check your API key, or VirusTotal is possible down")
 
+    TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
+    req = requests.get(TOR_URL)
+    print("\n TOR Exit Node Report: ")
+
+    if req.status_code == 200:
+        tl = req.text.split('\n')
+        c = 0
+        for i in tl:
+            if ip == i:
+                print("   " + i + " is a TOR Exit Node")
+                c = c+1
+        if c == 0:
+            print("   No match found")
+
+    else:
+        print("   TOR LIST UNREACHABLE")
+
     mainMenu()
 
 def dnsMenu():
