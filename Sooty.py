@@ -136,9 +136,9 @@ def proofPointDecoder():
         elif match.group(1) == 'v2':
             decodev2(rewrittenurl)
         else:
-            print('Unrecognized version in: ', rewrittenurl)
+            input('Unrecognized version in: ', rewrittenurl)
     else:
-        print('No valid URL found in input: ', rewrittenurl)
+        input('No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
 
@@ -172,9 +172,9 @@ def repChecker():
             if tot != 0:
                 print("   No of Reportings: " + str(tot))
                 print("   Average Score:    " + str(pos / tot))
-                print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
+                input("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
             else:
-                print("   No of Reportings: " + str(tot))
+                input("   No of Reportings: " + str(tot))
         except:
             try: #EAFP
                 url = 'https://www.virustotal.com/vtapi/v2/url/report'
@@ -183,11 +183,11 @@ def repChecker():
                 result = response.json()
                 print("\n VirusTotal Report:")
                 print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
-                print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
+                input("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
             except:
-                print(" Not found in database")
+                input(" Not found in database")
     else:
-        print(" There's been an error - check your API key, or VirusTotal is possible down")
+        input(" There's been an error - check your API key, or VirusTotal is possible down")
 
 
 
@@ -203,10 +203,10 @@ def repChecker():
                 print("   " + i + " is a TOR Exit Node")
                 c = c+1
         if c == 0:
-            print("   No match found")
+            input("   No match found")
 
     else:
-        print("   TOR LIST UNREACHABLE")
+        input("   TOR LIST UNREACHABLE")
 
     mainMenu()
 
@@ -225,9 +225,9 @@ def reverseDnsLookup():
     d = input(" Enter IP to check: ")
     try:
         s = socket.gethostbyaddr(d)
-        print('\n ' + s[0])
+        input('\n ' + s[0])
     except:
-        print(" Hostname not found")
+        input(" Hostname not found")
     dnsMenu()
 
 def dnsLookup():
@@ -236,9 +236,9 @@ def dnsLookup():
     d = re.sub("https://", "", d)
     try:
         s = socket.gethostbyname(d)
-        print('\n ' + s)
+        input('\n ' + s)
     except:
-        print("Website not found")
+        input("Website not found")
     dnsMenu()
 
 def whoIs():
@@ -260,9 +260,9 @@ def whoIs():
         print(" Post Code: " + str(w['nets'][0]['postal_code']))
         print(" Emails:    " + str(w['nets'][0]['emails']))
         print(" Created:   " + str(w['nets'][0]['created']))
-        print(" Updated:   " + str(w['nets'][0]['updated']))
+        input(" Updated:   " + str(w['nets'][0]['updated']))
     except:
-        print(" IP Not Found")
+        input(" IP Not Found")
     dnsMenu()
 
 def hashMenu():
@@ -273,7 +273,7 @@ def hashMenu():
     print(" OPTION 1: Hash a file")
     print(" OPTION 2: Check a hash for known malicious activity")
     print(" OPTION 3: Hash a file, check a hash for known malicious activity")
-    print(" OPTION 0: Exit to Main Menu")
+    input(" OPTION 0: Exit to Main Menu")
     hashSwitch(input())
 
 def hashFile():
@@ -283,7 +283,7 @@ def hashFile():
     with open(root.filename, 'rb') as afile:
         buf = afile.read()
         hasher.update(buf)
-    print(" MD5 Hash: " + hasher.hexdigest())
+    input(" MD5 Hash: " + hasher.hexdigest())
     root.destroy()
     hashMenu()
 
@@ -304,11 +304,11 @@ def hashRating():
                 for key, value in result['scans'].items():
                     if value['detected'] == True:
                         count = count + 1
-            print(" VirusTotal Report: " + str(count) + " detections found")
+            input(" VirusTotal Report: " + str(count) + " detections found")
         except:
-            print("\n Hash was not found in Malware Database")
+            input("\n Hash was not found in Malware Database")
     except:
-        print("Error: Invalid API Key")
+        input("Error: Invalid API Key")
     hashMenu()
 
 def hashAndFileUpload():
@@ -336,11 +336,11 @@ def hashAndFileUpload():
                 for key, value in result['scans'].items():
                     if value['detected'] == True:
                         count = count + 1
-            print(" VirusTotal Report: " + str(count) + " detections found")
+            input(" VirusTotal Report: " + str(count) + " detections found")
         except:
-            print("\n Hash was not found in Malware Database")
+            input("\n Hash was not found in Malware Database")
     except:
-        print(" Error: Invalid API Key")
+        input(" Error: Invalid API Key")
     hashMenu()
 
 if __name__ == '__main__':
