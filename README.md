@@ -17,6 +17,7 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
   - Sanitise URL's to be safe to send in emails
   - Perform reverse DNS and DNS lookups
   - Perform reputation checks from [VirusTotal](https://www.virustotal.com)
+  - Check if an IP address is a TOR exit node
   - Decode Proofpoint URL's and  UTF-8 encoded URLS
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   
