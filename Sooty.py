@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import filedialog
 
-API_KEY = '0d7209e7041a69dcfd392fc842da54dfdec9b1914ea7c0cdeb1f52767196eb3d'
+API_KEY = 'Enter API Key Here'
 menuChoice = 0
 
 
