@@ -74,9 +74,9 @@ def decodev1(rewrittenurl):
         htmlencodedurl = urllib.parse.unquote(urlencodedurl)
         url = html.unescape(htmlencodedurl)
         url = re.sub("http://", "", url)
-        print(url)
+        input(url)
     else:
-        print('Error parsing URL')
+        input('Error parsing URL')
 
 def decodev2(rewrittenurl):
     match = re.search(r'u=(.+?)&[dc]=', rewrittenurl)
@@ -87,9 +87,9 @@ def decodev2(rewrittenurl):
         htmlencodedurl = urllib.parse.unquote(urlencodedurl)
         url = html.unescape(htmlencodedurl)
         url = re.sub("http://", "", url)
-        print("\n" + url)
+        input("\n" + url)
     else:
-        print('Error parsing URL')
+        input('Error parsing URL')
 
 def mainMenu():
     clear()
