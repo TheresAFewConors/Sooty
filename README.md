@@ -20,7 +20,7 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
   - Check if an IP address is a TOR exit node
   - Decode Proofpoint URL's and  UTF-8 encoded URLS
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
-  
+  - Perform WhoIs Lookups
 
  
 ### Requirements
