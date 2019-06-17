@@ -6,12 +6,13 @@ import socket
 import urllib.parse
 from urllib.parse import unquote
 import requests
+from ipwhois import IPWhois
 
 from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import filedialog
 
-API_KEY = 'Enter API Key Here'
+API_KEY = '0d7209e7041a69dcfd392fc842da54dfdec9b1914ea7c0cdeb1f52767196eb3d'
 menuChoice = 0
 
 
@@ -43,6 +44,9 @@ def dnsSwitch(choice):
         reverseDnsLookup()
     if choice == '2':
         dnsLookup()
+    if choice == '3':
+        whoIs()
+
     if choice == '0':
         mainMenu()
 
@@ -177,6 +181,8 @@ def repChecker():
     else:
         print(" There's been an error - check your API key, or VirusTotal is possible down")
 
+
+
     TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
     req = requests.get(TOR_URL)
     print("\n TOR Exit Node Report: ")
@@ -203,6 +209,7 @@ def dnsMenu():
     print(" What would you like to do? ")
     print(" OPTION 1: Reverse DNS Lookup")
     print(" OPTION 2: DNS Lookup")
+    print(" OPTION 3: WHOIS Lookup")
     print(" OPTION 0: Exit to Main Menu")
     dnsSwitch(input())
 
@@ -226,6 +233,29 @@ def dnsLookup():
         print("Website not found")
     dnsMenu()
 
+def whoIs():
+    ip = input('ip: ')
+    try:
+        w = IPWhois(ip)
+        w = w.lookup_whois()
+
+        print("\n WHO IS REPORT \n")
+        print(" CIDR:      " + str(w['nets'][0]['cidr']))
+        print(" Name:      " + str(w['nets'][0]['name']))
+        print(" Handle:    " + str(w['nets'][0]['handle']))
+        print(" Range:     " + str(w['nets'][0]['range']))
+        print(" Descr:     " + str(w['nets'][0]['description']))
+        print(" Country:   " + str(w['nets'][0]['country']))
+        print(" State:     " + str(w['nets'][0]['state']))
+        print(" City:      " + str(w['nets'][0]['city']))
+        print(" Address:   " + str(w['nets'][0]['address']))
+        print(" Post Code: " + str(w['nets'][0]['postal_code']))
+        print(" Emails:    " + str(w['nets'][0]['emails']))
+        print(" Created:   " + str(w['nets'][0]['created']))
+        print(" Updated:   " + str(w['nets'][0]['updated']))
+    except:
+        print(" IP Not Found")
+    dnsMenu()
 
 def hashMenu():
     print("\n --------------------------------- ")
