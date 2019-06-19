@@ -11,7 +11,7 @@
 
 The SOC Analysts all-in-one CLI tool to automate and speed up workflow. 
 
-![](readmeimages/vt_repcheck.gif)
+![](readmeimages/repcheck.gif)
 
 ### Sooty can Currently:
   - Sanitise URL's to be safe to send in emails
