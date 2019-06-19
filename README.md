@@ -24,17 +24,24 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
 
  
 ### Requirements
- - Python 3.x
+ - [Python 3.x](https://www.python.org/)
  - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key in the code with your own key.
  
-
  
+### Development
+
+Want to contribute? Great!
+
+  #### Code Contributions
+  - New features / requests should start by opening an issue. This helps track new features and prevent crossover.
+  - All code modifications, enhancements or additions must be done through a pull request. 
+  - Once reviewed and merged, contibutors will be added to the ReadMe
+
+
+
 ### Contributors:
 
  - [Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
  - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
-
-
-
 
  ![](readmeimages/vt_hashchecker.gif)

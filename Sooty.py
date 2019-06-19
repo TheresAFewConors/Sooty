@@ -1,3 +1,11 @@
+"""
+    Title:      Sooty
+    Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
+    Author:     Connor Jackson
+    Version:    1.1
+    GitHub URL: https://github.com/TheresAFewConors/Sooty
+"""
+
 
 import hashlib
 import html.parser
@@ -7,14 +15,12 @@ import urllib.parse
 from urllib.parse import unquote
 import requests
 from ipwhois import IPWhois
-
+from os import system, name
 from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import filedialog
 
-API_KEY = '0d7209e7041a69dcfd392fc842da54dfdec9b1914ea7c0cdeb1f52767196eb3d'
-menuChoice = 0
-
+API_KEY = 'Enter API Key Here'
 
 def switchMenu(choice):
     if choice == '1':
@@ -146,6 +152,8 @@ def repChecker():
     print(" --------------------------------- ")
     ip = input(" Enter IP / URL: ")
 
+    whoIsPrint(ip)
+
     url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
     params = {'apikey': API_KEY, 'ip': ip}
     response = requests.get(url, params=params)
@@ -181,11 +189,10 @@ def repChecker():
     else:
         print(" There's been an error - check your API key, or VirusTotal is possible down")
 
-
-
+    print("\n Checking TOR node status...")
     TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
     req = requests.get(TOR_URL)
-    print("\n TOR Exit Node Report: ")
+    print("  TOR Exit Node Report: ")
 
     if req.status_code == 200:
         tl = req.text.split('\n')
@@ -195,10 +202,25 @@ def repChecker():
                 print("   " + i + " is a TOR Exit Node")
                 c = c+1
         if c == 0:
-            print("   No match found")
-
+            print("   " + ip + " is NOT a TOR Exit Node")
     else:
         print("   TOR LIST UNREACHABLE")
+
+
+    print("\nChecking BadIP's... ")
+    try:
+        BAD_IPS_URL = 'https://www.badips.com/get/info/' + ip
+        response = requests.get(BAD_IPS_URL)
+        if response.status_code == 200:
+            result = response.json()
+
+            sc = result['Score']['ssh']
+            print("  " + str(result['suc']))
+            print("  Score: " + str(sc))
+        else:
+            print('  Error reaching BadIPs')
+    except:
+        print('  IP not found')
 
     mainMenu()
 
@@ -235,27 +257,31 @@ def dnsLookup():
 
 def whoIs():
     ip = input('ip: ')
+    whoIsPrint(ip)
+    dnsMenu()
+
+def whoIsPrint(ip):
     try:
         w = IPWhois(ip)
         w = w.lookup_whois()
-
-        print("\n WHO IS REPORT \n")
-        print(" CIDR:      " + str(w['nets'][0]['cidr']))
-        print(" Name:      " + str(w['nets'][0]['name']))
-        print(" Handle:    " + str(w['nets'][0]['handle']))
-        print(" Range:     " + str(w['nets'][0]['range']))
-        print(" Descr:     " + str(w['nets'][0]['description']))
-        print(" Country:   " + str(w['nets'][0]['country']))
-        print(" State:     " + str(w['nets'][0]['state']))
-        print(" City:      " + str(w['nets'][0]['city']))
-        print(" Address:   " + str(w['nets'][0]['address']))
-        print(" Post Code: " + str(w['nets'][0]['postal_code']))
-        print(" Emails:    " + str(w['nets'][0]['emails']))
-        print(" Created:   " + str(w['nets'][0]['created']))
-        print(" Updated:   " + str(w['nets'][0]['updated']))
+        print("\n WHO IS REPORT:")
+        print("  CIDR:      " + str(w['nets'][0]['cidr']))
+        print("  Name:      " + str(w['nets'][0]['name']))
+        print("  Handle:    " + str(w['nets'][0]['handle']))
+        print("  Range:     " + str(w['nets'][0]['range']))
+        print("  Descr:     " + str(w['nets'][0]['description']))
+        print("  Country:   " + str(w['nets'][0]['country']))
+        print("  State:     " + str(w['nets'][0]['state']))
+        print("  City:      " + str(w['nets'][0]['city']))
+        print("  Address:   " + str(w['nets'][0]['address']))
+        print("  Post Code: " + str(w['nets'][0]['postal_code']))
+        print("  Emails:    " + str(w['nets'][0]['emails']))
+        print("  Created:   " + str(w['nets'][0]['created']))
+        print("  Updated:   " + str(w['nets'][0]['updated']))
     except:
         print(" IP Not Found")
-    dnsMenu()
+
+    return
 
 def hashMenu():
     print("\n --------------------------------- ")
