@@ -192,7 +192,6 @@ def repChecker():
     TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
     req = requests.get(TOR_URL)
     print("  TOR Exit Node Report: ")
-
     if req.status_code == 200:
         tl = req.text.split('\n')
         c = 0
