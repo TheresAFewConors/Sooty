@@ -23,6 +23,7 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
   - Decode Proofpoint URL's and  UTF-8 encoded URLS
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   - Perform WhoIs Lookups
+  - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
 
  
 ### Requirements
