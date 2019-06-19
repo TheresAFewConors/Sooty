@@ -45,5 +45,6 @@ Want to contribute? Great!
 
  - [Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
  - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
+ - [mrpnkt](https://github.com/mrpnkt) for adding the missing whois requirement to requirements.tx
 
  ![](readmeimages/vt_hashchecker.gif)
