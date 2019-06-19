@@ -33,7 +33,8 @@ def switchMenu(choice):
         dnsMenu()
     if choice == '5':
         hashMenu()
-
+    if choice == '6':
+        haveIBeenPwned()
     if choice == '0':
         exit()
 
@@ -100,6 +101,7 @@ def mainMenu():
     print(" OPTION 3: Reputation Checker")
     print(" OPTION 4: DNS Tools")
     print(" OPTION 5: Hashing Function")
+    print(" OPTION 6: HaveIBeenPwned Checkup")
     print(" OPTION 0: Exit Tool")
     switchMenu(input())
 
@@ -191,7 +193,7 @@ def repChecker():
 
     TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
     req = requests.get(TOR_URL)
-    print("  TOR Exit Node Report: ")
+    print("\n  TOR Exit Node Report: ")
     if req.status_code == 200:
         tl = req.text.split('\n')
         c = 0
@@ -358,6 +360,40 @@ def hashAndFileUpload():
     except:
         print(" Error: Invalid API Key")
     hashMenu()
+
+def haveIBeenPwned():
+    print("\n --------------------------------- ")
+    print(" H A V E   I   B E E N   P W N E D  ")
+    print(" --------------------------------- ")
+    
+    try:
+        acc = input(' Enter email: ')
+        url = ('https://haveibeenpwned.com/api/v2/breachedaccount/%s' % acc)
+        response = requests.get(url)
+
+        if response.status_code == 200:
+
+            response = response.json()
+            le = len(response)
+
+            for i in range(le):
+                dc = str(response[i]['DataClasses'])
+                dc = re.sub('\[(?:[^\]|]*\|)?([^\]|]*)\]', r'\1', dc)
+                dc = dc.replace("'", '')
+
+                print("\n")
+                print("Name:     " + str(response[i]['Title']))
+                print("Domain:   " + str(response[i]['Domain']))
+                print("Breached: " + str(response[i]['BreachDate']))
+                print("Details:  " + str(dc))
+                print("Verified: " + str(response[i]['IsVerified']))
+        else:
+            print(" Email NOT Found in Database")
+
+    except:
+        print(" Unable to reach HaveIBeenPwned")
+
+    mainMenu()
 
 if __name__ == '__main__':
     mainMenu()
