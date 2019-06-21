@@ -25,6 +25,19 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
   - Perform WhoIs Lookups
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
 
+### Changelog
+
+#### Version 1.1
+ - Improved Rep Checker
+ - Added HaveIBeenPwned Functionality
+ - Added DNS Tools
+ - Added Hash and VirusTotal Checkers
+ 
+#### Version 1.0
+ - Initial Release
+ - URL and ProofPoint Decoder
+ - Initial implementation of Reputation Checker
+ - Sanitize links to be safe for email
  
 ### Requirements
  - [Python 3.x](https://www.python.org/)
