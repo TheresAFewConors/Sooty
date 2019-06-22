@@ -2,10 +2,9 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.1
+    Version:    1.11
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
-
 
 import hashlib
 import html.parser
@@ -15,12 +14,11 @@ import urllib.parse
 from urllib.parse import unquote
 import requests
 from ipwhois import IPWhois
-from os import system, name
-from bs4 import BeautifulSoup
 from tkinter import *
 from tkinter import filedialog
 
-API_KEY = 'Enter API Key Here'
+VT_API_KEY = ''
+AB_API_KEY = ''
 
 def switchMenu(choice):
     if choice == '1':
@@ -156,10 +154,10 @@ def repChecker():
 
     whoIsPrint(ip)
 
+    print("\n VirusTotal Report:")
     url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-    params = {'apikey': API_KEY, 'ip': ip}
+    params = {'apikey': VT_API_KEY, 'ip': ip}
     response = requests.get(url, params=params)
-    #print(response.status_code)
 
     pos = 0
     tot = 0
@@ -170,7 +168,6 @@ def repChecker():
                 tot = tot + 1
                 pos = pos + each['positives']
 
-            print("\n VirusTotal Report:")
             if tot != 0:
                 print("   No of Reportings: " + str(tot))
                 print("   Average Score:    " + str(pos / tot))
@@ -180,7 +177,7 @@ def repChecker():
         except:
             try: #EAFP
                 url = 'https://www.virustotal.com/vtapi/v2/url/report'
-                params = {'apikey': API_KEY, 'resource': ip}
+                params = {'apikey': VT_API_KEY, 'resource': ip}
                 response = requests.get(url, params=params)
                 result = response.json()
                 print("\n VirusTotal Report:")
@@ -193,21 +190,21 @@ def repChecker():
 
     TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
     req = requests.get(TOR_URL)
-    print("\n  TOR Exit Node Report: ")
+    print("\n TOR Exit Node Report: ")
     if req.status_code == 200:
         tl = req.text.split('\n')
         c = 0
         for i in tl:
             if ip == i:
-                print("   " + i + " is a TOR Exit Node")
+                print("  " + i + " is a TOR Exit Node")
                 c = c+1
         if c == 0:
-            print("   " + ip + " is NOT a TOR Exit Node")
+            print("  " + ip + " is NOT a TOR Exit Node")
     else:
         print("   TOR LIST UNREACHABLE")
 
 
-    print("\nChecking BadIP's... ")
+    print("\n Checking BadIP's... ")
     try:
         BAD_IPS_URL = 'https://www.badips.com/get/info/' + ip
         response = requests.get(BAD_IPS_URL)
@@ -221,6 +218,35 @@ def repChecker():
             print('  Error reaching BadIPs')
     except:
         print('  IP not found')
+
+    print("\n ABUSEIPDB Report:")
+    try:
+        AB_URL = 'https://api.abuseipdb.com/api/v2/check'
+        days = '180'
+
+        querystring = {
+            'ipAddress': ip,
+            'maxAgeInDays': days
+        }
+
+        headers = {
+            'Accept': 'application/json',
+            'Key': AB_API_KEY
+        }
+        response = requests.request(method='GET', url=AB_URL, headers=headers, params=querystring)
+        if response.status_code == 200:
+            req = response.json()
+
+            print("   IP:          " + str(req['data']['ipAddress']))
+            print("   Reports:     " + str(req['data']['totalReports']))
+            print("   Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
+            print("   Last Report: " + str(req['data']['lastReportedAt']))
+        else:
+            print("   Error Reaching ABUSE IPDB")
+    except:
+            print('   IP Not Found')
+
+
 
     mainMenu()
 
@@ -311,7 +337,7 @@ def hashRating():
     fileHash = input(" Enter Hash of file: ")
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
-    params = {'apikey': API_KEY, 'resource': fileHash}
+    params = {'apikey': VT_API_KEY, 'resource': fileHash}
     response = requests.get(url, params=params)
 
     try:  # EAFP
@@ -343,7 +369,7 @@ def hashAndFileUpload():
     # VT Hash Checker
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
-    params = {'apikey': API_KEY, 'resource': fileHash}
+    params = {'apikey': VT_API_KEY, 'resource': fileHash}
     response = requests.get(url, params=params)
 
     try:  # EAFP
@@ -365,7 +391,7 @@ def haveIBeenPwned():
     print("\n --------------------------------- ")
     print(" H A V E   I   B E E N   P W N E D  ")
     print(" --------------------------------- ")
-    
+
     try:
         acc = input(' Enter email: ')
         url = ('https://haveibeenpwned.com/api/v2/breachedaccount/%s' % acc)
