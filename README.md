@@ -19,6 +19,7 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
   - Perform reputation checks from:
     - [VirusTotal](https://www.virustotal.com)
     - [BadIP's](https://www.badips.com/)
+    - [Abuse IPDB](https://www.abuseipdb.com/)
   - Check if an IP address is a TOR exit node
   - Decode Proofpoint URL's and  UTF-8 encoded URLS
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
@@ -41,7 +42,8 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
  
 ### Requirements
  - [Python 3.x](https://www.python.org/)
- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key in the code with your own key.
+ - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
+ - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  
  
 ### Development
