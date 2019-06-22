@@ -31,8 +31,9 @@ The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
 #### Version 1.1
  - Improved Rep Checker
  - Added HaveIBeenPwned Functionality
- - Added DNS Tools
+ - Added DNS Tools and WhoIs Functionality
  - Added Hash and VirusTotal Checkers
+ - Added Abuse IPDB, Tor Exit Node, BadIP's to Reputation Checker
  
 #### Version 1.0
  - Initial Release
@@ -52,6 +53,7 @@ Want to contribute? Great!
 
   #### Code Contributions
   - New features / requests should start by opening an issue. This helps track new features and prevent crossover.
+  - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
   - All code modifications, enhancements or additions must be done through a pull request. 
   - Once reviewed and merged, contibutors will be added to the ReadMe
 
