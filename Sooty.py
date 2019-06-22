@@ -282,7 +282,7 @@ def dnsLookup():
     dnsMenu()
 
 def whoIs():
-    ip = input('ip: ')
+    ip = input(' Enter IP: ')
     whoIsPrint(ip)
     dnsMenu()
 
@@ -290,18 +290,20 @@ def whoIsPrint(ip):
     try:
         w = IPWhois(ip)
         w = w.lookup_whois()
+        addr = str(w['nets'][0]['address'])
+        addr = addr.replace('\n', ', ')
         print("\n WHO IS REPORT:")
         print("  CIDR:      " + str(w['nets'][0]['cidr']))
         print("  Name:      " + str(w['nets'][0]['name']))
-        print("  Handle:    " + str(w['nets'][0]['handle']))
+       # print("  Handle:    " + str(w['nets'][0]['handle']))
         print("  Range:     " + str(w['nets'][0]['range']))
         print("  Descr:     " + str(w['nets'][0]['description']))
         print("  Country:   " + str(w['nets'][0]['country']))
         print("  State:     " + str(w['nets'][0]['state']))
         print("  City:      " + str(w['nets'][0]['city']))
-        print("  Address:   " + str(w['nets'][0]['address']))
+        print("  Address:   " + addr)
         print("  Post Code: " + str(w['nets'][0]['postal_code']))
-        print("  Emails:    " + str(w['nets'][0]['emails']))
+       # print("  Emails:    " + str(w['nets'][0]['emails']))
         print("  Created:   " + str(w['nets'][0]['created']))
         print("  Updated:   " + str(w['nets'][0]['updated']))
     except:
