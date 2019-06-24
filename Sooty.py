@@ -351,6 +351,7 @@ def hashRating():
                     if value['detected'] == True:
                         count = count + 1
             print(" VirusTotal Report: " + str(count) + " detections found")
+            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
         except:
             print("\n Hash was not found in Malware Database")
     except:
@@ -383,6 +384,7 @@ def hashAndFileUpload():
                     if value['detected'] == True:
                         count = count + 1
             print(" VirusTotal Report: " + str(count) + " detections found")
+            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
         except:
             print("\n Hash was not found in Malware Database")
     except:
