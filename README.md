@@ -28,7 +28,7 @@
 
 ### Changelog
 
-#### Version 1.1
+#### Version 1.1 - The Reputation Update
  - Improved Rep Checker
  - Added HaveIBeenPwned Functionality
  - Added DNS Tools and WhoIs Functionality
@@ -40,7 +40,18 @@
  - URL and ProofPoint Decoder
  - Initial implementation of Reputation Checker
  - Sanitize links to be safe for email
- 
+
+### RoadMap
+  This is an outline of what features *will* be coming in future versions.
+  
+  #### Version 1.2 - The Phishing Update
+    - Add Ability to extract email addresses and URL's from mail.
+    - Correlate emails and URL's to see if they have been reported for phishing (PhishTank)
+    - Scan email attachments for malicious content, macros, files, scan hashes, etc.
+  
+  #### Version 1.3 - The Case Update
+    - Add a 'New Case' Feature, allowing output of the tool to be output to a txt file.
+
 ### Requirements
  - [Python 3.x](https://www.python.org/)
  - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
