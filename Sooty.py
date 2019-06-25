@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.11
+    Version:    1.2
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -17,8 +17,13 @@ from ipwhois import IPWhois
 from tkinter import *
 from tkinter import filedialog
 
-VT_API_KEY = ''
-AB_API_KEY = ''
+try:
+    import win32com.client
+except:
+    print('Cant install package')
+
+VT_API_KEY = 'Enter VirusTotal API Key Here'
+AB_API_KEY = 'Enter AbuseIPDB API Key Here'
 
 def switchMenu(choice):
     if choice == '1':
@@ -32,7 +37,7 @@ def switchMenu(choice):
     if choice == '5':
         hashMenu()
     if choice == '6':
-        haveIBeenPwned()
+        phishingMenu()
     if choice == '0':
         exit()
 
@@ -62,6 +67,14 @@ def hashSwitch(choice):
         hashRating()
     if choice == '3':
         hashAndFileUpload()
+    if choice == '0':
+        mainMenu()
+
+def phishingSwitch(choice):
+    if choice == '1':
+        analyzePhish()
+    if choice == '9':
+        haveIBeenPwned()
     if choice == '0':
         mainMenu()
 
@@ -99,7 +112,7 @@ def mainMenu():
     print(" OPTION 3: Reputation Checker")
     print(" OPTION 4: DNS Tools")
     print(" OPTION 5: Hashing Function")
-    print(" OPTION 6: HaveIBeenPwned Checkup")
+    print(" OPTION 6: Phishing Analysis")
     print(" OPTION 0: Exit Tool")
     switchMenu(input())
 
@@ -424,6 +437,69 @@ def haveIBeenPwned():
         print(" Unable to reach HaveIBeenPwned")
 
     mainMenu()
+
+
+
+def phishingMenu():
+    print("\n --------------------------------- ")
+    print("          P H I S H I N G          ")
+    print(" --------------------------------- ")
+    print(" What would you like to do? ")
+    print(" OPTION 1: Analyze an Email for IOC's")
+    print(" OPTION 9: HaveIBeenPwned")
+    print(" OPTION 0: Exit to Main Menu")
+    phishingSwitch(input())
+
+
+def analyzePhish():
+    try:
+        root = Tk()
+        file = filedialog.askopenfilename(initialdir="/", title="Select file")
+        with open(file, encoding='Latin-1') as f:
+            msg = f.read()
+
+        outlook = win32com.client.Dispatch("Outlook.Application").GetNameSpace("MAPI")
+        msg = outlook.OpenSharedItem(file)
+    except:
+        print(' Error Opening File')
+
+    try:
+        print("\n Header Analysis: ")
+        print("   FROM:      ", str(msg.SenderName), ", ", str(msg.SenderEmailAddress))
+        print("   TO:        ", str(msg.To))
+        print("   SUBJECT:   ", str(msg.Subject))
+        print("   NameBehalf:", str(msg.SentOnBehalfOfName))
+        print("   CC:        ", str(msg.CC))
+        print("   BCC:       ", str(msg.BCC))
+        print("   Sent On:   ", str(msg.SentOn))
+        print("   Created:   ", str(msg.CreationTime))
+
+        print("\n Links: ")
+        s = str(msg.Body)
+        match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
+        a = re.findall(match, s, re.M | re.I)
+
+        for b in a:
+            pp = 'urldefense'
+            if pp in b[0]:
+                proofPointDecoder(b[0])
+            else:
+                print(" ", b[0])
+
+        print("\n Emails: ")
+        match = r'([\w0-9._-]+@[\w0-9._-]+\.[\w0-9_-]+)'
+        emailList = list()
+        a = re.findall(match, s, re.M | re.I)
+
+        for b in a:
+            if b not in emailList:
+                emailList.append(b)
+                print(" ", b)
+
+    except:
+        print(' Error Analysing Email')
+    mainMenu()
+
 
 if __name__ == '__main__':
     mainMenu()
