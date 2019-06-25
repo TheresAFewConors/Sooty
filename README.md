@@ -25,6 +25,7 @@
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   - Perform WhoIs Lookups
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
+  - Simple analysis of emails to retrieve URL's, emails and header information.
 
 ### Changelog
 
