@@ -59,6 +59,7 @@
 
 ### Requirements
  - [Python 3.x](https://www.python.org/)
+ - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
  - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  
