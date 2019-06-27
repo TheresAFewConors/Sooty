@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.2
+    Version:    1.21
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -460,18 +460,20 @@ def phishingMenu():
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
 
-
 def analyzePhish():
     try:
-        root = Tk()
         file = filedialog.askopenfilename(initialdir="/", title="Select file")
-        with open(file, encoding='Latin-1') as f:
-            msg = f.read()
 
-        outlook = win32com.client.Dispatch("Outlook.Application").GetNameSpace("MAPI")
+        # Fixes issue with file name / dir name exceptions
+        file = file.replace('//', '/')  # dir
+        file2 = file.replace(' ', '')   # file name (remove spaces / %20)
+        os.rename(file, file2)
+
+        outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         msg = outlook.OpenSharedItem(file)
+        print(file)
     except:
-        print(' Error Opening File')
+        print(" Unable to Open File")
 
     try:
         print("\n Header Analysis: ")
@@ -483,11 +485,15 @@ def analyzePhish():
         print("   BCC:       ", str(msg.BCC))
         print("   Sent On:   ", str(msg.SentOn))
         print("   Created:   ", str(msg.CreationTime))
+    except:
+        print('header issue')
 
+    try:
         print("\n Links: ")
         s = str(msg.Body)
         match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, s, re.M | re.I)
+        print(a)
 
         for b in a:
             pp = 'urldefense'
@@ -495,7 +501,10 @@ def analyzePhish():
                 proofPointDecoder(b[0])
             else:
                 print(" ", b[0])
+    except:
+        print("link issue")
 
+    try:
         print("\n Emails: ")
         match = r'([\w0-9._-]+@[\w0-9._-]+\.[\w0-9_-]+)'
         emailList = list()
@@ -505,11 +514,10 @@ def analyzePhish():
             if b not in emailList:
                 emailList.append(b)
                 print(" ", b)
-
     except:
-        print(' Error Analysing Email')
-    mainMenu()
+        print(' Emails Issue')
 
+    phishingMenu()
 
 if __name__ == '__main__':
     mainMenu()
