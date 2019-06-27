@@ -294,9 +294,11 @@ def dnsLookup():
         print("Website not found")
     dnsMenu()
 
+
 def whoIs():
-    ip = input(' Enter IP: ')
+    ip = input(' Enter IP / Domain: ')
     whoIsPrint(ip)
+
     dnsMenu()
 
 def whoIsPrint(ip):
@@ -320,9 +322,17 @@ def whoIsPrint(ip):
         print("  Created:   " + str(w['nets'][0]['created']))
         print("  Updated:   " + str(w['nets'][0]['updated']))
     except:
-        print(" IP Not Found")
-
+        print(" IP Not Found - Checking Domains")
+        ip = re.sub('https://', '', ip)
+        ip = re.sub('http://', '', ip)
+        try:
+            s = socket.gethostbyname(ip)
+            print(s)
+            whoIsPrint(s)
+        except:
+            print(' IP or Domain not Found')
     return
+
 
 def hashMenu():
     print("\n --------------------------------- ")
