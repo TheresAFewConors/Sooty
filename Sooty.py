@@ -5,7 +5,7 @@
     Version:    1.21
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
-
+import os
 import hashlib
 import html.parser
 import re
