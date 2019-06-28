@@ -9,6 +9,14 @@
 
 # Sooty
 
+### Contents
+ - [Current Features](#sooty-can-currently)
+ - [Requirements](#requirements)
+ - [Development](#development)
+ - [Changelog](#changelog)
+ - [Roadmap](#roadmap)
+ - [Contributors](#contributors)
+ 
 <!-- The SOC Analysts all-in-one CLI tool to automate and speed up workflow. -->
 
 ![](readmeimages/repcheck.gif)
@@ -26,6 +34,22 @@
   - Perform WhoIs Lookups
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
   - Simple analysis of emails to retrieve URL's, emails and header information.
+
+### Requirements
+ - [Python 3.x](https://www.python.org/)
+ - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
+ - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
+ - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
+ 
+### Development
+
+Want to contribute? Great!
+
+  #### Code Contributions
+  - New features / requests should start by opening an issue. This helps track new features and prevent crossover.
+  - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
+  - All code modifications, enhancements or additions must be done through a pull request. 
+  - Once reviewed and merged, contibutors will be added to the ReadMe
 
 ### Changelog
 
@@ -56,24 +80,6 @@
   
 #### Version 1.3 - The Case Update
   - Add a 'New Case' Feature, allowing output of the tool to be output to a txt file.
-
-### Requirements
- - [Python 3.x](https://www.python.org/)
- - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
- - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
- 
- 
-### Development
-
-Want to contribute? Great!
-
-  #### Code Contributions
-  - New features / requests should start by opening an issue. This helps track new features and prevent crossover.
-  - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
-  - All code modifications, enhancements or additions must be done through a pull request. 
-  - Once reviewed and merged, contibutors will be added to the ReadMe
-
 
 
 ### Contributors:
