@@ -21,6 +21,8 @@
 
 ![](readmeimages/repcheck.gif)
 
+---------------------------
+
 ### Sooty can Currently:
   - Sanitise URL's to be safe to send in emails
   - Perform reverse DNS and DNS lookups
@@ -35,11 +37,15 @@
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
   - Simple analysis of emails to retrieve URL's, emails and header information.
 
+---------------------------
+
 ### Requirements
  - [Python 3.x](https://www.python.org/)
  - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
  - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
+ 
+---------------------------
  
 ### Development
 
@@ -50,6 +56,8 @@ Want to contribute? Great!
   - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
   - All code modifications, enhancements or additions must be done through a pull request. 
   - Once reviewed and merged, contibutors will be added to the ReadMe
+
+---------------------------
 
 ### Changelog
 
@@ -70,6 +78,8 @@ Want to contribute? Great!
  - Initial implementation of Reputation Checker
  - Sanitize links to be safe for email
 
+---------------------------
+
 ### RoadMap
   This is an outline of what features *will* be coming in future versions.
   
@@ -81,6 +91,7 @@ Want to contribute? Great!
 #### Version 1.3 - The Case Update
   - Add a 'New Case' Feature, allowing output of the tool to be output to a txt file.
 
+---------------------------
 
 ### Contributors:
 
