@@ -30,11 +30,12 @@
     - [BadIP's](https://www.badips.com/)
     - [Abuse IPDB](https://www.abuseipdb.com/)
   - Check if an IP address is a TOR exit node
-  - Decode Proofpoint URL's and  UTF-8 encoded URLS
+  - Decode Proofpoint URL's, UTF-8 encoded URLS and Office SafeLink URL's
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   - Perform WhoIs Lookups
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
   - Simple analysis of emails to retrieve URL's, emails and header information.
+  - Extract IP addresses from emails.
 
 
 
@@ -61,6 +62,7 @@ Want to contribute? Great!
 #### Version 1.2 - The Phishing Update
  - Added first iteration of the Phishing tool.
  - Able to analyze an email (outlook / .msg only tested at the moment) and retrieve emails, urls (Proofpoint decode if necessary) and extract info from headers. 
+ - Extract IP's from body of email.
 
 #### Version 1.1 - The Reputation Update
  - Improved Rep Checker
