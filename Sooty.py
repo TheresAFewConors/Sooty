@@ -2,10 +2,10 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.21
+    Version:    1.22
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
-import os
+
 import hashlib
 import html.parser
 import re
@@ -46,6 +46,8 @@ def decoderSwitch(choice):
         proofPointDecoder()
     if choice == '2':
         urlDecoder()
+    if choice == '3':
+        safelinksDecoder()
     if choice == '0':
         mainMenu()
 
@@ -87,7 +89,8 @@ def decodev1(rewrittenurl):
         url = re.sub("http://", "", url)
         print(url)
     else:
-        print('Error parsing URL')
+        #print('Error parsing URLv1')
+        print(rewrittenurl)
 
 def decodev2(rewrittenurl):
     match = re.search(r'u=(.+?)&[dc]=', rewrittenurl)
@@ -100,7 +103,8 @@ def decodev2(rewrittenurl):
         url = re.sub("http://", "", url)
         print("\n" + url)
     else:
-        print('Error parsing URL')
+        #print('Error parsing URLv2')
+        print(rewrittenurl)
 
 def mainMenu():
     print("\n --------------------------------- ")
@@ -108,7 +112,7 @@ def mainMenu():
     print("\n --------------------------------- ")
     print(" What would you like to do? ")
     print("\n OPTION 1: Sanitise URL For emails ")
-    print(" OPTION 2: Decoders (PP, URL) ")
+    print(" OPTION 2: Decoders (PP, URL, SafeLinks) ")
     print(" OPTION 3: Reputation Checker")
     print(" OPTION 4: DNS Tools")
     print(" OPTION 5: Hashing Function")
@@ -135,6 +139,7 @@ def decoderMenu():
     print(" What would you like to do? ")
     print(" OPTION 1: ProofPoint Decoder")
     print(" OPTION 2: URL Decoder")
+    print(" OPTION 3: Office SafeLinks Decoder")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -154,9 +159,16 @@ def proofPointDecoder():
     mainMenu()
 
 def urlDecoder():
-    url = input('Enter url: ')
+    url = input(' Enter URL: ')
     decodedUrl = unquote(url)
     print(decodedUrl)
+    mainMenu()
+
+def safelinksDecoder():
+    url = input(' Enter URL: ')
+    dcUrl = unquote(url)
+    dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
+    print(dcUrl)
     mainMenu()
 
 def repChecker():
@@ -294,7 +306,6 @@ def dnsLookup():
         print("Website not found")
     dnsMenu()
 
-
 def whoIs():
     ip = input(' Enter IP / Domain: ')
     whoIsPrint(ip)
@@ -332,7 +343,6 @@ def whoIsPrint(ip):
         except:
             print(' IP or Domain not Found')
     return
-
 
 def hashMenu():
     print("\n --------------------------------- ")
@@ -448,8 +458,6 @@ def haveIBeenPwned():
 
     mainMenu()
 
-
-
 def phishingMenu():
     print("\n --------------------------------- ")
     print("          P H I S H I N G          ")
@@ -462,21 +470,18 @@ def phishingMenu():
 
 def analyzePhish():
     try:
+        #root = Tk()
         file = filedialog.askopenfilename(initialdir="/", title="Select file")
-
-        # Fixes issue with file name / dir name exceptions
-        file = file.replace('//', '/')  # dir
-        file2 = file.replace(' ', '')   # file name (remove spaces / %20)
-        os.rename(file, file2)
+        with open(file, encoding='Latin-1') as f:
+            msg = f.read()
 
         outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         msg = outlook.OpenSharedItem(file)
-        print(file)
     except:
-        print(" Unable to Open File")
+        print(' Error Opening File')
 
     try:
-        print("\n Header Analysis: ")
+        print("\n Extracting Headers...")
         print("   FROM:      ", str(msg.SenderName), ", ", str(msg.SenderEmailAddress))
         print("   TO:        ", str(msg.To))
         print("   SUBJECT:   ", str(msg.Subject))
@@ -485,27 +490,35 @@ def analyzePhish():
         print("   BCC:       ", str(msg.BCC))
         print("   Sent On:   ", str(msg.SentOn))
         print("   Created:   ", str(msg.CreationTime))
-    except:
-        print('header issue')
-
-    try:
-        print("\n Links: ")
         s = str(msg.Body)
+    except:
+        print('   Header Error')
+        f.close()
+
+    print("\n Extracting Links... ")
+    try:
         match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, s, re.M | re.I)
-        print(a)
 
         for b in a:
-            pp = 'urldefense'
+            pp = 'https://urldefense.proofpoint'
             if pp in b[0]:
-                proofPointDecoder(b[0])
+                match2 = match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
+                if match2:
+                    if match.group(1) == 'v1':
+                        decodev1(b[0])
+                    elif match.group(1) == 'v2':
+                        decodev2(b[0])
+                    else:
+                        print(' Unrecognized')
             else:
                 print(" ", b[0])
     except:
-        print("link issue")
+        print('   Links Error')
+        f.close()
 
+    print("\n Extracting Emails... ")
     try:
-        print("\n Emails: ")
         match = r'([\w0-9._-]+@[\w0-9._-]+\.[\w0-9_-]+)'
         emailList = list()
         a = re.findall(match, s, re.M | re.I)
@@ -514,8 +527,25 @@ def analyzePhish():
             if b not in emailList:
                 emailList.append(b)
                 print(" ", b)
+            if len(emailList) == 0:
+                print('   No Emails Found')
     except:
-        print(' Emails Issue')
+        print('   Emails Error')
+        f.close()
+
+    print("\n Extracting IP's...")
+    try:
+        ipList = []
+        foundIP = re.findall(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', s)
+        ipList.append(foundIP)
+
+        if not ipList:
+            for each in ipList:
+                print(each)
+        else:
+            print('   No IP Addresses Found')
+    except:
+        print('   IP error')
 
     phishingMenu()
 
