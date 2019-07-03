@@ -9,6 +9,7 @@
 import hashlib
 import html.parser
 import re
+import os
 import socket
 import urllib.parse
 from urllib.parse import unquote
