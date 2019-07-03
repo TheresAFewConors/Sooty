@@ -474,7 +474,11 @@ def analyzePhish():
         file = filedialog.askopenfilename(initialdir="/", title="Select file")
         with open(file, encoding='Latin-1') as f:
             msg = f.read()
-
+        
+        # Fixes issue with file name / dir name exceptions
+        file = file.replace('//', '/')  # dir
+        file2 = file.replace(' ', '')   # file name (remove spaces / %20)
+        os.rename(file, file2)
         outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         msg = outlook.OpenSharedItem(file)
     except:
