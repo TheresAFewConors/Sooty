@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.22
+    Version:    1.23
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -49,6 +49,8 @@ def decoderSwitch(choice):
         urlDecoder()
     if choice == '3':
         safelinksDecoder()
+    if choice == '4':
+        unshortenEnter()
     if choice == '0':
         mainMenu()
 
@@ -141,6 +143,7 @@ def decoderMenu():
     print(" OPTION 1: ProofPoint Decoder")
     print(" OPTION 2: URL Decoder")
     print(" OPTION 3: Office SafeLinks Decoder")
+    print(" OPTION 4: URL unShortener")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -171,6 +174,22 @@ def safelinksDecoder():
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
     mainMenu()
+
+def unshortenEnter():
+    link = input(' Enter: ')
+    urlUnshortener(link)
+    decoderMenu()
+
+def urlUnshortener(link):
+    url = 'https://unshorten.me/s/'
+
+    final = str(url) + str(link)
+    req = requests.get(str(final))
+    us_url = req.content
+    us_url = str(us_url).split("b'")[-1]
+    us_url = str(us_url).strip("'\\n'")
+    print(us_url)
+    return
 
 def repChecker():
     print("\n --------------------------------- ")
@@ -271,8 +290,6 @@ def repChecker():
             print("   Error Reaching ABUSE IPDB")
     except:
             print('   IP Not Found')
-
-
 
     mainMenu()
 
@@ -475,7 +492,7 @@ def analyzePhish():
         file = filedialog.askopenfilename(initialdir="/", title="Select file")
         with open(file, encoding='Latin-1') as f:
             msg = f.read()
-        
+
         # Fixes issue with file name / dir name exceptions
         file = file.replace('//', '/')  # dir
         file2 = file.replace(' ', '')   # file name (remove spaces / %20)
