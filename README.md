@@ -36,6 +36,7 @@
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
   - Simple analysis of emails to retrieve URL's, emails and header information.
   - Extract IP addresses from emails.
+  - Unshorten URL's that have been shortened by external services.
 
 
 
