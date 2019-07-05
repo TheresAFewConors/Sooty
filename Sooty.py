@@ -197,7 +197,10 @@ def b64Decoder():
     url = input(' Enter URL: ')
     b64 = re.compile("[A-Za-z0-9]{6,}[=]{0,2}")
     for match in b64.findall(url):
-        print( base64.decodebytes(match.encode("utf-8") ) )
+        try:
+            print( base64.decodebytes(match.encode("utf-8") ) )
+        except:
+            pass
     mainMenu()
 
 def repChecker():
