@@ -25,6 +25,7 @@ except:
 
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
+PT_API_KEY = 'Enter PhishTank API Key Here'
 
 def switchMenu(choice):
     if choice == '1':
@@ -144,6 +145,7 @@ def decoderMenu():
     print(" OPTION 2: URL Decoder")
     print(" OPTION 3: Office SafeLinks Decoder")
     print(" OPTION 4: URL unShortener")
+    print(" OPTION 5: Base64 Decoder")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -190,6 +192,13 @@ def urlUnshortener(link):
     us_url = str(us_url).strip("'\\n'")
     print(us_url)
     return
+
+def b64Decoder():
+    url = input(' Enter URL: ')
+    b64 = re.compile("[A-Za-z0-9]{6,}[=]{0,2}")
+    for match in b64.findall(url):
+        print( base64.decodebytes(match.encode("utf-8") ) )
+    mainMenu()
 
 def repChecker():
     print("\n --------------------------------- ")
@@ -288,6 +297,35 @@ def repChecker():
             print("   Last Report: " + str(req['data']['lastReportedAt']))
         else:
             print("   Error Reaching ABUSE IPDB")
+    except:
+            print('   IP Not Found')
+
+
+    print("\n PhishTank Report:")
+    try:
+        PT_URL = 'https://checkurl.phishtank.com/checkurl/'
+
+        querystring = {
+            'url': ip,
+            'format':'json',
+            'app_key': PT_API_KEY
+        }
+
+        response = requests.request(method='POST', url=PT_URL, data=querystring)
+        if response.status_code == 200:
+            req = response.json()
+
+            print("   URL:           " + str(req['results']['url']))
+            print("   In Database:   " + str(req['results']['in_database']))
+            if req['results']['in_database'] == True:
+                print("   Phish ID:      " + str(req['results']['phish_id']))
+                print("   Phish Details: " + str(req['results']['phish_detail_page']))
+                print("   Verified:      " + str(req['results']['verified']))
+                print("   Verified At:   " + str(req['results']['verified_at']))
+                print("   Valid:         " + str(req['results']['valid']))
+
+        else:
+            print("   Error Reaching PhishTank")
     except:
             print('   IP Not Found')
 
