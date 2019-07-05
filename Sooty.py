@@ -148,6 +148,9 @@ def decoderMenu():
     decoderSwitch(input())
 
 def proofPointDecoder():
+    print("\n --------------------------------- ")
+    print(" P R O O F P O I N T D E C O D E R ")
+    print(" --------------------------------- ")
     rewrittenurl = input(" Enter ProofPoint Link: ")
     match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
     if match:
@@ -158,17 +161,23 @@ def proofPointDecoder():
         else:
             print('Unrecognized version in: ', rewrittenurl)
     else:
-        print('No valid URL found in input: ', rewrittenurl)
+        print(' No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
 
 def urlDecoder():
+    print("\n --------------------------------- ")
+    print("       U R L   D E C O D E R      ")
+    print(" --------------------------------- ")
     url = input(' Enter URL: ')
     decodedUrl = unquote(url)
     print(decodedUrl)
     mainMenu()
 
 def safelinksDecoder():
+    print("\n --------------------------------- ")
+    print(" S A F E L I N K S   D E C O D E R  ")
+    print(" --------------------------------- ")
     url = input(' Enter URL: ')
     dcUrl = unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
@@ -176,10 +185,13 @@ def safelinksDecoder():
     mainMenu()
 
 def unshortenEnter():
+    print("\n --------------------------------- ")
+    print("   U R L   U N S H O R T E N E R  ")
+    print(" --------------------------------- ")
     link = input(' Enter: ')
     urlUnshortener(link)
     decoderMenu()
-
+    
 def urlUnshortener(link):
     url = 'https://unshorten.me/s/'
 
