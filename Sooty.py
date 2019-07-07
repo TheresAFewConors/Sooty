@@ -25,7 +25,6 @@ except:
 
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
-PT_API_KEY = 'Enter PhishTank API Key Here'
 
 def switchMenu(choice):
     if choice == '1':
@@ -202,7 +201,7 @@ def b64Decoder():
             print( "Decoded String: " + base64.decodebytes(match.encode("utf-8") ) )
         except:
             pass
-            
+
     mainMenu()
 
 def repChecker():
@@ -302,35 +301,6 @@ def repChecker():
             print("   Last Report: " + str(req['data']['lastReportedAt']))
         else:
             print("   Error Reaching ABUSE IPDB")
-    except:
-            print('   IP Not Found')
-
-
-    print("\n PhishTank Report:")
-    try:
-        PT_URL = 'https://checkurl.phishtank.com/checkurl/'
-
-        querystring = {
-            'url': ip,
-            'format':'json',
-            'app_key': PT_API_KEY
-        }
-
-        response = requests.request(method='POST', url=PT_URL, data=querystring)
-        if response.status_code == 200:
-            req = response.json()
-
-            print("   URL:           " + str(req['results']['url']))
-            print("   In Database:   " + str(req['results']['in_database']))
-            if req['results']['in_database'] == True:
-                print("   Phish ID:      " + str(req['results']['phish_id']))
-                print("   Phish Details: " + str(req['results']['phish_detail_page']))
-                print("   Verified:      " + str(req['results']['verified']))
-                print("   Verified At:   " + str(req['results']['verified_at']))
-                print("   Valid:         " + str(req['results']['valid']))
-
-        else:
-            print("   Error Reaching PhishTank")
     except:
             print('   IP Not Found')
 
