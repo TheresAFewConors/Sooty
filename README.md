@@ -30,7 +30,7 @@
     - [BadIP's](https://www.badips.com/)
     - [Abuse IPDB](https://www.abuseipdb.com/)
   - Check if an IP address is a TOR exit node
-  - Decode Proofpoint URL's, UTF-8 encoded URLS and Office SafeLink URL's
+  - Decode Proofpoint URL's, UTF-8 encoded URLS, Office SafeLink URL's and Base64 Strings
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   - Perform WhoIs Lookups
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
@@ -103,5 +103,6 @@ Found a Bug? Show Me!
  - [Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
  - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
  - [mrpnkt](https://github.com/mrpnkt) for adding the missing whois requirement to requirements.txt
+ - [Gurulhu](https://github.com/Gurulhu) for adding the Base64 Decoder to the Decoders menu.
 
  ![](readmeimages/vt_hashchecker.gif)
