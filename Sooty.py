@@ -5,7 +5,7 @@
     Version:    1.23
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
-
+import base64
 import hashlib
 import html.parser
 import re
@@ -194,7 +194,7 @@ def unshortenEnter():
     link = input(' Enter: ')
     urlUnshortener(link)
     decoderMenu()
-    
+
 def urlUnshortener(link):
     url = 'https://unshorten.me/s/'
 
@@ -208,15 +208,16 @@ def urlUnshortener(link):
 
 def b64Decoder():
     url = input(' Enter URL: ')
-    b64 = re.compile("[A-Za-z0-9]{6,}[=]{0,2}")
-    for match in b64.findall(url):
-        try:
-            print( "B64 String:     " + match )
-            print( "Decoded String: " + base64.decodebytes(match.encode("utf-8") ) )
-        except:
-            pass
 
-    mainMenu()
+    try:
+        b64 = str(base64.b64decode(url))
+        a = re.split("'", b64)[1]
+        print(" B64 String:     " + url)
+        print(" Decoded String: " + a)
+    except:
+        print(' No Base64 Encoded String Found')
+
+    decoderMenu()
 
 def repChecker():
     print("\n --------------------------------- ")
