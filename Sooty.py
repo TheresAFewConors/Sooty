@@ -51,6 +51,8 @@ def decoderSwitch(choice):
         safelinksDecoder()
     if choice == '4':
         unshortenEnter()
+    if choice == '5':
+        b64Decoder()
     if choice == '0':
         mainMenu()
 
@@ -144,6 +146,7 @@ def decoderMenu():
     print(" OPTION 2: URL Decoder")
     print(" OPTION 3: Office SafeLinks Decoder")
     print(" OPTION 4: URL unShortener")
+    print(" OPTION 5: Base64 Decoder")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -202,6 +205,18 @@ def urlUnshortener(link):
     us_url = str(us_url).strip("'\\n'")
     print(us_url)
     return
+
+def b64Decoder():
+    url = input(' Enter URL: ')
+    b64 = re.compile("[A-Za-z0-9]{6,}[=]{0,2}")
+    for match in b64.findall(url):
+        try:
+            print( "B64 String:     " + match )
+            print( "Decoded String: " + base64.decodebytes(match.encode("utf-8") ) )
+        except:
+            pass
+
+    mainMenu()
 
 def repChecker():
     print("\n --------------------------------- ")
