@@ -51,6 +51,8 @@ def decoderSwitch(choice):
         safelinksDecoder()
     if choice == '4':
         unshortenEnter()
+    if choice == '5':
+        b64Decoder()
     if choice == '0':
         mainMenu()
 
