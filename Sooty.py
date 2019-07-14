@@ -9,6 +9,8 @@ import base64
 import hashlib
 import html.parser
 import re
+import json
+import time
 import os
 import socket
 import urllib.parse
@@ -25,6 +27,7 @@ except:
 
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
+URLSCAN_IO_KEY = 'Enter urlscan.io API Key Here'
 
 def switchMenu(choice):
     if choice == '1':
@@ -39,6 +42,8 @@ def switchMenu(choice):
         hashMenu()
     if choice == '6':
         phishingMenu()
+    if choice == '7':
+        urlscanio()
     if choice == '0':
         exit()
 
@@ -122,6 +127,7 @@ def mainMenu():
     print(" OPTION 4: DNS Tools")
     print(" OPTION 5: Hashing Function")
     print(" OPTION 6: Phishing Analysis")
+    print(" OPTION 7: URL scan")
     print(" OPTION 0: Exit Tool")
     switchMenu(input())
 
@@ -186,7 +192,47 @@ def safelinksDecoder():
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
     mainMenu()
+    
+def urlscanio():
+    print("\n --------------------------------- ")
+    print("\n        U R L S C A N . I O        ")
+    print("\n --------------------------------- ")
+    url_to_scan = str(input('\nEnter url: '))
+    print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
+	
+    headers = {
+        'Content-Type': 'application/json',
+        'API-Key': URLSCAN_IO_KEY,
+        }
+    response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json()
+    uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
+    time.sleep(45) # sleep for 45 seconds. The scan takes awhile, if we try to retrieve the scan too soon, it will return an error.
+    scan_results = requests.get('https://urlscan.io/api/v1/result/%s/' % uuid_variable).json() # retrieving the scan using the uuid for this scan
 
+    task_url = scan_results['task']['url']
+    verdicts_overall_score = scan_results['verdicts']['overall']['score']
+    verdicts_overall_malicious = scan_results['verdicts']['overall']['malicious']
+    task_report_URL = scan_results['task']['reportURL']
+
+    print("\nurlscan.io Report:")
+    print("\nURL: " + task_url)  
+    print("\nOverall Verdict: " + str(verdicts_overall_score))
+    print("Malicious: " + str(verdicts_overall_malicious))
+    print("urlscan.io: " + str(scan_results['verdicts']['urlscan']['score']))
+    if scan_results['verdicts']['urlscan']['malicious']:
+        print("Malicious: " + str(scan_results['verdicts']['urlscan']['malicious'])) # True
+    if scan_results['verdicts']['urlscan']['categories']:
+        print("Categories: ")	
+    for line in scan_results['verdicts']['urlscan']['categories']:
+        print("\t"+ str(line)) # phishing
+    for line in scan_results['verdicts']['engines']['verdicts']:
+        print(str(line['engine']) + " score: " + str(line['score'])) # googlesafebrowsing
+        print("Categories: ")
+        for item in line['categories']:
+            print("\t" + item) # social_engineering
+    print("\nSee full report for more details: " + str(task_report_URL))
+    print('')
+    
 def unshortenEnter():
     print("\n --------------------------------- ")
     print("   U R L   U N S H O R T E N E R  ")
