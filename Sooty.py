@@ -2,15 +2,16 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.22
+    Version:    1.23
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
-
+import base64
 import hashlib
 import html.parser
 import re
 import json
 import time
+import os
 import socket
 import urllib.parse
 from urllib.parse import unquote
@@ -53,6 +54,10 @@ def decoderSwitch(choice):
         urlDecoder()
     if choice == '3':
         safelinksDecoder()
+    if choice == '4':
+        unshortenEnter()
+    if choice == '5':
+        b64Decoder()
     if choice == '0':
         mainMenu()
 
@@ -146,10 +151,15 @@ def decoderMenu():
     print(" OPTION 1: ProofPoint Decoder")
     print(" OPTION 2: URL Decoder")
     print(" OPTION 3: Office SafeLinks Decoder")
+    print(" OPTION 4: URL unShortener")
+    print(" OPTION 5: Base64 Decoder")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
 def proofPointDecoder():
+    print("\n --------------------------------- ")
+    print(" P R O O F P O I N T D E C O D E R ")
+    print(" --------------------------------- ")
     rewrittenurl = input(" Enter ProofPoint Link: ")
     match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
     if match:
@@ -160,17 +170,23 @@ def proofPointDecoder():
         else:
             print('Unrecognized version in: ', rewrittenurl)
     else:
-        print('No valid URL found in input: ', rewrittenurl)
+        print(' No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
 
 def urlDecoder():
+    print("\n --------------------------------- ")
+    print("       U R L   D E C O D E R      ")
+    print(" --------------------------------- ")
     url = input(' Enter URL: ')
     decodedUrl = unquote(url)
     print(decodedUrl)
     mainMenu()
 
 def safelinksDecoder():
+    print("\n --------------------------------- ")
+    print(" S A F E L I N K S   D E C O D E R  ")
+    print(" --------------------------------- ")
     url = input(' Enter URL: ')
     dcUrl = unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
@@ -217,6 +233,38 @@ def urlscanio():
     print("\nSee full report for more details: " + str(task_report_URL))
     print('')
     
+def unshortenEnter():
+    print("\n --------------------------------- ")
+    print("   U R L   U N S H O R T E N E R  ")
+    print(" --------------------------------- ")
+    link = input(' Enter: ')
+    urlUnshortener(link)
+    decoderMenu()
+
+def urlUnshortener(link):
+    url = 'https://unshorten.me/s/'
+
+    final = str(url) + str(link)
+    req = requests.get(str(final))
+    us_url = req.content
+    us_url = str(us_url).split("b'")[-1]
+    us_url = str(us_url).strip("'\\n'")
+    print(us_url)
+    return
+
+def b64Decoder():
+    url = input(' Enter URL: ')
+
+    try:
+        b64 = str(base64.b64decode(url))
+        a = re.split("'", b64)[1]
+        print(" B64 String:     " + url)
+        print(" Decoded String: " + a)
+    except:
+        print(' No Base64 Encoded String Found')
+
+    decoderMenu()
+
 def repChecker():
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
@@ -316,8 +364,6 @@ def repChecker():
             print("   Error Reaching ABUSE IPDB")
     except:
             print('   IP Not Found')
-
-
 
     mainMenu()
 
@@ -521,6 +567,10 @@ def analyzePhish():
         with open(file, encoding='Latin-1') as f:
             msg = f.read()
 
+        # Fixes issue with file name / dir name exceptions
+        file = file.replace('//', '/')  # dir
+        file2 = file.replace(' ', '')   # file name (remove spaces / %20)
+        os.rename(file, file2)
         outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         msg = outlook.OpenSharedItem(file)
     except:
