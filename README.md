@@ -37,6 +37,7 @@
   - Simple analysis of emails to retrieve URL's, emails and header information.
   - Extract IP addresses from emails.
   - Unshorten URL's that have been shortened by external services. (Limited to 10 requests per hour)
+  - Query URLScan.io for reputation reports.
 
 
 
@@ -45,7 +46,7 @@
  - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
  - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
- 
+ - To use the URLScan.io checker function with URLScan requires an [API Key](https://urlscan.io/about-api/), replace the key 'URLSCAN_IO_KEY' in the code with your own key. The tool will still function without this key, however this feature will not work. 
 
 ## Development
 
@@ -104,5 +105,6 @@ Found a Bug? Show Me!
  - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
  - [mrpnkt](https://github.com/mrpnkt) for adding the missing whois requirement to requirements.txt
  - [Gurulhu](https://github.com/Gurulhu) for adding the Base64 Decoder to the Decoders menu.
+ - [AndThenEnteredAlex](https://github.com/andthenenteredalex) for adding the URLScan Function from URLScan.io
 
  ![](readmeimages/vt_hashchecker.gif)
