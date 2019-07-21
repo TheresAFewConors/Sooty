@@ -2,9 +2,10 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.23
+    Version:    1.25
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
+
 import base64
 import hashlib
 import html.parser
@@ -25,6 +26,8 @@ try:
 except:
     print('Cant install package')
 
+versionNo = '1.25'
+
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
 URLSCAN_IO_KEY = 'Enter urlscan.io API Key Here'
@@ -44,6 +47,8 @@ def switchMenu(choice):
         phishingMenu()
     if choice == '7':
         urlscanio()
+    if choice == '9':
+        extrasMenu()
     if choice == '0':
         exit()
 
@@ -90,6 +95,16 @@ def phishingSwitch(choice):
     if choice == '0':
         mainMenu()
 
+def extrasSwitch(choice):
+    if choice == '1':
+        aboutSooty()
+    if choice == '2':
+        contributors()
+    if choice == '3':
+        extrasVersion()
+    if choice == '0':
+        mainMenu()
+
 def decodev1(rewrittenurl):
     match = re.search(r'u=(.+?)&k=', rewrittenurl)
     if match:
@@ -128,6 +143,7 @@ def mainMenu():
     print(" OPTION 5: Hashing Function")
     print(" OPTION 6: Phishing Analysis")
     print(" OPTION 7: URL scan")
+    print(" OPTION 9: Extras")
     print(" OPTION 0: Exit Tool")
     switchMenu(input())
 
@@ -192,14 +208,14 @@ def safelinksDecoder():
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
     mainMenu()
-    
+
 def urlscanio():
     print("\n --------------------------------- ")
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
     url_to_scan = str(input('\nEnter url: '))
     print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
-	
+
     headers = {
         'Content-Type': 'application/json',
         'API-Key': URLSCAN_IO_KEY,
@@ -215,14 +231,14 @@ def urlscanio():
     task_report_URL = scan_results['task']['reportURL']
 
     print("\nurlscan.io Report:")
-    print("\nURL: " + task_url)  
+    print("\nURL: " + task_url)
     print("\nOverall Verdict: " + str(verdicts_overall_score))
     print("Malicious: " + str(verdicts_overall_malicious))
     print("urlscan.io: " + str(scan_results['verdicts']['urlscan']['score']))
     if scan_results['verdicts']['urlscan']['malicious']:
         print("Malicious: " + str(scan_results['verdicts']['urlscan']['malicious'])) # True
     if scan_results['verdicts']['urlscan']['categories']:
-        print("Categories: ")	
+        print("Categories: ")
     for line in scan_results['verdicts']['urlscan']['categories']:
         print("\t"+ str(line)) # phishing
     for line in scan_results['verdicts']['engines']['verdicts']:
@@ -232,7 +248,7 @@ def urlscanio():
             print("\t" + item) # social_engineering
     print("\nSee full report for more details: " + str(task_report_URL))
     print('')
-    
+
 def unshortenEnter():
     print("\n --------------------------------- ")
     print("   U R L   U N S H O R T E N E R  ")
@@ -644,6 +660,36 @@ def analyzePhish():
         print('   IP error')
 
     phishingMenu()
+
+def extrasMenu():
+    print("\n --------------------------------- ")
+    print("            E X T R A S            ")
+    print(" --------------------------------- ")
+    print(" What would you like to do? ")
+    print(" OPTION 1: About SOOTY ")
+    print(" OPTION 2: Contributors ")
+    print(" OPTION 3: Version")
+    print(" OPTION 0: Exit to Main Menu")
+    extrasSwitch(input())
+
+def aboutSooty():
+    print(' SOOTY is a tool developed and targeted to help automate some tasks that SOC Analysts perform.')
+    extrasMenu()
+
+def contributors():
+    print(' CONTRIBUTORS')
+    print(" Aaron J Copley for his code to decode ProofPoint URL's")
+    print(" James Duarte for adding a hash and auto-check option to the hashing function ")
+    print(" mrpnkt for adding the missing whois requirement to requirements.txt")
+    print(" Gurulhu for adding the Base64 Decoder to the Decoders menu.")
+    print(" AndThenEnteredAlex for adding the URLScan Function from URLScan.io")
+    extrasMenu()
+
+def extrasVersion():
+    print(' Current Version: ' + versionNo)
+    extrasMenu()
+
+
 
 if __name__ == '__main__':
     mainMenu()
