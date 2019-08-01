@@ -37,8 +37,8 @@
   - Simple analysis of emails to retrieve URL's, emails and header information.
   - Extract IP addresses from emails.
   - Unshorten URL's that have been shortened by external services. (Limited to 10 requests per hour)
-  - Query URLScan.io for reputation reports.
-  - Analyze email addresses for known malicious activity and report on domain reputation utilising [emailrep.io](https://emailrep.io)
+  - Query [URLScan.io](https://urlscan.io) for reputation reports.
+  - Analyze email addresses for known malicious activity and report on domain reputation utilising [EmailRep.io](https://emailrep.io)
 
 
 
