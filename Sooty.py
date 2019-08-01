@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.25
+    Version:    1.26
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -90,6 +90,8 @@ def hashSwitch(choice):
 def phishingSwitch(choice):
     if choice == '1':
         analyzePhish()
+    if choice == '2':
+        analyzeEmail()
     if choice == '9':
         haveIBeenPwned()
     if choice == '0':
@@ -532,46 +534,13 @@ def hashAndFileUpload():
         print(" Error: Invalid API Key")
     hashMenu()
 
-def haveIBeenPwned():
-    print("\n --------------------------------- ")
-    print(" H A V E   I   B E E N   P W N E D  ")
-    print(" --------------------------------- ")
-
-    try:
-        acc = input(' Enter email: ')
-        url = ('https://haveibeenpwned.com/api/v2/breachedaccount/%s' % acc)
-        response = requests.get(url)
-
-        if response.status_code == 200:
-
-            response = response.json()
-            le = len(response)
-
-            for i in range(le):
-                dc = str(response[i]['DataClasses'])
-                dc = re.sub('\[(?:[^\]|]*\|)?([^\]|]*)\]', r'\1', dc)
-                dc = dc.replace("'", '')
-
-                print("\n")
-                print("Name:     " + str(response[i]['Title']))
-                print("Domain:   " + str(response[i]['Domain']))
-                print("Breached: " + str(response[i]['BreachDate']))
-                print("Details:  " + str(dc))
-                print("Verified: " + str(response[i]['IsVerified']))
-        else:
-            print(" Email NOT Found in Database")
-
-    except:
-        print(" Unable to reach HaveIBeenPwned")
-
-    mainMenu()
-
 def phishingMenu():
     print("\n --------------------------------- ")
     print("          P H I S H I N G          ")
     print(" --------------------------------- ")
     print(" What would you like to do? ")
-    print(" OPTION 1: Analyze an Email for IOC's")
+    print(" OPTION 1: Analyze an Email ")
+    print(" OPTION 2: Analyze an Email Address for Known Activity")
     print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
@@ -661,6 +630,96 @@ def analyzePhish():
 
     phishingMenu()
 
+def haveIBeenPwned():
+    print("\n --------------------------------- ")
+    print(" H A V E   I   B E E N   P W N E D  ")
+    print(" --------------------------------- ")
+
+    try:
+        acc = input(' Enter email: ')
+        url = ('https://haveibeenpwned.com/api/v2/breachedaccount/%s' % acc)
+        response = requests.get(url)
+
+        if response.status_code == 200:
+
+            response = response.json()
+            le = len(response)
+
+            for i in range(le):
+                dc = str(response[i]['DataClasses'])
+                dc = re.sub('\[(?:[^\]|]*\|)?([^\]|]*)\]', r'\1', dc)
+                dc = dc.replace("'", '')
+
+                print("\n")
+                print("Name:     " + str(response[i]['Title']))
+                print("Domain:   " + str(response[i]['Domain']))
+                print("Breached: " + str(response[i]['BreachDate']))
+                print("Details:  " + str(dc))
+                print("Verified: " + str(response[i]['IsVerified']))
+        else:
+            print(" Email NOT Found in Database")
+
+    except:
+        print(" Unable to reach HaveIBeenPwned")
+
+    mainMenu()
+
+def analyzeEmail():
+    print("\n --------------------------------- ")
+    print("    E M A I L   A N A L Y S I S    ")
+    print(" --------------------------------- ")
+    try:
+        url = 'https://emailrep.io/'
+        print(' Enter Email Address to Analyze: ')
+        email = input()
+        summary = '?summary=true'
+        url = url + email + summary
+
+        response = requests.get(url)
+        req = response.json()
+
+        emailDomain = re.split('@', email)[1]
+
+        print('\n Email Analysis Report ')
+        if response.status_code == 200:
+            print('   Email:       %s' % req['email'])
+            print('   Reputation:  %s' % req['reputation'])
+            print('   Suspicious:  %s' % req['suspicious'])
+            print('   Spotted:     %s' % req['references'] + ' Times')
+            print('   Blacklisted: %s' % req['details']['blacklisted'])
+            print('   Last Seen:   %s' % req['details']['last_seen'])
+            print('   Known Spam:  %s' % req['details']['spam'])
+
+            print('\n Domain Report ')
+            print('   Domain:        @%s' % emailDomain)
+            print('   Domain Exists: %s' % req['details']['domain_exists'])
+            print('   Domain Rep:    %s' % req['details']['domain_reputation'])
+            print('   Domain Age:    %s' % req['details']['days_since_domain_creation'] + ' Days')
+            print('   New Domain:    %s' % req['details']['new_domain'])
+            print('   Deliverable:   %s' % req['details']['deliverable'])
+            print('   Free Provider: %s' % req['details']['free_provider'])
+            print('   Disposable:    %s' % req['details']['disposable'])
+            print('   Spoofable:     %s' % req['details']['spoofable'])
+
+            print('\n Malicious Activity Report ')
+            print('   Malicious Activity: %s' % req['details']['malicious_activity'])
+            print('   Recent Activity:    %s' % req['details']['malicious_activity_recent'])
+            print('   Credentials Leaked: %s' % req['details']['credentials_leaked'])
+            print('   Found in breach:    %s' % req['details']['data_breach'])
+
+            print('\n Profiles Found ')
+            print('   %s' % req['details']['profiles'])
+
+            print('\n Summary of Report: ')
+            repSum = req['summary']
+            repSum = re.split(r"\.\s*", repSum)
+            for each in repSum:
+                print('   %s' % each)
+
+    except:
+        print(' Error Analyzing Submitted Email')
+    phishingMenu()
+
 def extrasMenu():
     print("\n --------------------------------- ")
     print("            E X T R A S            ")
@@ -688,8 +747,6 @@ def contributors():
 def extrasVersion():
     print(' Current Version: ' + versionNo)
     extrasMenu()
-
-
 
 if __name__ == '__main__':
     mainMenu()
