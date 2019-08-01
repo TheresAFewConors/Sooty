@@ -38,6 +38,7 @@
   - Extract IP addresses from emails.
   - Unshorten URL's that have been shortened by external services. (Limited to 10 requests per hour)
   - Query URLScan.io for reputation reports.
+  - Analyze email addresses for known malicious activity and report on domain reputation utilising [emailrep.io](https://emailrep.io)
 
 
 
@@ -91,7 +92,7 @@ Found a Bug? Show Me!
   
 #### Version 1.2 - The Phishing Update
   - ~~Add Ability to extract email addresses and URL's from mail.~~ Edit: Added
-  - Correlate emails and URL's to see if they have been reported for phishing (PhishTank)
+  - ~~Correlate emails and URL's to see if they have been reported for phishing~~ Edit: Added
   - Scan email attachments for malicious content, macros, files, scan hashes, etc.
   
 #### Version 1.3 - The Case Update
