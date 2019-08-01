@@ -40,7 +40,7 @@
   - Query [URLScan.io](https://urlscan.io) for reputation reports.
   - Analyze email addresses for known malicious activity and report on domain reputation utilising [EmailRep.io](https://emailrep.io)
 
-
+![](readmeimages/email_analysis.gif)
 
 ## Requirements
  - [Python 3.x](https://www.python.org/)
