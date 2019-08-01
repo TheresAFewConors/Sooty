@@ -26,7 +26,7 @@ try:
 except:
     print('Cant install package')
 
-versionNo = '1.25'
+versionNo = '1.26'
 
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
