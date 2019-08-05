@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.26
+    Version:    1.265
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -26,7 +26,7 @@ try:
 except:
     print('Cant install package')
 
-versionNo = '1.26'
+versionNo = '1.265'
 
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
@@ -91,7 +91,7 @@ def phishingSwitch(choice):
     if choice == '1':
         analyzePhish()
     if choice == '2':
-        analyzeEmail()
+        analyzeEmailInput()
     if choice == '9':
         haveIBeenPwned()
     if choice == '0':
@@ -547,7 +547,6 @@ def phishingMenu():
 
 def analyzePhish():
     try:
-        #root = Tk()
         file = filedialog.askopenfilename(initialdir="/", title="Select file")
         with open(file, encoding='Latin-1') as f:
             msg = f.read()
@@ -561,8 +560,8 @@ def analyzePhish():
     except:
         print(' Error Opening File')
 
+    print("\n Extracting Headers...")
     try:
-        print("\n Extracting Headers...")
         print("   FROM:      ", str(msg.SenderName), ", ", str(msg.SenderEmailAddress))
         print("   TO:        ", str(msg.To))
         print("   SUBJECT:   ", str(msg.Subject))
@@ -598,7 +597,7 @@ def analyzePhish():
         print('   Links Error')
         f.close()
 
-    print("\n Extracting Emails... ")
+    print("\n Extracting Emails Addresses... ")
     try:
         match = r'([\w0-9._-]+@[\w0-9._-]+\.[\w0-9_-]+)'
         emailList = list()
@@ -627,6 +626,9 @@ def analyzePhish():
             print('   No IP Addresses Found')
     except:
         print('   IP error')
+
+
+    analyzeEmail(msg.SenderEmailAddress)
 
     phishingMenu()
 
@@ -664,20 +666,27 @@ def haveIBeenPwned():
 
     mainMenu()
 
-def analyzeEmail():
+def analyzeEmailInput():
     print("\n --------------------------------- ")
     print("    E M A I L   A N A L Y S I S    ")
     print(" --------------------------------- ")
     try:
-        url = 'https://emailrep.io/'
         print(' Enter Email Address to Analyze: ')
         email = input()
+        analyzeEmail(email)
+        phishingMenu()
+    except:
+        print("   Error Scanning Email Address")
+
+
+def analyzeEmail(email):
+
+    try:
+        url = 'https://emailrep.io/'
         summary = '?summary=true'
         url = url + email + summary
-
         response = requests.get(url)
         req = response.json()
-
         emailDomain = re.split('@', email)[1]
 
         print('\n Email Analysis Report ')
@@ -718,7 +727,6 @@ def analyzeEmail():
 
     except:
         print(' Error Analyzing Submitted Email')
-    phishingMenu()
 
 def extrasMenu():
     print("\n --------------------------------- ")
