@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.265
+    Version:    1.26
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -26,7 +26,7 @@ try:
 except:
     print('Cant install package')
 
-versionNo = '1.265'
+versionNo = '1.26'
 
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
@@ -717,7 +717,10 @@ def analyzeEmail(email):
             print('   Found in breach:    %s' % req['details']['data_breach'])
 
             print('\n Profiles Found ')
-            print('   %s' % req['details']['profiles'])
+            if (len(req['details']['profiles']) != 0):
+                print('   %s' % req['details']['profiles'])
+            else:
+                print('   No Profiles Found For This User')
 
             print('\n Summary of Report: ')
             repSum = req['summary']
