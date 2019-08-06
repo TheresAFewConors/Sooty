@@ -287,101 +287,107 @@ def repChecker():
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
     print(" --------------------------------- ")
-    ip = input(" Enter IP / URL: ")
+    ip = input(" Enter IP, URL or Email Address: ")
 
-    whoIsPrint(ip)
+    s = re.findall('\S+@\S+', ip)
+    if s:
+        print(' Email Detected...')
+        analyzeEmail(''.join(s))
+    else:
 
-    print("\n VirusTotal Report:")
-    url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-    params = {'apikey': VT_API_KEY, 'ip': ip}
-    response = requests.get(url, params=params)
+        whoIsPrint(ip)
 
-    pos = 0
-    tot = 0
-    if response.status_code == 200:
-        try:    # try IP else fall through to URL
-            result = response.json()
-            for each in result['detected_urls']:
-                tot = tot + 1
-                pos = pos + each['positives']
+        print("\n VirusTotal Report:")
+        url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
+        params = {'apikey': VT_API_KEY, 'ip': ip}
+        response = requests.get(url, params=params)
 
-            if tot != 0:
-                print("   No of Reportings: " + str(tot))
-                print("   Average Score:    " + str(pos / tot))
-                print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
-            else:
-                print("   No of Reportings: " + str(tot))
-        except:
-            try: #EAFP
-                url = 'https://www.virustotal.com/vtapi/v2/url/report'
-                params = {'apikey': VT_API_KEY, 'resource': ip}
-                response = requests.get(url, params=params)
+        pos = 0
+        tot = 0
+        if response.status_code == 200:
+            try:    # try IP else fall through to URL
                 result = response.json()
-                print("\n VirusTotal Report:")
-                print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
-                print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
+                for each in result['detected_urls']:
+                    tot = tot + 1
+                    pos = pos + each['positives']
+
+                if tot != 0:
+                    print("   No of Reportings: " + str(tot))
+                    print("   Average Score:    " + str(pos / tot))
+                    print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
+                else:
+                    print("   No of Reportings: " + str(tot))
             except:
-                print(" Not found in database")
-    else:
-        print(" There's been an error - check your API key, or VirusTotal is possible down")
-
-    TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
-    req = requests.get(TOR_URL)
-    print("\n TOR Exit Node Report: ")
-    if req.status_code == 200:
-        tl = req.text.split('\n')
-        c = 0
-        for i in tl:
-            if ip == i:
-                print("  " + i + " is a TOR Exit Node")
-                c = c+1
-        if c == 0:
-            print("  " + ip + " is NOT a TOR Exit Node")
-    else:
-        print("   TOR LIST UNREACHABLE")
-
-
-    print("\n Checking BadIP's... ")
-    try:
-        BAD_IPS_URL = 'https://www.badips.com/get/info/' + ip
-        response = requests.get(BAD_IPS_URL)
-        if response.status_code == 200:
-            result = response.json()
-
-            sc = result['Score']['ssh']
-            print("  " + str(result['suc']))
-            print("  Score: " + str(sc))
+                try: #EAFP
+                    url = 'https://www.virustotal.com/vtapi/v2/url/report'
+                    params = {'apikey': VT_API_KEY, 'resource': ip}
+                    response = requests.get(url, params=params)
+                    result = response.json()
+                    print("\n VirusTotal Report:")
+                    print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
+                    print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
+                except:
+                    print(" Not found in database")
         else:
-            print('  Error reaching BadIPs')
-    except:
-        print('  IP not found')
+            print(" There's been an error - check your API key, or VirusTotal is possible down")
 
-    print("\n ABUSEIPDB Report:")
-    try:
-        AB_URL = 'https://api.abuseipdb.com/api/v2/check'
-        days = '180'
-
-        querystring = {
-            'ipAddress': ip,
-            'maxAgeInDays': days
-        }
-
-        headers = {
-            'Accept': 'application/json',
-            'Key': AB_API_KEY
-        }
-        response = requests.request(method='GET', url=AB_URL, headers=headers, params=querystring)
-        if response.status_code == 200:
-            req = response.json()
-
-            print("   IP:          " + str(req['data']['ipAddress']))
-            print("   Reports:     " + str(req['data']['totalReports']))
-            print("   Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
-            print("   Last Report: " + str(req['data']['lastReportedAt']))
+        TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
+        req = requests.get(TOR_URL)
+        print("\n TOR Exit Node Report: ")
+        if req.status_code == 200:
+            tl = req.text.split('\n')
+            c = 0
+            for i in tl:
+                if ip == i:
+                    print("  " + i + " is a TOR Exit Node")
+                    c = c+1
+            if c == 0:
+                print("  " + ip + " is NOT a TOR Exit Node")
         else:
-            print("   Error Reaching ABUSE IPDB")
-    except:
-            print('   IP Not Found')
+            print("   TOR LIST UNREACHABLE")
+
+
+        print("\n Checking BadIP's... ")
+        try:
+            BAD_IPS_URL = 'https://www.badips.com/get/info/' + ip
+            response = requests.get(BAD_IPS_URL)
+            if response.status_code == 200:
+                result = response.json()
+
+                sc = result['Score']['ssh']
+                print("  " + str(result['suc']))
+                print("  Score: " + str(sc))
+            else:
+                print('  Error reaching BadIPs')
+        except:
+            print('  IP not found')
+
+        print("\n ABUSEIPDB Report:")
+        try:
+            AB_URL = 'https://api.abuseipdb.com/api/v2/check'
+            days = '180'
+
+            querystring = {
+                'ipAddress': ip,
+                'maxAgeInDays': days
+            }
+
+            headers = {
+                'Accept': 'application/json',
+                'Key': AB_API_KEY
+            }
+            response = requests.request(method='GET', url=AB_URL, headers=headers, params=querystring)
+            if response.status_code == 200:
+                req = response.json()
+
+                print("   IP:          " + str(req['data']['ipAddress']))
+                print("   Reports:     " + str(req['data']['totalReports']))
+                print("   Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
+                print("   Last Report: " + str(req['data']['lastReportedAt']))
+            else:
+                print("   Error Reaching ABUSE IPDB")
+        except:
+                print('   IP Not Found')
 
     mainMenu()
 
