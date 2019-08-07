@@ -724,7 +724,8 @@ def analyzeEmail(email):
 
             print('\n Profiles Found ')
             if (len(req['details']['profiles']) != 0):
-                print('   %s' % req['details']['profiles'])
+                for each in req['details']['profiles']:
+                    print('   %s' % each)
             else:
                 print('   No Profiles Found For This User')
 
