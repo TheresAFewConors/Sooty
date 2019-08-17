@@ -33,7 +33,7 @@
   - Decode Proofpoint URL's, UTF-8 encoded URLS, Office SafeLink URL's and Base64 Strings
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   - Perform WhoIs Lookups
-  - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred.
+<!--  - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred. -->
   - Simple analysis of emails to retrieve URL's, emails and header information.
   - Extract IP addresses from emails.
   - Unshorten URL's that have been shortened by external services. (Limited to 10 requests per hour)
