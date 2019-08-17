@@ -547,7 +547,7 @@ def phishingMenu():
     print(" What would you like to do? ")
     print(" OPTION 1: Analyze an Email ")
     print(" OPTION 2: Analyze an Email Address for Known Activity")
-    print(" OPTION 9: HaveIBeenPwned")
+    #print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
 
@@ -638,6 +638,7 @@ def analyzePhish():
 
     phishingMenu()
 
+"""
 def haveIBeenPwned():
     print("\n --------------------------------- ")
     print(" H A V E   I   B E E N   P W N E D  ")
@@ -671,6 +672,7 @@ def haveIBeenPwned():
         print(" Unable to reach HaveIBeenPwned")
 
     mainMenu()
+"""
 
 def analyzeEmailInput():
     print("\n --------------------------------- ")
