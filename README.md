@@ -94,8 +94,11 @@ Found a Bug? Show Me!
   - ~~Add Ability to extract email addresses and URL's from mail.~~ Edit: Added
   - ~~Correlate emails and URL's to see if they have been reported for phishing~~ Edit: Added
   - Scan email attachments for malicious content, macros, files, scan hashes, etc.
-  
-#### Version 1.3 - The Case Update
+
+#### Version 1.3 - The Templating Update
+ - Add dynamic email templates that generate based on Sooty's analysis.
+
+#### Version 1.4 - The Case Update
   - Add a 'New Case' Feature, allowing output of the tool to be output to a txt file.
 
 
