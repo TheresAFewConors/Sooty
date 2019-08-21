@@ -114,10 +114,9 @@ def decodev1(rewrittenurl):
         htmlencodedurl = urllib.parse.unquote(urlencodedurl)
         url = html.unescape(htmlencodedurl)
         url = re.sub("http://", "", url)
-        print(url)
-    else:
-        #print('Error parsing URLv1')
-        print(rewrittenurl)
+        #print('\n %s' % url)
+        if url not in linksFoundList:
+            linksFoundList.append(url)
 
 def decodev2(rewrittenurl):
     match = re.search(r'u=(.+?)&[dc]=', rewrittenurl)
@@ -128,10 +127,9 @@ def decodev2(rewrittenurl):
         htmlencodedurl = urllib.parse.unquote(urlencodedurl)
         url = html.unescape(htmlencodedurl)
         url = re.sub("http://", "", url)
-        print("\n" + url)
-    else:
-        #print('Error parsing URLv2')
-        print(rewrittenurl)
+        #print("\n %s" % url)
+        if url not in linksFoundList:
+            linksFoundList.append(url)
 
 def mainMenu():
     print("\n --------------------------------- ")
@@ -174,6 +172,7 @@ def decoderMenu():
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
+
 def proofPointDecoder():
     print("\n --------------------------------- ")
     print(" P R O O F P O I N T D E C O D E R ")
@@ -183,14 +182,19 @@ def proofPointDecoder():
     if match:
         if match.group(1) == 'v1':
             decodev1(rewrittenurl)
+            for each in linksFoundList:
+                print('\n Decoded Link: %s' % each)
         elif match.group(1) == 'v2':
             decodev2(rewrittenurl)
+            for each in linksFoundList:
+                print('\n Decoded Link: %s' % each)
         else:
             print('Unrecognized version in: ', rewrittenurl)
     else:
         print(' No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
+
 
 def urlDecoder():
     print("\n --------------------------------- ")
@@ -584,24 +588,26 @@ def analyzePhish():
     print("\n Extracting Links... ")
     try:
         match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
-        a = re.findall(match, s, re.M | re.I)
-
+        a = re.findall(match, msg.Body, re.M | re.I)
         for b in a:
             pp = 'https://urldefense.proofpoint'
-            if pp in b[0]:
-                match2 = match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
-                if match2:
-                    if match.group(1) == 'v1':
-                        decodev1(b[0])
-                    elif match.group(1) == 'v2':
-                        decodev2(b[0])
-                    else:
-                        print(' Unrecognized')
+            match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
+            if match:
+                if match.group(1) == 'v1':
+                    decodev1(b[0])
+                elif match.group(1) == 'v2':
+                    decodev2(b[0])
             else:
-                print(" ", b[0])
+                if b[0] not in linksFoundList:
+                    linksFoundList.append(b[0])
+        if len(a) == 0:
+            print(' No Links Found...')
     except:
         print('   Links Error')
         f.close()
+
+    for each in linksFoundList:
+        print('   %s' % each)
 
     print("\n Extracting Emails Addresses... ")
     try:
@@ -615,6 +621,9 @@ def analyzePhish():
                 print(" ", b)
             if len(emailList) == 0:
                 print('   No Emails Found')
+
+        if len(a) == 0:
+            print('   No Emails Found...')
     except:
         print('   Emails Error')
         f.close()
@@ -629,10 +638,9 @@ def analyzePhish():
             for each in ipList:
                 print(each)
         else:
-            print('   No IP Addresses Found')
+            print('   No IP Addresses Found...')
     except:
         print('   IP error')
-
 
     analyzeEmail(msg.SenderEmailAddress)
 
