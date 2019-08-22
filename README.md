@@ -99,7 +99,7 @@ Found a Bug? Show Me!
  - Add dynamic email templates that generate based on Sooty's analysis.
 
 #### Version 1.4 - The PCAP Analysis Update
-- Add ebility to analze .pcap files and provide concise, enriched information.
+- Add ability to analze .pcap files and provide concise, enriched information.
 
 #### Version 1.x - The Case Update
   - Add a 'New Case' Feature, allowing output of the tool to be output to a txt file.
