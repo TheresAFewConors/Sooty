@@ -31,6 +31,7 @@ versionNo = '1.26'
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
 URLSCAN_IO_KEY = 'Enter urlscan.io API Key Here'
+HIBP_API_KEY = 'Enter HaveIBeenPwned API Key Here'
 
 def switchMenu(choice):
     if choice == '1':
@@ -551,7 +552,7 @@ def phishingMenu():
     print(" What would you like to do? ")
     print(" OPTION 1: Analyze an Email ")
     print(" OPTION 2: Analyze an Email Address for Known Activity")
-    #print(" OPTION 9: HaveIBeenPwned")
+    print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
 
@@ -646,7 +647,7 @@ def analyzePhish():
 
     phishingMenu()
 
-"""
+
 def haveIBeenPwned():
     print("\n --------------------------------- ")
     print(" H A V E   I   B E E N   P W N E D  ")
@@ -654,33 +655,27 @@ def haveIBeenPwned():
 
     try:
         acc = input(' Enter email: ')
-        url = ('https://haveibeenpwned.com/api/v2/breachedaccount/%s' % acc)
-        response = requests.get(url)
+        url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % acc
+        userAgent = 'Sooty'
+        headers = {'Content-Type': 'application/json', 'hibp-api-key': HIBP_API_KEY, 'user-agent': userAgent}
 
-        if response.status_code == 200:
+        try:
+            req = requests.get(url, headers=headers)
+            response = req.json()
+            lr = len(response)
+            if lr != 0:
+                print(' The account has been found in the following breaches: ')
+                for each in range(lr):
+                    print('   %s' % response[each]['Name'])
 
-            response = response.json()
-            le = len(response)
-
-            for i in range(le):
-                dc = str(response[i]['DataClasses'])
-                dc = re.sub('\[(?:[^\]|]*\|)?([^\]|]*)\]', r'\1', dc)
-                dc = dc.replace("'", '')
-
-                print("\n")
-                print("Name:     " + str(response[i]['Title']))
-                print("Domain:   " + str(response[i]['Domain']))
-                print("Breached: " + str(response[i]['BreachDate']))
-                print("Details:  " + str(dc))
-                print("Verified: " + str(response[i]['IsVerified']))
-        else:
-            print(" Email NOT Found in Database")
+        except:
+            print('No Entries found in database')
 
     except:
-        print(" Unable to reach HaveIBeenPwned")
+        print('')
+    
+    print(menu)
 
-    mainMenu()
-"""
 
 def analyzeEmailInput():
     print("\n --------------------------------- ")
