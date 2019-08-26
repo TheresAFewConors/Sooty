@@ -33,7 +33,7 @@
   - Decode Proofpoint URL's, UTF-8 encoded URLS, Office SafeLink URL's and Base64 Strings
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   - Perform WhoIs Lookups
-<!--  - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred. -->
+  - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred. (see requirements)
   - Simple analysis of emails to retrieve URL's, emails and header information.
   - Extract IP addresses from emails.
   - Unshorten URL's that have been shortened by external services. (Limited to 10 requests per hour)
@@ -48,7 +48,8 @@
  - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the URLScan.io checker function with URLScan requires an [API Key](https://urlscan.io/about-api/), replace the key `URLSCAN_IO_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work. 
-
+ - Use of the HaveIBeenPwned functionality requires an [API Key](https://haveibeenpwned.com/API/Key), replace the key in the code with your own key. The tool will still function without this key, however this feature will not work.
+ 
 ## Development
 
 Want to contribute? Great!
