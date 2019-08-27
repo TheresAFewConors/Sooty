@@ -666,7 +666,18 @@ def haveIBeenPwned():
             if lr != 0:
                 print(' The account has been found in the following breaches: ')
                 for each in range(lr):
-                    print('   %s' % response[each]['Name'])
+                    breach = 'https://haveibeenpwned.com/api/v3/breach/%s' % response[each]['Name']
+                    breachReq = requests.get(breach, headers=headers)
+                    breachResponse = breachReq.json()
+
+                    breachList = []
+                    print('\n   Title:        %s' % breachResponse['Title'])
+                    print('   Domain:       %s' % breachResponse['Domain'])
+                    print('   Breach Date:  %s' % breachResponse['BreachDate'])
+                    print('   Pwn Count:    %s' % breachResponse['PwnCount'])
+                    for each in breachResponse['DataClasses']:
+                        breachList.append(each)
+                    print('   Data leaked: %s' % breachList)
 
         except:
             print('No Entries found in database')
