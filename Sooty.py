@@ -683,7 +683,7 @@ def haveIBeenPwned():
             print('No Entries found in database')
 
     except:
-        print('')
+        print(' No API Key found')
     
     print(menu)
 
