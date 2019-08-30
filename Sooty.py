@@ -655,16 +655,22 @@ def haveIBeenPwned():
 
     try:
         acc = input(' Enter email: ')
+        haveIBeenPwnedPrintOut(acc)
+    except:
+        print('')
+    phishingMenu()
+
+def haveIBeenPwnedPrintOut(acc):
+    try:
         url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % acc
         userAgent = 'Sooty'
         headers = {'Content-Type': 'application/json', 'hibp-api-key': HIBP_API_KEY, 'user-agent': userAgent}
-
         try:
             req = requests.get(url, headers=headers)
             response = req.json()
             lr = len(response)
             if lr != 0:
-                print(' The account has been found in the following breaches: ')
+                print('\n The account has been found in the following breaches: ')
                 for each in range(lr):
                     breach = 'https://haveibeenpwned.com/api/v3/breach/%s' % response[each]['Name']
                     breachReq = requests.get(breach, headers=headers)
@@ -678,14 +684,12 @@ def haveIBeenPwned():
                     for each in breachResponse['DataClasses']:
                         breachList.append(each)
                     print('   Data leaked: %s' % breachList)
-
         except:
-            print('No Entries found in database')
-
+            print(' No Entries found in Database')
     except:
-        print(' No API Key found')
-    
-    print(menu)
+        print('')
+
+
 
 
 def analyzeEmailInput():
@@ -738,6 +742,33 @@ def analyzeEmail(email):
             print('   Credentials Leaked: %s' % req['details']['credentials_leaked'])
             print('   Found in breach:    %s' % req['details']['data_breach'])
 
+            if (req['details']['data_breach']):
+                try:
+                    url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % email
+                    userAgent = 'Sooty'
+                    headers = {'Content-Type': 'application/json', 'hibp-api-key': HIBP_API_KEY, 'user-agent': userAgent}
+
+                    try:
+                        reqHIBP = requests.get(url, headers=headers)
+                        response = reqHIBP.json()
+                        lr = len(response)
+                        if lr != 0:
+                            print('\nThe account has been found in the following breaches: ')
+                            for each in range(lr):
+                                breach = 'https://haveibeenpwned.com/api/v3/breach/%s' % response[each]['Name']
+                                breachReq = requests.get(breach, headers=headers)
+                                breachResponse = breachReq.json()
+                                breachList = []
+                                print('   Title:        %s' % breachResponse['Title'])
+                                print('   Breach Date:  %s' % breachResponse['BreachDate'])
+
+                                for each in breachResponse['DataClasses']:
+                                    breachList.append(each)
+                                print('   Data leaked: %s' % breachList,'\n')
+                    except:
+                        print(' Error')
+                except:
+                    print(' No API Key Found')
             print('\n Profiles Found ')
             if (len(req['details']['profiles']) != 0):
                 profileList = (req['details']['profiles'])
