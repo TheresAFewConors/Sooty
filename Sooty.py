@@ -645,8 +645,11 @@ def analyzePhish():
     except:
         print('   IP error')
 
-    analyzeEmail(msg.SenderEmailAddress)
-
+    try:
+        analyzeEmail(msg.SenderEmailAddress)
+    except:
+        print('')
+        
     phishingMenu()
 
 
