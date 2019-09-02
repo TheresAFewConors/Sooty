@@ -33,6 +33,8 @@ AB_API_KEY = 'Enter AbuseIPDB API Key Here'
 URLSCAN_IO_KEY = 'Enter urlscan.io API Key Here'
 HIBP_API_KEY = 'Enter HaveIBeenPwned API Key Here'
 
+linksFoundList = []
+
 def switchMenu(choice):
     if choice == '1':
         urlSanitise()
