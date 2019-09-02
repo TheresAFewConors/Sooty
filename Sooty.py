@@ -24,7 +24,7 @@ from tkinter import filedialog
 try:
     import win32com.client
 except:
-    print('Cant install package')
+    print('Cant install Win32com package')
 
 versionNo = '1.26'
 
