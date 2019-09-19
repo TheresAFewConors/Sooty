@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.26
+    Version:    1.3
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -26,7 +26,7 @@ try:
 except:
     print('Cant install Win32com package')
 
-versionNo = '1.26'
+versionNo = '1.3'
 
 VT_API_KEY = 'Enter VirusTotal API Key Here'
 AB_API_KEY = 'Enter AbuseIPDB API Key Here'
@@ -34,6 +34,9 @@ URLSCAN_IO_KEY = 'Enter urlscan.io API Key Here'
 HIBP_API_KEY = 'Enter HaveIBeenPwned API Key Here'
 
 linksFoundList = []
+linksRatingList = []
+linksSanitized = []
+linksDict = {}
 
 def switchMenu(choice):
     if choice == '1':
@@ -95,6 +98,8 @@ def phishingSwitch(choice):
         analyzePhish()
     if choice == '2':
         analyzeEmailInput()
+    if choice == '3':
+        emailTemplateGen()
     if choice == '9':
         haveIBeenPwned()
     if choice == '0':
@@ -117,7 +122,6 @@ def decodev1(rewrittenurl):
         htmlencodedurl = urllib.parse.unquote(urlencodedurl)
         url = html.unescape(htmlencodedurl)
         url = re.sub("http://", "", url)
-        #print('\n %s' % url)
         if url not in linksFoundList:
             linksFoundList.append(url)
 
@@ -130,7 +134,6 @@ def decodev2(rewrittenurl):
         htmlencodedurl = urllib.parse.unquote(urlencodedurl)
         url = html.unescape(htmlencodedurl)
         url = re.sub("http://", "", url)
-        #print("\n %s" % url)
         if url not in linksFoundList:
             linksFoundList.append(url)
 
@@ -175,7 +178,6 @@ def decoderMenu():
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
-
 def proofPointDecoder():
     print("\n --------------------------------- ")
     print(" P R O O F P O I N T D E C O D E R ")
@@ -197,7 +199,6 @@ def proofPointDecoder():
         print(' No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
-
 
 def urlDecoder():
     print("\n --------------------------------- ")
@@ -649,9 +650,8 @@ def analyzePhish():
         analyzeEmail(msg.SenderEmailAddress)
     except:
         print('')
-        
-    phishingMenu()
 
+    phishingMenu()
 
 def haveIBeenPwned():
     print("\n --------------------------------- ")
@@ -694,9 +694,6 @@ def haveIBeenPwnedPrintOut(acc):
     except:
         print('')
 
-
-
-
 def analyzeEmailInput():
     print("\n --------------------------------- ")
     print("    E M A I L   A N A L Y S I S    ")
@@ -708,7 +705,6 @@ def analyzeEmailInput():
         phishingMenu()
     except:
         print("   Error Scanning Email Address")
-
 
 def analyzeEmail(email):
 
@@ -790,6 +786,149 @@ def analyzeEmail(email):
 
     except:
         print(' Error Analyzing Submitted Email')
+
+def virusTotalAnalyze(result, sanitizedLink):
+    linksDict['%s' % sanitizedLink] = str(result['positives'])
+
+def emailTemplateGen():
+    print('\n--------------------')
+    print('  Phishing Response')
+    print('--------------------')
+
+    try:
+        file = filedialog.askopenfilename(initialdir="/", title="Select file")
+        with open(file, encoding='Latin-1') as f:
+            msg = f.read()
+        file = file.replace('//', '/')  # dir
+        file2 = file.replace(' ', '')  # file name (remove spaces / %20)
+        os.rename(file, file2)
+        outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+        msg = outlook.OpenSharedItem(file)
+    except:
+        print(' Error importing email for template generator')
+
+    url = 'https://emailrep.io/'
+    email = msg.SenderEmailAddress
+    url = url + email
+    responseRep = requests.get(url)
+    req = responseRep.json()
+    f = msg.To.split(' ', 1)[0]
+
+    try:
+        match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
+        a = re.findall(match, msg.Body, re.M | re.I)
+        for b in a:
+            pp = 'https://urldefense.proofpoint'
+            match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
+            if match:
+                if match.group(1) == 'v1':
+                    decodev1(b[0])
+                elif match.group(1) == 'v2':
+                    decodev2(b[0])
+            else:
+                if b[0] not in linksFoundList:
+                    linksFoundList.append(b[0])
+        if len(a) == 0:
+            print(' No Links Found...')
+    except:
+        print('   Links Error')
+        f.close()
+
+    for each in linksFoundList:
+        x = re.sub("\.", "[.]", each)
+        x = re.sub("http://", "hxxp://", x)
+        x = re.sub("https://", "hxxps://", x)
+        sanitizedLink = x
+
+    if 'API Key' not in VT_API_KEY:
+        try:  # EAFP
+            url = 'https://www.virustotal.com/vtapi/v2/url/report'
+            params = {'apikey': VT_API_KEY, 'resource': url}
+            response = requests.get(url, params=params)
+            result = response.json()
+            if response.status_code == 200:
+                virusTotalAnalyze(result, sanitizedLink)
+
+        except:
+            print("\n Threshold reached for VirusTotal: "
+                  "\n   60 seconds remaining...")
+            time.sleep(15)
+            print('   45 seconds remaining...')
+            time.sleep(15)
+            print('   30 seconds remaining...')
+            time.sleep(15)
+            print('   15 seconds remaining...')
+            time.sleep(15)
+            virusTotalAnalyze(result, sanitizedLink)
+    else:
+        print('No API Key set, results will not show malicious links')
+
+    rc = 'potentially benign'
+    threshold = '1'
+
+    if req['details']['spam'] or req['suspicious'] or req['details']['blacklisted'] or req['details']['malicious_activity']:
+        rc = 'potentially suspicious'
+
+    for key, value in linksDict.items():
+        if value == threshold:
+            rc = 'potentially malicious'
+
+    if responseRep.status_code == 200:
+        print('\nHi %s,' % f,)
+        print('\nThanks for your recent submission.')
+        print('\nI have completed my analysis of the submitted mail and have classed it is as %s.' % rc)
+        print('\nThe sender has a reputation score of %s,' % req['reputation'], 'for the following reasons: ')
+
+        if req['details']['spam']:
+            print(' • The sender has been reported for sending spam in the past.')
+        if req['suspicious']:
+            print(' • It has been marked as suspicious on reputation checking websites.')
+        if req['details']['free_provider']:
+            print(' • The sender is using a free provider.')
+        if req['details']['days_since_domain_creation'] < 365:
+            print(' • The domain is less than a year old.')
+        if req['details']['blacklisted']:
+            print(' • It has been blacklisted on several sites.')
+        if req['details']['data_breach']:
+            print(' • Has been seen in data breaches')
+        if req['details']['credentials_leaked']:
+            print(' • The credentials have been leaked for this address')
+        if req['details']['malicious_activity']:
+            print(' • This sender has been flagged for malicious activity.')
+
+        if threshold in linksDict.values():
+            print('\nThe following malicious links were found embedded in the body of the mail:')
+            for key, value in linksDict.items():
+                if value == threshold or 'unknown':
+                    print(' • %s' % key)
+
+        print('\nAs such, I would recommend the following: ')
+
+        if 'suspicious' in rc:
+            print(' • Delete and Ignore the mail for the time being.')
+
+        if 'malicious' in rc:
+            print(' • If you clicked any links or entered information into any displayed webpages let us know asap.')
+
+        if 'spam' in rc:
+            print(' • If you were not expecting the mail, please delete and ignore.')
+            print(' • We would advise you to use your email vendors spam function to block further mails.')
+
+        if 'task' in rc:
+            print(' • If you completed any tasks asked of you, please let us know asap.')
+            print(' • If you were not expecting the mail, please delete and ignore.')
+
+        if 'benign' in rc:
+            print(' • If you were not expecting this mail, please delete and ignore.')
+            print('\nIf you receive further mails from this sender, you can use your mail vendors spam function to block further mails.')
+
+        if 'suspicious' or 'malicious' or 'task' in rc:
+            print('\nI will be reaching out to have this sender blocked to prevent the sending of further mails as part of our remediation effort.')
+            print('For now, I would recommend to simply delete and ignore this mail.')
+            print('\nWe appreciate your diligence in reporting this mail.')
+
+        print('\nRegards,')
+
 
 def extrasMenu():
     print("\n --------------------------------- ")
