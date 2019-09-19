@@ -39,6 +39,7 @@
   - Unshorten URL's that have been shortened by external services. (Limited to 10 requests per hour)
   - Query [URLScan.io](https://urlscan.io) for reputation reports.
   - Analyze email addresses for known malicious activity and report on domain reputation utilising [EmailRep.io](https://emailrep.io)
+  - Create dynamic email templates that can be used as a base for phsing triage response.
 
 ![](readmeimages/email_analysis.gif)
 
@@ -67,6 +68,9 @@ Found a Bug? Show Me!
  - I will assign myself / another commenter to that case and work on fixing it asap.
 
 ## Changelog
+
+#### Version 1.3 - The Templating Update
+ - Added first iteration of dynamic email templates that generate based on Sooty's analysis.
 
 #### Version 1.2 - The Phishing Update
  - Added first iteration of the Phishing tool.
@@ -97,7 +101,7 @@ Found a Bug? Show Me!
   - Scan email attachments for malicious content, macros, files, scan hashes, etc.
 
 #### Version 1.3 - The Templating Update
- - Add dynamic email templates that generate based on Sooty's analysis.
+ - ~~Add dynamic email templates that generate based on Sooty's analysis.
 
 #### Version 1.4 - The PCAP Analysis Update
 - Add ability to analze .pcap files and provide concise, enriched information.
