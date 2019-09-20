@@ -555,6 +555,7 @@ def phishingMenu():
     print(" What would you like to do? ")
     print(" OPTION 1: Analyze an Email ")
     print(" OPTION 2: Analyze an Email Address for Known Activity")
+    print(" OPTION 3: Generate an Email Template based on Analysis")
     print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
