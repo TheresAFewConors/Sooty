@@ -76,6 +76,7 @@ Found a Bug? Show Me!
  - Added first iteration of the Phishing tool.
  - Able to analyze an email (outlook / .msg only tested at the moment) and retrieve emails, urls (Proofpoint decode if necessary) and extract info from headers. 
  - Extract IP's from body of email.
+ - Reputation check on sender of email, and provide enriched information.
 
 #### Version 1.1 - The Reputation Update
  - Improved Rep Checker
@@ -96,8 +97,6 @@ Found a Bug? Show Me!
   This is an outline of what features *will* be coming in future versions.
   
 #### Version 1.2 - The Phishing Update
-  - ~~Add Ability to extract email addresses and URL's from mail.~~ Edit: Added
-  - ~~Correlate emails and URL's to see if they have been reported for phishing~~ Edit: Added
   - Scan email attachments for malicious content, macros, files, scan hashes, etc.
 
 #### Version 1.3 - The Templating Update
