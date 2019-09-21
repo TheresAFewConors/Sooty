@@ -101,7 +101,7 @@ Found a Bug? Show Me!
   - Scan email attachments for malicious content, macros, files, scan hashes, etc.
 
 #### Version 1.3 - The Templating Update
- - ~~Add dynamic email templates that generate based on Sooty's analysis.
+ - ~~Add dynamic email templates that generate based on Sooty's analysis.~~ Edit: Added
 
 #### Version 1.4 - The PCAP Analysis Update
 - Add ability to analze .pcap files and provide concise, enriched information.
