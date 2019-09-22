@@ -790,6 +790,7 @@ def analyzeEmail(email):
 
 def virusTotalAnalyze(result, sanitizedLink):
     linksDict['%s' % sanitizedLink] = str(result['positives'])
+    #print(str(result['positives']))
 
 def emailTemplateGen():
     print('\n--------------------')
@@ -844,11 +845,13 @@ def emailTemplateGen():
     if 'API Key' not in VT_API_KEY:
         try:  # EAFP
             url = 'https://www.virustotal.com/vtapi/v2/url/report'
-            params = {'apikey': VT_API_KEY, 'resource': url}
-            response = requests.get(url, params=params)
-            result = response.json()
-            if response.status_code == 200:
-                virusTotalAnalyze(result, sanitizedLink)
+            for each in linksFoundList:
+                link = each
+                params = {'apikey': VT_API_KEY, 'resource': link}
+                response = requests.get(url, params=params)
+                result = response.json()
+                if response.status_code == 200:
+                    virusTotalAnalyze(result, sanitizedLink)
 
         except:
             print("\n Threshold reached for VirusTotal: "
@@ -871,7 +874,7 @@ def emailTemplateGen():
         rc = 'potentially suspicious'
 
     for key, value in linksDict.items():
-        if value == threshold:
+        if int(value) >= int(threshold):
             rc = 'potentially malicious'
 
     if responseRep.status_code == 200:
@@ -897,10 +900,15 @@ def emailTemplateGen():
         if req['details']['malicious_activity']:
             print(' • This sender has been flagged for malicious activity.')
 
-        if threshold in linksDict.values():
-            print('\nThe following malicious links were found embedded in the body of the mail:')
+        malLink = 0     # Controller for mal link text
+        for each in linksDict.values():
+            if int(threshold) <= int(each):
+                malLink = 1
+
+        if malLink == 1:
+            print('\nThe following potentially malicious links were found embedded in the body of the mail:')
             for key, value in linksDict.items():
-                if value == threshold or 'unknown':
+                if int(value) >= int(threshold):
                     print(' • %s' % key)
 
         print('\nAs such, I would recommend the following: ')
