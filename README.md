@@ -72,6 +72,8 @@ Found a Bug? Show Me!
 #### Version 1.3 - The Templating Update
  - Added first iteration of dynamic email templates that generate based on Sooty's analysis.
 
+![](readmeimages/templateGen.gif)
+
 #### Version 1.2 - The Phishing Update
  - Added first iteration of the Phishing tool.
  - Able to analyze an email (outlook / .msg only tested at the moment) and retrieve emails, urls (Proofpoint decode if necessary) and extract info from headers. 
