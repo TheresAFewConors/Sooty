@@ -304,10 +304,11 @@ def repChecker():
     else:
 
         whoIsPrint(ip)
+        wIP = socket.gethostbyname(ip)
 
         print("\n VirusTotal Report:")
         url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-        params = {'apikey': VT_API_KEY, 'ip': ip}
+        params = {'apikey': VT_API_KEY, 'ip': wIP}
         response = requests.get(url, params=params)
 
         pos = 0
@@ -328,7 +329,7 @@ def repChecker():
             except:
                 try: #EAFP
                     url = 'https://www.virustotal.com/vtapi/v2/url/report'
-                    params = {'apikey': VT_API_KEY, 'resource': ip}
+                    params = {'apikey': VT_API_KEY, 'resource': wIP}
                     response = requests.get(url, params=params)
                     result = response.json()
                     print("\n VirusTotal Report:")
@@ -346,18 +347,18 @@ def repChecker():
             tl = req.text.split('\n')
             c = 0
             for i in tl:
-                if ip == i:
+                if wIP == i:
                     print("  " + i + " is a TOR Exit Node")
                     c = c+1
             if c == 0:
-                print("  " + ip + " is NOT a TOR Exit Node")
+                print("  " + wIP + " is NOT a TOR Exit Node")
         else:
             print("   TOR LIST UNREACHABLE")
 
 
         print("\n Checking BadIP's... ")
         try:
-            BAD_IPS_URL = 'https://www.badips.com/get/info/' + ip
+            BAD_IPS_URL = 'https://www.badips.com/get/info/' + wIP
             response = requests.get(BAD_IPS_URL)
             if response.status_code == 200:
                 result = response.json()
@@ -376,7 +377,7 @@ def repChecker():
             days = '180'
 
             querystring = {
-                'ipAddress': ip,
+                'ipAddress': wIP,
                 'maxAgeInDays': days
             }
 
@@ -457,12 +458,12 @@ def whoIsPrint(ip):
         print("  Created:   " + str(w['nets'][0]['created']))
         print("  Updated:   " + str(w['nets'][0]['updated']))
     except:
-        print(" IP Not Found - Checking Domains")
+        print("\n  IP Not Found - Checking Domains")
         ip = re.sub('https://', '', ip)
         ip = re.sub('http://', '', ip)
         try:
             s = socket.gethostbyname(ip)
-            print(s)
+            print( '  Resolved Address: %s' % s)
             whoIsPrint(s)
         except:
             print(' IP or Domain not Found')
