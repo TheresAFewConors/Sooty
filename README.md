@@ -118,7 +118,7 @@ Found a Bug? Show Me!
 
 ## Contributors:
 
- - [Aaron J Copley](https://github.com/aaronjcopley) for his code to decode ProofPoint URL's
+ - [Aaron J Copley](https://github.com/aaronjcopley) for his modified version of ProofPoint's code to decode ProofPoint URL's
  - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
  - [mrpnkt](https://github.com/mrpnkt) for adding the missing whois requirement to requirements.txt
  - [Gurulhu](https://github.com/Gurulhu) for adding the Base64 Decoder to the Decoders menu.
