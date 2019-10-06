@@ -58,6 +58,8 @@ def switchMenu(choice):
         extrasMenu()
     if choice == '0':
         exit()
+    else:
+        mainMenu()
 
 def decoderSwitch(choice):
     if choice == '1':
