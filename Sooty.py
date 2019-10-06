@@ -20,6 +20,7 @@ import requests
 from ipwhois import IPWhois
 from tkinter import *
 from tkinter import filedialog
+from Modules import TitleOpen
 
 try:
     import win32com.client
@@ -102,7 +103,7 @@ def phishingSwitch(choice):
         emailTemplateGen()
     if choice == '9':
         haveIBeenPwned()
-    if choice == '0':
+    else:
         mainMenu()
 
 def extrasSwitch(choice):
@@ -112,7 +113,11 @@ def extrasSwitch(choice):
         contributors()
     if choice == '3':
         extrasVersion()
-    if choice == '0':
+    if choice == '4':
+        wikiLink()
+    if choice == '5':
+        ghLink()
+    else:
         mainMenu()
 
 def decodev1(rewrittenurl):
@@ -136,6 +141,10 @@ def decodev2(rewrittenurl):
         url = re.sub("http://", "", url)
         if url not in linksFoundList:
             linksFoundList.append(url)
+
+def titleLogo():
+    TitleOpen.titleOpen()
+    os.system('cls||clear')
 
 def mainMenu():
     print("\n --------------------------------- ")
@@ -939,7 +948,6 @@ def emailTemplateGen():
 
         print('\nRegards,')
 
-
 def extrasMenu():
     print("\n --------------------------------- ")
     print("            E X T R A S            ")
@@ -948,6 +956,8 @@ def extrasMenu():
     print(" OPTION 1: About SOOTY ")
     print(" OPTION 2: Contributors ")
     print(" OPTION 3: Version")
+    print(" OPTION 4: Wiki")
+    print(" OPTION 5: GitHub Repo")
     print(" OPTION 0: Exit to Main Menu")
     extrasSwitch(input())
 
@@ -968,5 +978,16 @@ def extrasVersion():
     print(' Current Version: ' + versionNo)
     extrasMenu()
 
+def wikiLink():
+    print('\n The Sooty Wiki can be found at the following link:')
+    print(' https://github.com/TheresAFewConors/Sooty/wiki')
+    extrasMenu()
+
+def ghLink():
+    print('\n The Sooty Repo can be found at the following link:')
+    print(' https://github.com/TheresAFewConors/Sooty')
+    extrasMenu()
+
 if __name__ == '__main__':
+    titleLogo()
     mainMenu()
