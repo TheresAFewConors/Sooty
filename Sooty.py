@@ -974,6 +974,7 @@ def contributors():
     print(" mrpnkt for adding the missing whois requirement to requirements.txt")
     print(" Gurulhu for adding the Base64 Decoder to the Decoders menu.")
     print(" AndThenEnteredAlex for adding the URLScan Function from URLScan.io")
+    print(" Eric Kelson for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.")
     extrasMenu()
 
 def extrasVersion():
