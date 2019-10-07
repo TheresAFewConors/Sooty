@@ -123,5 +123,6 @@ Found a Bug? Show Me!
  - [mrpnkt](https://github.com/mrpnkt) for adding the missing whois requirement to requirements.txt
  - [Gurulhu](https://github.com/Gurulhu) for adding the Base64 Decoder to the Decoders menu.
  - [AndThenEnteredAlex](https://github.com/andthenenteredalex) for adding the URLScan Function from URLScan.io
+ - [Eric Kelson](https://github.com/ekelson-bcove) for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.
 
  ![](readmeimages/vt_hashchecker.gif)
