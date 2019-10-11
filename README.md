@@ -43,7 +43,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   - Unshorten URL's that have been shortened by external services. (Limited to 10 requests per hour)
   - Query [URLScan.io](https://urlscan.io) for reputation reports.
   - Analyze email addresses for known malicious activity and report on domain reputation utilising [EmailRep.io](https://emailrep.io)
-  - Create dynamic email templates that can be used as a base for phsing triage response.
+  - Create dynamic email templates that can be used as a base for phishing triage response.
 
 ![](readmeimages/email_analysis.gif)
 
