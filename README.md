@@ -74,7 +74,7 @@ Found a Bug? Show Me!
 ## Changelog
 
 #### Version 1.3 - The Templating Update
- - Added first iteration of dynamic email templates that generate based on Sooty's analysis.
+ - Added first iteration of dynamic email templates that generate based on Sooty's analysis, example below:
 
 ![](readmeimages/templateGen.PNG)
 
