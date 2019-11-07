@@ -15,11 +15,9 @@ import time
 import os
 import socket
 import urllib.parse
-from urllib.parse import unquote
 import requests
+import tkinter
 from ipwhois import IPWhois
-from tkinter import *
-from tkinter import filedialog
 from Modules import TitleOpen
 
 try:
