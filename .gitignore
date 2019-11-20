@@ -1,0 +1,18 @@
+# Project specific files
+config.yaml
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.vscode
+
+# mypy
+.mypy_cache/
