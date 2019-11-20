@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.3
+    Version:    1.3.1
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -14,6 +14,7 @@ import json
 import time
 import os
 import socket
+import strictyaml
 import urllib.parse
 from urllib.parse import unquote
 import requests
@@ -27,12 +28,14 @@ try:
 except:
     print('Cant install Win32com package')
 
-versionNo = '1.3'
+versionNo = '1.3.1'
 
-VT_API_KEY = 'Enter VirusTotal API Key Here'
-AB_API_KEY = 'Enter AbuseIPDB API Key Here'
-URLSCAN_IO_KEY = 'Enter urlscan.io API Key Here'
-HIBP_API_KEY = 'Enter HaveIBeenPwned API Key Here'
+try: 
+    f = open("config.yaml", "r")
+    configvars = strictyaml.load(f.read())
+    f.close()
+except FileNotFoundError:
+    print("Config.yaml not found. Check the example config file and rename to 'config.yaml'.")
 
 linksFoundList = []
 linksRatingList = []
@@ -239,7 +242,7 @@ def urlscanio():
 
     headers = {
         'Content-Type': 'application/json',
-        'API-Key': URLSCAN_IO_KEY,
+        'API-Key': configvars.data['URLSCAN_IO_KEY'],
         }
     response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json()
     uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
@@ -319,7 +322,7 @@ def repChecker():
 
         print("\n VirusTotal Report:")
         url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-        params = {'apikey': VT_API_KEY, 'ip': wIP}
+        params = {'apikey': configvars.data['VT_API_KEY'], 'ip': wIP}
         response = requests.get(url, params=params)
 
         pos = 0
@@ -340,7 +343,7 @@ def repChecker():
             except:
                 try: #EAFP
                     url = 'https://www.virustotal.com/vtapi/v2/url/report'
-                    params = {'apikey': VT_API_KEY, 'resource': wIP}
+                    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
                     response = requests.get(url, params=params)
                     result = response.json()
                     print("\n VirusTotal Report:")
@@ -394,7 +397,7 @@ def repChecker():
 
             headers = {
                 'Accept': 'application/json',
-                'Key': AB_API_KEY
+                'Key': configvars.data['AB_API_KEY']
             }
             response = requests.request(method='GET', url=AB_URL, headers=headers, params=querystring)
             if response.status_code == 200:
@@ -508,7 +511,7 @@ def hashRating():
     fileHash = input(" Enter Hash of file: ")
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
-    params = {'apikey': VT_API_KEY, 'resource': fileHash}
+    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': fileHash}
     response = requests.get(url, params=params)
 
     try:  # EAFP
@@ -541,7 +544,7 @@ def hashAndFileUpload():
     # VT Hash Checker
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
-    params = {'apikey': VT_API_KEY, 'resource': fileHash}
+    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': fileHash}
     response = requests.get(url, params=params)
 
     try:  # EAFP
@@ -682,7 +685,7 @@ def haveIBeenPwnedPrintOut(acc):
     try:
         url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % acc
         userAgent = 'Sooty'
-        headers = {'Content-Type': 'application/json', 'hibp-api-key': HIBP_API_KEY, 'user-agent': userAgent}
+        headers = {'Content-Type': 'application/json', 'hibp-api-key': configvars.data['HIBP_API_KEY'], 'user-agent': userAgent}
         try:
             req = requests.get(url, headers=headers)
             response = req.json()
@@ -760,7 +763,7 @@ def analyzeEmail(email):
                 try:
                     url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % email
                     userAgent = 'Sooty'
-                    headers = {'Content-Type': 'application/json', 'hibp-api-key': HIBP_API_KEY, 'user-agent': userAgent}
+                    headers = {'Content-Type': 'application/json', 'hibp-api-key': configvars.data['HIBP_API_KEY'], 'user-agent': userAgent}
 
                     try:
                         reqHIBP = requests.get(url, headers=headers)
@@ -854,12 +857,12 @@ def emailTemplateGen():
         x = re.sub("https://", "hxxps://", x)
         sanitizedLink = x
 
-    if 'API Key' not in VT_API_KEY:
+    if 'API Key' not in configvars.data['VT_API_KEY']:
         try:  # EAFP
             url = 'https://www.virustotal.com/vtapi/v2/url/report'
             for each in linksFoundList:
                 link = each
-                params = {'apikey': VT_API_KEY, 'resource': link}
+                params = {'apikey': configvars.data['VT_API_KEY'], 'resource': link}
                 response = requests.get(url, params=params)
                 result = response.json()
                 if response.status_code == 200:
