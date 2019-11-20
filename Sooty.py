@@ -75,6 +75,8 @@ def decoderSwitch(choice):
         unshortenEnter()
     if choice == '5':
         b64Decoder()
+    if choice == '6':
+        cisco7Decoder()
     if choice == '0':
         mainMenu()
 
@@ -189,6 +191,7 @@ def decoderMenu():
     print(" OPTION 3: Office SafeLinks Decoder")
     print(" OPTION 4: URL unShortener")
     print(" OPTION 5: Base64 Decoder")
+    print(" OPTION 6: Cisco Password 7 Decoder")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -302,6 +305,32 @@ def b64Decoder():
         print(" Decoded String: " + a)
     except:
         print(' No Base64 Encoded String Found')
+
+    decoderMenu()
+
+def cisco7Decoder():
+    pw = input(' Enter Cisco Password 7: ').strip()
+
+    key = [0x64, 0x73, 0x66, 0x64, 0x3b, 0x6b, 0x66, 0x6f, 0x41,
+    0x2c, 0x2e, 0x69, 0x79, 0x65, 0x77, 0x72, 0x6b, 0x6c,
+    0x64, 0x4a, 0x4b, 0x44, 0x48, 0x53, 0x55, 0x42]
+
+    try:
+        # the first 2 characters of the password are the starting index in the key array
+        index = int(pw[:2],16)
+
+        # the remaining values are the characters in the password, as hex bytes
+        pw_text = pw[2:]
+        pw_hex_values = [pw_text[start:start+2] for start in range(0,len(pw_text),2)]
+
+        # XOR those values against the key values, starting at the index, and convert to ASCII
+        pw_chars = [chr(key[index+i] ^ int(pw_hex_values[i],16)) for i in range(0,len(pw_hex_values))]
+
+        pw_plaintext = ''.join(pw_chars)
+        print("Password: " + pw_plaintext)
+
+    except Exception as e:
+        print(e)
 
     decoderMenu()
 
