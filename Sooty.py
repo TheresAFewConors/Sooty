@@ -93,8 +93,10 @@ def hashSwitch(choice):
     if choice == '1':
         hashFile()
     if choice == '2':
-        hashRating()
+        hashText()
     if choice == '3':
+        hashRating()
+    if choice == '4':
         hashAndFileUpload()
     if choice == '0':
         mainMenu()
@@ -489,8 +491,9 @@ def hashMenu():
     print(" --------------------------------- ")
     print(" What would you like to do? ")
     print(" OPTION 1: Hash a file")
-    print(" OPTION 2: Check a hash for known malicious activity")
-    print(" OPTION 3: Hash a file, check a hash for known malicious activity")
+    print(" OPTION 2: Hash text")
+    print(" OPTION 3: Check a hash for known malicious activity")
+    print(" OPTION 4: Hash a file, check a hash for known malicious activity")
     print(" OPTION 0: Exit to Main Menu")
     hashSwitch(input())
 
@@ -503,6 +506,11 @@ def hashFile():
         hasher.update(buf)
     print(" MD5 Hash: " + hasher.hexdigest())
     root.destroy()
+    hashMenu()
+
+def hashText():
+    userinput = input(" Enter the text to be hashed: ")
+    print(" MD5 Hash: " + hashlib.md5(userinput.encode("utf-8")).hexdigest())
     hashMenu()
 
 def hashRating():
