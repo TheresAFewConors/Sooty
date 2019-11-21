@@ -171,8 +171,7 @@ def urlSanitise():
     print("\n --------------------------------- ")
     print(" U R L   S A N I T I S E   T O O L ")
     print(" --------------------------------- ")
-    print("Enter URL to sanitize: ")
-    url = input()
+    url = str(input("Enter URL to sanitize: ").strip())
     x = re.sub("\.", "[.]", url)
     x = re.sub("http://", "hxxp://", x)
     x = re.sub("https://", "hxxps://", x)
@@ -196,7 +195,7 @@ def proofPointDecoder():
     print("\n --------------------------------- ")
     print(" P R O O F P O I N T D E C O D E R ")
     print(" --------------------------------- ")
-    rewrittenurl = input(" Enter ProofPoint Link: ")
+    rewrittenurl = str(input(" Enter ProofPoint Link: ").strip())
     match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
     if match:
         if match.group(1) == 'v1':
@@ -218,7 +217,7 @@ def urlDecoder():
     print("\n --------------------------------- ")
     print("       U R L   D E C O D E R      ")
     print(" --------------------------------- ")
-    url = input(' Enter URL: ')
+    url = str(input(' Enter URL: ').strip())
     decodedUrl = unquote(url)
     print(decodedUrl)
     mainMenu()
@@ -227,7 +226,7 @@ def safelinksDecoder():
     print("\n --------------------------------- ")
     print(" S A F E L I N K S   D E C O D E R  ")
     print(" --------------------------------- ")
-    url = input(' Enter URL: ')
+    url = str(input(' Enter URL: ').strip())
     dcUrl = unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
@@ -237,7 +236,7 @@ def urlscanio():
     print("\n --------------------------------- ")
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
-    url_to_scan = str(input('\nEnter url: '))
+    url_to_scan = str(input('\nEnter url: ').strip())
     print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
 
     headers = {
@@ -277,7 +276,7 @@ def unshortenEnter():
     print("\n --------------------------------- ")
     print("   U R L   U N S H O R T E N E R  ")
     print(" --------------------------------- ")
-    link = input(' Enter: ')
+    link = str(input(' Enter URL: ').strip())
     urlUnshortener(link)
     decoderMenu()
 
@@ -293,7 +292,7 @@ def urlUnshortener(link):
     return
 
 def b64Decoder():
-    url = input(' Enter URL: ')
+    url = str(input(' Enter URL: ').strip())
 
     try:
         b64 = str(base64.b64decode(url))
@@ -309,7 +308,7 @@ def repChecker():
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
     print(" --------------------------------- ")
-    ip = input(" Enter IP, URL or Email Address: ")
+    ip = str(input(" Enter IP, URL or Email Address: ").strip())
 
     s = re.findall('\S+@\S+', ip)
     if s:
@@ -429,7 +428,7 @@ def dnsMenu():
     dnsSwitch(input())
 
 def reverseDnsLookup():
-    d = input(" Enter IP to check: ")
+    d = str(input(" Enter IP to check: ").strip())
     try:
         s = socket.gethostbyaddr(d)
         print('\n ' + s[0])
@@ -438,7 +437,7 @@ def reverseDnsLookup():
     dnsMenu()
 
 def dnsLookup():
-    d = input(" Enter Domain Name to check: ")
+    d = str(input(" Enter Domain Name to check: ").strip())
     d = re.sub("http://", "", d)
     d = re.sub("https://", "", d)
     try:
@@ -449,7 +448,7 @@ def dnsLookup():
     dnsMenu()
 
 def whoIs():
-    ip = input(' Enter IP / Domain: ')
+    ip = str(input(' Enter IP / Domain: ').strip())
     whoIsPrint(ip)
 
     dnsMenu()
@@ -511,7 +510,7 @@ def hashFile():
 def hashRating():
     count = 0
     # VT Hash Checker
-    fileHash = input(" Enter Hash of file: ")
+    fileHash = str(input(" Enter Hash of file: ").strip())
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
     params = {'apikey': configvars.data['VT_API_KEY'], 'resource': fileHash}
@@ -678,7 +677,7 @@ def haveIBeenPwned():
     print(" --------------------------------- ")
 
     try:
-        acc = input(' Enter email: ')
+        acc = str(input(' Enter email: ').strip())
         haveIBeenPwnedPrintOut(acc)
     except:
         print('')
@@ -718,8 +717,7 @@ def analyzeEmailInput():
     print("    E M A I L   A N A L Y S I S    ")
     print(" --------------------------------- ")
     try:
-        print(' Enter Email Address to Analyze: ')
-        email = input()
+        email = str(input(' Enter Email Address to Analyze: ').strip())
         analyzeEmail(email)
         phishingMenu()
     except:
