@@ -549,7 +549,7 @@ def hashRating():
         try:
             if result['positives'] != 0:
                 print("\n Malware Detection")
-                for key, value in result['scans'].items():
+                for value in result['scans'].items():
                     if value['detected'] == True:
                         count = count + 1
             print(" VirusTotal Report: " + str(count) + " detections found")
@@ -582,7 +582,7 @@ def hashAndFileUpload():
         try:
             if result['positives'] != 0:
                 print("\n Malware Detection")
-                for key, value in result['scans'].items():
+                for value in result['scans'].items():
                     if value['detected'] == True:
                         count = count + 1
             print(" VirusTotal Report: " + str(count) + " detections found")
@@ -640,7 +640,6 @@ def analyzePhish():
         match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, msg.Body, re.M | re.I)
         for b in a:
-            pp = 'https://urldefense.proofpoint'
             match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
             if match:
                 if match.group(1) == 'v1':
@@ -864,7 +863,6 @@ def emailTemplateGen():
         match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, msg.Body, re.M | re.I)
         for b in a:
-            pp = 'https://urldefense.proofpoint'
             match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
             if match:
                 if match.group(1) == 'v1':
