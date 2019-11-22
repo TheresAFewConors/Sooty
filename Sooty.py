@@ -72,7 +72,7 @@ def decoderSwitch(choice):
     if choice == '3':
         safelinksDecoder()
     if choice == '4':
-        unshortenEnter()
+        unshortenUrl()
     if choice == '5':
         b64Decoder()
     if choice == '6':
@@ -277,24 +277,15 @@ def urlscanio():
     print("\nSee full report for more details: " + str(task_report_URL))
     print('')
 
-def unshortenEnter():
+def unshortenUrl():
     print("\n --------------------------------- ")
     print("   U R L   U N S H O R T E N E R  ")
     print(" --------------------------------- ")
     link = str(input(' Enter URL: ').strip())
-    urlUnshortener(link)
+    req = requests.get(str('https://unshorten.me/s/' + link))
+    print(req.text)
+
     decoderMenu()
-
-def urlUnshortener(link):
-    url = 'https://unshorten.me/s/'
-
-    final = str(url) + str(link)
-    req = requests.get(str(final))
-    us_url = req.content
-    us_url = str(us_url).split("b'")[-1]
-    us_url = str(us_url).strip("'\\n'")
-    print(us_url)
-    return
 
 def b64Decoder():
     url = str(input(' Enter URL: ').strip())
