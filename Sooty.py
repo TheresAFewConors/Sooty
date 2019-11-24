@@ -533,8 +533,8 @@ def hashAndFileUpload():
     with open(root.filename, 'rb') as afile:
         buf = afile.read()
         hasher.update(buf)
-    print(" MD5 Hash: " + hasher.hexdigest())
-    fileHash = hasher.hexdigest
+    fileHash = hasher.hexdigest()
+    print(" MD5 Hash: " + fileHash)
     root.destroy()
     count = 0
     # VT Hash Checker
