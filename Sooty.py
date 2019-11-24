@@ -16,7 +16,8 @@ import os
 import socket
 import urllib.parse
 import requests
-import tkinter
+from tkinter import *
+from tkinter import filedialog
 from ipwhois import IPWhois
 from Modules import TitleOpen
 
