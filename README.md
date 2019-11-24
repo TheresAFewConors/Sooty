@@ -124,5 +124,6 @@ Found a Bug? Show Me!
  - [Gurulhu](https://github.com/Gurulhu) for adding the Base64 Decoder to the Decoders menu.
  - [AndThenEnteredAlex](https://github.com/andthenenteredalex) for adding the URLScan Function from URLScan.io
  - [Eric Kelson](https://github.com/ekelson-bcove) for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.
+ - [Jenetiks](https://github.com/jenetiks) for removing and tidying up duplicate imports that had accumulated over time. 
 
  ![](readmeimages/vt_hashchecker.gif)
