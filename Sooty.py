@@ -973,6 +973,7 @@ def contributors():
     print(" Gurulhu for adding the Base64 Decoder to the Decoders menu.")
     print(" AndThenEnteredAlex for adding the URLScan Function from URLScan.io")
     print(" Eric Kelson for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.")
+    print(" Jenetiks for removing and tidying up duplicate imports that had accumulated over time.")
     extrasMenu()
 
 def extrasVersion():
