@@ -19,8 +19,8 @@ import urllib.parse
 from urllib.parse import unquote
 import requests
 from ipwhois import IPWhois
-from tkinter import *
-from tkinter import filedialog
+import tkinter
+import tkinter.filedialog
 from Modules import TitleOpen
 
 try:
@@ -176,7 +176,7 @@ def urlSanitise():
     print(" U R L   S A N I T I S E   T O O L ")
     print(" --------------------------------- ")
     url = str(input("Enter URL to sanitize: ").strip())
-    x = re.sub("\.", "[.]", url)
+    x = re.sub(r"\.", "[.]", url)
     x = re.sub("http://", "hxxp://", x)
     x = re.sub("https://", "hxxps://", x)
     print("\n" + x)
@@ -332,7 +332,7 @@ def repChecker():
     print(" --------------------------------- ")
     ip = str(input(" Enter IP, URL or Email Address: ").strip())
 
-    s = re.findall('\S+@\S+', ip)
+    s = re.findall(r'\S+@\S+', ip)
     if s:
         print(' Email Detected...')
         analyzeEmail(''.join(s))
@@ -520,8 +520,8 @@ def hashMenu():
     hashSwitch(input())
 
 def hashFile():
-    root = Tk()
-    root.filename = filedialog.askopenfilename(initialdir="/", title="Select file")
+    root = tkinter.Tk()
+    root.filename = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
     hasher = hashlib.md5()
     with open(root.filename, 'rb') as afile:
         buf = afile.read()
@@ -561,8 +561,8 @@ def hashRating():
     hashMenu()
 
 def hashAndFileUpload():
-    root = Tk()
-    root.filename = filedialog.askopenfilename(initialdir="/", title="Select file")
+    root = tkinter.Tk()
+    root.filename = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
     hasher = hashlib.md5()
     with open(root.filename, 'rb') as afile:
         buf = afile.read()
@@ -637,7 +637,7 @@ def analyzePhish():
 
     print("\n Extracting Links... ")
     try:
-        match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
+        match = r"((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, msg.Body, re.M | re.I)
         for b in a:
             match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
@@ -860,7 +860,7 @@ def emailTemplateGen():
     f = msg.To.split(' ', 1)[0]
 
     try:
-        match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
+        match = r"((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, msg.Body, re.M | re.I)
         for b in a:
             match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
@@ -879,7 +879,7 @@ def emailTemplateGen():
         f.close()
 
     for each in linksFoundList:
-        x = re.sub("\.", "[.]", each)
+        x = re.sub(r"\.", "[.]", each)
         x = re.sub("http://", "hxxp://", x)
         x = re.sub("https://", "hxxps://", x)
         sanitizedLink = x
