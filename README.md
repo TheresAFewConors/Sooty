@@ -57,6 +57,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
    - [AbuseIPDB API Key](https://www.abuseipdb.com/api)
    - [HaveIBeenPwned API Key](https://haveibeenpwned.com/API/Key)
  - Replace the corresponding key in the `example_config.yaml` file, and rename the file to `config.yaml`, example layout below:
+ 
  ![](readmeimages/yaml.png)
  
  <!-- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
