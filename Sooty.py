@@ -1008,6 +1008,7 @@ def contributors():
     print(" Eric Kelson for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.")
     print(" Jenetiks for removing and tidying up duplicate imports that had accumulated over time.")
     print(" Nikosch86 for fixing an issue with Hexdigest not storing hashes correctly")
+    print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding")
     extrasMenu()
 
 def extrasVersion():
