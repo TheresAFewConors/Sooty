@@ -50,10 +50,18 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 ## Requirements
  - [Python 3.x](https://www.python.org/)
  - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
+ - Several API Keys are required to have full functionality with Sooty, however it will still function without these keys, just without the added functionality they provide. Replace the corresponding key in the config.yaml file, seen below:
+   - [VirusTotal API Key](https://developers.virustotal.com/reference)
+   - [URLScan.io API Key](https://urlscan.io/about-api/)
+   - [AbuseIPDB API Key](https://www.abuseipdb.com/api)
+   - [HaveIBeenPwned API Key](https://haveibeenpwned.com/API/Key)
+   
+ ![](readmeimages/yaml.png)
+ 
+ <!-- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the URLScan.io checker function with URLScan requires an [API Key](https://urlscan.io/about-api/), replace the key `URLSCAN_IO_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work. 
- - Use of the HaveIBeenPwned functionality requires an [API Key](https://haveibeenpwned.com/API/Key), replace the key `HIBP_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
+ - Use of the HaveIBeenPwned functionality requires an [API Key](https://haveibeenpwned.com/API/Key), replace the key `HIBP_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work. -->
  
 ## Development
 
@@ -126,5 +134,6 @@ Found a Bug? Show Me!
  - [Eric Kelson](https://github.com/ekelson-bcove) for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.
  - [Jenetiks](https://github.com/jenetiks) for removing and tidying up duplicate imports that had accumulated over time.
  - [Nikosch86](https://github.com/nikosch86) for fixing an issue with hexdigest not correctly storing a file hash.
+ - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding
 
  ![](readmeimages/vt_hashchecker.gif)
