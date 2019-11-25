@@ -50,12 +50,12 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 ## Requirements
  - [Python 3.x](https://www.python.org/)
  - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
- - Several API Keys are required to have full functionality with Sooty, however it will still function without these keys, just without the added functionality they provide. Replace the corresponding key in the config.yaml file, seen below:
+ - Several API Keys are required to have full functionality with Sooty, however it will still function without these keys, just without the added functionality they provide, links are found below:
    - [VirusTotal API Key](https://developers.virustotal.com/reference)
    - [URLScan.io API Key](https://urlscan.io/about-api/)
    - [AbuseIPDB API Key](https://www.abuseipdb.com/api)
    - [HaveIBeenPwned API Key](https://haveibeenpwned.com/API/Key)
-   
+ - Replace the corresponding key in the `example_config.yaml` file, and rename the file to `config.yaml`, example layout below:
  ![](readmeimages/yaml.png)
  
  <!-- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
