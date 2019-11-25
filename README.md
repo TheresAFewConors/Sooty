@@ -34,7 +34,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
     - [BadIP's](https://www.badips.com/)
     - [Abuse IPDB](https://www.abuseipdb.com/)
   - Check if an IP address is a TOR exit node
-  - Decode Proofpoint URL's, UTF-8 encoded URLS, Office SafeLink URL's and Base64 Strings
+  - Decode Proofpoint URL's, UTF-8 encoded URLS, Office SafeLink URL's, Base64 Strings and Cisco7 Passwords.
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
   - Perform WhoIs Lookups
   - Check Usernames and Emails against [HaveIBeenPwned](https://haveibeenpwned.com) to see if a breach has occurred. (see requirements)
@@ -44,6 +44,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   - Query [URLScan.io](https://urlscan.io) for reputation reports.
   - Analyze email addresses for known malicious activity and report on domain reputation utilising [EmailRep.io](https://emailrep.io)
   - Create dynamic email templates that can be used as a base for phishing triage response.(.msg only, .eml coming in future update)
+  - Perform analysis enrichment on phishing mails using the HaveIBeenPwned database, (Requires API Key).
 
 ![](readmeimages/email_analysis.gif)
 
