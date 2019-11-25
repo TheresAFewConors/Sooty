@@ -16,11 +16,12 @@ import os
 import socket
 import strictyaml
 import urllib.parse
-from urllib.parse import unquote
 import requests
 from ipwhois import IPWhois
 import tkinter
 import tkinter.filedialog
+
+from ipwhois import IPWhois
 from Modules import TitleOpen
 
 try:
@@ -567,8 +568,8 @@ def hashAndFileUpload():
     with open(root.filename, 'rb') as afile:
         buf = afile.read()
         hasher.update(buf)
-    print(" MD5 Hash: " + hasher.hexdigest())
-    fileHash = hasher.hexdigest
+    fileHash = hasher.hexdigest()
+    print(" MD5 Hash: " + fileHash)
     root.destroy()
     count = 0
     # VT Hash Checker
@@ -1005,6 +1006,8 @@ def contributors():
     print(" Gurulhu for adding the Base64 Decoder to the Decoders menu.")
     print(" AndThenEnteredAlex for adding the URLScan Function from URLScan.io")
     print(" Eric Kelson for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.")
+    print(" Jenetiks for removing and tidying up duplicate imports that had accumulated over time.")
+    print(" Nikosch86 for fixing an issue with Hexdigest not storing hashes correctly")
     extrasMenu()
 
 def extrasVersion():
