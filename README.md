@@ -78,7 +78,7 @@ Want to contribute? Great!
 Found a Bug? Show Me!
 
  #### Bugs and Issues
- - If an issue / bug is found please open a ticket in the issue tracker. State the issue first, and how to recreate it if necessary.
+ - If an issue / bug is found please open a ticket in the issue tracker and use the bug report template. Fill in this template and include any additional relevant information.
  - I will assign myself / another commenter to that case and work on fixing it asap.
 
 ## Changelog
