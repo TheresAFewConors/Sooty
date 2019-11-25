@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.3
+    Version:    1.3.1
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -14,10 +14,13 @@ import json
 import time
 import os
 import socket
+import strictyaml
 import urllib.parse
 import requests
-from tkinter import *
-from tkinter import filedialog
+from ipwhois import IPWhois
+import tkinter
+import tkinter.filedialog
+
 from ipwhois import IPWhois
 from Modules import TitleOpen
 
@@ -26,12 +29,14 @@ try:
 except:
     print('Cant install Win32com package')
 
-versionNo = '1.3'
+versionNo = '1.3.1'
 
-VT_API_KEY = 'Enter VirusTotal API Key Here'
-AB_API_KEY = 'Enter AbuseIPDB API Key Here'
-URLSCAN_IO_KEY = 'Enter urlscan.io API Key Here'
-HIBP_API_KEY = 'Enter HaveIBeenPwned API Key Here'
+try: 
+    f = open("config.yaml", "r")
+    configvars = strictyaml.load(f.read())
+    f.close()
+except FileNotFoundError:
+    print("Config.yaml not found. Check the example config file and rename to 'config.yaml'.")
 
 linksFoundList = []
 linksRatingList = []
@@ -68,9 +73,11 @@ def decoderSwitch(choice):
     if choice == '3':
         safelinksDecoder()
     if choice == '4':
-        unshortenEnter()
+        unshortenUrl()
     if choice == '5':
         b64Decoder()
+    if choice == '6':
+        cisco7Decoder()
     if choice == '0':
         mainMenu()
 
@@ -89,8 +96,10 @@ def hashSwitch(choice):
     if choice == '1':
         hashFile()
     if choice == '2':
-        hashRating()
+        hashText()
     if choice == '3':
+        hashRating()
+    if choice == '4':
         hashAndFileUpload()
     if choice == '0':
         mainMenu()
@@ -167,9 +176,8 @@ def urlSanitise():
     print("\n --------------------------------- ")
     print(" U R L   S A N I T I S E   T O O L ")
     print(" --------------------------------- ")
-    print("Enter URL to sanitize: ")
-    url = input()
-    x = re.sub("\.", "[.]", url)
+    url = str(input("Enter URL to sanitize: ").strip())
+    x = re.sub(r"\.", "[.]", url)
     x = re.sub("http://", "hxxp://", x)
     x = re.sub("https://", "hxxps://", x)
     print("\n" + x)
@@ -185,6 +193,7 @@ def decoderMenu():
     print(" OPTION 3: Office SafeLinks Decoder")
     print(" OPTION 4: URL unShortener")
     print(" OPTION 5: Base64 Decoder")
+    print(" OPTION 6: Cisco Password 7 Decoder")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -192,7 +201,7 @@ def proofPointDecoder():
     print("\n --------------------------------- ")
     print(" P R O O F P O I N T D E C O D E R ")
     print(" --------------------------------- ")
-    rewrittenurl = input(" Enter ProofPoint Link: ")
+    rewrittenurl = str(input(" Enter ProofPoint Link: ").strip())
     match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
     if match:
         if match.group(1) == 'v1':
@@ -214,7 +223,7 @@ def urlDecoder():
     print("\n --------------------------------- ")
     print("       U R L   D E C O D E R      ")
     print(" --------------------------------- ")
-    url = input(' Enter URL: ')
+    url = str(input(' Enter URL: ').strip())
     decodedUrl = unquote(url)
     print(decodedUrl)
     mainMenu()
@@ -223,7 +232,7 @@ def safelinksDecoder():
     print("\n --------------------------------- ")
     print(" S A F E L I N K S   D E C O D E R  ")
     print(" --------------------------------- ")
-    url = input(' Enter URL: ')
+    url = str(input(' Enter URL: ').strip())
     dcUrl = unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
@@ -233,12 +242,12 @@ def urlscanio():
     print("\n --------------------------------- ")
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
-    url_to_scan = str(input('\nEnter url: '))
+    url_to_scan = str(input('\nEnter url: ').strip())
     print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
 
     headers = {
         'Content-Type': 'application/json',
-        'API-Key': URLSCAN_IO_KEY,
+        'API-Key': configvars.data['URLSCAN_IO_KEY'],
         }
     response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json()
     uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
@@ -269,27 +278,18 @@ def urlscanio():
     print("\nSee full report for more details: " + str(task_report_URL))
     print('')
 
-def unshortenEnter():
+def unshortenUrl():
     print("\n --------------------------------- ")
     print("   U R L   U N S H O R T E N E R  ")
     print(" --------------------------------- ")
-    link = input(' Enter: ')
-    urlUnshortener(link)
+    link = str(input(' Enter URL: ').strip())
+    req = requests.get(str('https://unshorten.me/s/' + link))
+    print(req.text)
+
     decoderMenu()
 
-def urlUnshortener(link):
-    url = 'https://unshorten.me/s/'
-
-    final = str(url) + str(link)
-    req = requests.get(str(final))
-    us_url = req.content
-    us_url = str(us_url).split("b'")[-1]
-    us_url = str(us_url).strip("'\\n'")
-    print(us_url)
-    return
-
 def b64Decoder():
-    url = input(' Enter URL: ')
+    url = str(input(' Enter URL: ').strip())
 
     try:
         b64 = str(base64.b64decode(url))
@@ -301,13 +301,39 @@ def b64Decoder():
 
     decoderMenu()
 
+def cisco7Decoder():
+    pw = input(' Enter Cisco Password 7: ').strip()
+
+    key = [0x64, 0x73, 0x66, 0x64, 0x3b, 0x6b, 0x66, 0x6f, 0x41,
+    0x2c, 0x2e, 0x69, 0x79, 0x65, 0x77, 0x72, 0x6b, 0x6c,
+    0x64, 0x4a, 0x4b, 0x44, 0x48, 0x53, 0x55, 0x42]
+
+    try:
+        # the first 2 characters of the password are the starting index in the key array
+        index = int(pw[:2],16)
+
+        # the remaining values are the characters in the password, as hex bytes
+        pw_text = pw[2:]
+        pw_hex_values = [pw_text[start:start+2] for start in range(0,len(pw_text),2)]
+
+        # XOR those values against the key values, starting at the index, and convert to ASCII
+        pw_chars = [chr(key[index+i] ^ int(pw_hex_values[i],16)) for i in range(0,len(pw_hex_values))]
+
+        pw_plaintext = ''.join(pw_chars)
+        print("Password: " + pw_plaintext)
+
+    except Exception as e:
+        print(e)
+
+    decoderMenu()
+
 def repChecker():
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
     print(" --------------------------------- ")
-    ip = input(" Enter IP, URL or Email Address: ")
+    ip = str(input(" Enter IP, URL or Email Address: ").strip())
 
-    s = re.findall('\S+@\S+', ip)
+    s = re.findall(r'\S+@\S+', ip)
     if s:
         print(' Email Detected...')
         analyzeEmail(''.join(s))
@@ -318,7 +344,7 @@ def repChecker():
 
         print("\n VirusTotal Report:")
         url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-        params = {'apikey': VT_API_KEY, 'ip': wIP}
+        params = {'apikey': configvars.data['VT_API_KEY'], 'ip': wIP}
         response = requests.get(url, params=params)
 
         pos = 0
@@ -339,7 +365,7 @@ def repChecker():
             except:
                 try: #EAFP
                     url = 'https://www.virustotal.com/vtapi/v2/url/report'
-                    params = {'apikey': VT_API_KEY, 'resource': wIP}
+                    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
                     response = requests.get(url, params=params)
                     result = response.json()
                     print("\n VirusTotal Report:")
@@ -350,20 +376,23 @@ def repChecker():
         else:
             print(" There's been an error - check your API key, or VirusTotal is possible down")
 
-        TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
-        req = requests.get(TOR_URL)
-        print("\n TOR Exit Node Report: ")
-        if req.status_code == 200:
-            tl = req.text.split('\n')
-            c = 0
-            for i in tl:
-                if wIP == i:
-                    print("  " + i + " is a TOR Exit Node")
-                    c = c+1
-            if c == 0:
-                print("  " + wIP + " is NOT a TOR Exit Node")
-        else:
-            print("   TOR LIST UNREACHABLE")
+        try:
+            TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
+            req = requests.get(TOR_URL)
+            print("\n TOR Exit Node Report: ")
+            if req.status_code == 200:
+                tl = req.text.split('\n')
+                c = 0
+                for i in tl:
+                    if wIP == i:
+                        print("  " + i + " is a TOR Exit Node")
+                        c = c+1
+                if c == 0:
+                    print("  " + wIP + " is NOT a TOR Exit Node")
+            else:
+                print("   TOR LIST UNREACHABLE")
+        except Exception as e:
+            print("There is an error with checking for Tor exit nodes:\n" + str(e))
 
 
         print("\n Checking BadIP's... ")
@@ -393,7 +422,7 @@ def repChecker():
 
             headers = {
                 'Accept': 'application/json',
-                'Key': AB_API_KEY
+                'Key': configvars.data['AB_API_KEY']
             }
             response = requests.request(method='GET', url=AB_URL, headers=headers, params=querystring)
             if response.status_code == 200:
@@ -422,7 +451,7 @@ def dnsMenu():
     dnsSwitch(input())
 
 def reverseDnsLookup():
-    d = input(" Enter IP to check: ")
+    d = str(input(" Enter IP to check: ").strip())
     try:
         s = socket.gethostbyaddr(d)
         print('\n ' + s[0])
@@ -431,7 +460,7 @@ def reverseDnsLookup():
     dnsMenu()
 
 def dnsLookup():
-    d = input(" Enter Domain Name to check: ")
+    d = str(input(" Enter Domain Name to check: ").strip())
     d = re.sub("http://", "", d)
     d = re.sub("https://", "", d)
     try:
@@ -442,7 +471,7 @@ def dnsLookup():
     dnsMenu()
 
 def whoIs():
-    ip = input(' Enter IP / Domain: ')
+    ip = str(input(' Enter IP / Domain: ').strip())
     whoIsPrint(ip)
 
     dnsMenu()
@@ -485,14 +514,15 @@ def hashMenu():
     print(" --------------------------------- ")
     print(" What would you like to do? ")
     print(" OPTION 1: Hash a file")
-    print(" OPTION 2: Check a hash for known malicious activity")
-    print(" OPTION 3: Hash a file, check a hash for known malicious activity")
+    print(" OPTION 2: Hash text")
+    print(" OPTION 3: Check a hash for known malicious activity")
+    print(" OPTION 4: Hash a file, check a hash for known malicious activity")
     print(" OPTION 0: Exit to Main Menu")
     hashSwitch(input())
 
 def hashFile():
-    root = Tk()
-    root.filename = filedialog.askopenfilename(initialdir="/", title="Select file")
+    root = tkinter.Tk()
+    root.filename = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
     hasher = hashlib.md5()
     with open(root.filename, 'rb') as afile:
         buf = afile.read()
@@ -501,13 +531,18 @@ def hashFile():
     root.destroy()
     hashMenu()
 
+def hashText():
+    userinput = input(" Enter the text to be hashed: ")
+    print(" MD5 Hash: " + hashlib.md5(userinput.encode("utf-8")).hexdigest())
+    hashMenu()
+
 def hashRating():
     count = 0
     # VT Hash Checker
-    fileHash = input(" Enter Hash of file: ")
+    fileHash = str(input(" Enter Hash of file: ").strip())
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
-    params = {'apikey': VT_API_KEY, 'resource': fileHash}
+    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': fileHash}
     response = requests.get(url, params=params)
 
     try:  # EAFP
@@ -515,7 +550,7 @@ def hashRating():
         try:
             if result['positives'] != 0:
                 print("\n Malware Detection")
-                for key, value in result['scans'].items():
+                for value in result['scans'].items():
                     if value['detected'] == True:
                         count = count + 1
             print(" VirusTotal Report: " + str(count) + " detections found")
@@ -527,8 +562,8 @@ def hashRating():
     hashMenu()
 
 def hashAndFileUpload():
-    root = Tk()
-    root.filename = filedialog.askopenfilename(initialdir="/", title="Select file")
+    root = tkinter.Tk()
+    root.filename = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
     hasher = hashlib.md5()
     with open(root.filename, 'rb') as afile:
         buf = afile.read()
@@ -540,7 +575,7 @@ def hashAndFileUpload():
     # VT Hash Checker
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
-    params = {'apikey': VT_API_KEY, 'resource': fileHash}
+    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': fileHash}
     response = requests.get(url, params=params)
 
     try:  # EAFP
@@ -548,7 +583,7 @@ def hashAndFileUpload():
         try:
             if result['positives'] != 0:
                 print("\n Malware Detection")
-                for key, value in result['scans'].items():
+                for value in result['scans'].items():
                     if value['detected'] == True:
                         count = count + 1
             print(" VirusTotal Report: " + str(count) + " detections found")
@@ -603,10 +638,9 @@ def analyzePhish():
 
     print("\n Extracting Links... ")
     try:
-        match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
+        match = r"((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, msg.Body, re.M | re.I)
         for b in a:
-            pp = 'https://urldefense.proofpoint'
             match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
             if match:
                 if match.group(1) == 'v1':
@@ -671,7 +705,7 @@ def haveIBeenPwned():
     print(" --------------------------------- ")
 
     try:
-        acc = input(' Enter email: ')
+        acc = str(input(' Enter email: ').strip())
         haveIBeenPwnedPrintOut(acc)
     except:
         print('')
@@ -681,7 +715,7 @@ def haveIBeenPwnedPrintOut(acc):
     try:
         url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % acc
         userAgent = 'Sooty'
-        headers = {'Content-Type': 'application/json', 'hibp-api-key': HIBP_API_KEY, 'user-agent': userAgent}
+        headers = {'Content-Type': 'application/json', 'hibp-api-key': configvars.data['HIBP_API_KEY'], 'user-agent': userAgent}
         try:
             req = requests.get(url, headers=headers)
             response = req.json()
@@ -711,8 +745,7 @@ def analyzeEmailInput():
     print("    E M A I L   A N A L Y S I S    ")
     print(" --------------------------------- ")
     try:
-        print(' Enter Email Address to Analyze: ')
-        email = input()
+        email = str(input(' Enter Email Address to Analyze: ').strip())
         analyzeEmail(email)
         phishingMenu()
     except:
@@ -759,7 +792,7 @@ def analyzeEmail(email):
                 try:
                     url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % email
                     userAgent = 'Sooty'
-                    headers = {'Content-Type': 'application/json', 'hibp-api-key': HIBP_API_KEY, 'user-agent': userAgent}
+                    headers = {'Content-Type': 'application/json', 'hibp-api-key': configvars.data['HIBP_API_KEY'], 'user-agent': userAgent}
 
                     try:
                         reqHIBP = requests.get(url, headers=headers)
@@ -828,10 +861,9 @@ def emailTemplateGen():
     f = msg.To.split(' ', 1)[0]
 
     try:
-        match = "((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
+        match = r"((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))"
         a = re.findall(match, msg.Body, re.M | re.I)
         for b in a:
-            pp = 'https://urldefense.proofpoint'
             match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', b[0])
             if match:
                 if match.group(1) == 'v1':
@@ -848,17 +880,17 @@ def emailTemplateGen():
         f.close()
 
     for each in linksFoundList:
-        x = re.sub("\.", "[.]", each)
+        x = re.sub(r"\.", "[.]", each)
         x = re.sub("http://", "hxxp://", x)
         x = re.sub("https://", "hxxps://", x)
         sanitizedLink = x
 
-    if 'API Key' not in VT_API_KEY:
+    if 'API Key' not in configvars.data['VT_API_KEY']:
         try:  # EAFP
             url = 'https://www.virustotal.com/vtapi/v2/url/report'
             for each in linksFoundList:
                 link = each
-                params = {'apikey': VT_API_KEY, 'resource': link}
+                params = {'apikey': configvars.data['VT_API_KEY'], 'resource': link}
                 response = requests.get(url, params=params)
                 result = response.json()
                 if response.status_code == 200:
