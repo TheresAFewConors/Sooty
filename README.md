@@ -70,7 +70,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 Want to contribute? Great!
 
   #### Code Contributions
-  - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant in necessary.
+  - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant if necessary.
   - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
   - All code modifications, enhancements or additions must be done through a pull request. 
   - Once reviewed and merged, contibutors will be added to the ReadMe
