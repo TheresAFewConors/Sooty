@@ -70,7 +70,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 Want to contribute? Great!
 
   #### Code Contributions
-  - New features / requests should start by opening an issue. This helps track new features and prevent crossover.
+  - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant in necessary.
   - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
   - All code modifications, enhancements or additions must be done through a pull request. 
   - Once reviewed and merged, contibutors will be added to the ReadMe
@@ -79,7 +79,8 @@ Found a Bug? Show Me!
 
  #### Bugs and Issues
  - If an issue / bug is found please open a ticket in the issue tracker and use the bug report template. Fill in this template and include any additional relevant information.
- - I will assign myself / another commenter to that case and work on fixing it asap.
+ - If you wish to work on a known bug, leave a comment on the issue page and open a Pull Request to track progress. I will assign you to it.
+ - If there is an issue with installation or usage, use the supplied template and I will respond asap.
 
 ## Changelog
 
@@ -117,6 +118,8 @@ Found a Bug? Show Me!
 
 #### Version 1.3 - The Templating Update
  - ~~Add dynamic email templates that generate based on Sooty's analysis.~~ Edit: Added
+ - Verify MX Records
+ - Perform DKIM Verification
 
 #### Version 1.4 - The PCAP Analysis Update
 - Add ability to analze .pcap files and provide concise, enriched information.
