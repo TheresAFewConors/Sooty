@@ -224,7 +224,7 @@ def urlDecoder():
     print("       U R L   D E C O D E R      ")
     print(" --------------------------------- ")
     url = str(input(' Enter URL: ').strip())
-    decodedUrl = unquote(url)
+    decodedUrl = urllib.parse.unquote(url)
     print(decodedUrl)
     mainMenu()
 
@@ -233,7 +233,7 @@ def safelinksDecoder():
     print(" S A F E L I N K S   D E C O D E R  ")
     print(" --------------------------------- ")
     url = str(input(' Enter URL: ').strip())
-    dcUrl = unquote(url)
+    dcUrl = urllib.parse.unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
     mainMenu()
@@ -608,7 +608,7 @@ def phishingMenu():
 
 def analyzePhish():
     try:
-        file = filedialog.askopenfilename(initialdir="/", title="Select file")
+        file = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
         with open(file, encoding='Latin-1') as f:
             msg = f.read()
 
@@ -842,7 +842,7 @@ def emailTemplateGen():
     print('--------------------')
 
     try:
-        file = filedialog.askopenfilename(initialdir="/", title="Select file")
+        file = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
         with open(file, encoding='Latin-1') as f:
             msg = f.read()
         file = file.replace('//', '/')  # dir
