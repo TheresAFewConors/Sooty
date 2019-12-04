@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.3.1
+    Version:    1.3.2
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -21,15 +21,15 @@ from ipwhois import IPWhois
 import tkinter
 import tkinter.filedialog
 
-from ipwhois import IPWhois
 from Modules import TitleOpen
+from Modules import phishtank
 
 try:
     import win32com.client
 except:
     print('Cant install Win32com package')
 
-versionNo = '1.3.1'
+versionNo = '1.3.2'
 
 try: 
     f = open("config.yaml", "r")
@@ -111,6 +111,8 @@ def phishingSwitch(choice):
         analyzeEmailInput()
     if choice == '3':
         emailTemplateGen()
+    if choice == '4':
+        phishtankModule()
     if choice == '9':
         haveIBeenPwned()
     else:
@@ -602,6 +604,7 @@ def phishingMenu():
     print(" OPTION 1: Analyze an Email ")
     print(" OPTION 2: Analyze an Email Address for Known Activity")
     print(" OPTION 3: Generate an Email Template based on Analysis")
+    print(" OPTION 4: Analyze an URL with Phishtank")
     print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
@@ -980,6 +983,18 @@ def emailTemplateGen():
             print('\nWe appreciate your diligence in reporting this mail.')
 
         print('\nRegards,')
+
+def phishtankModule():
+    if "phishtank" in configvars.data:
+        url = input(' Enter the URL to be checked: ').strip()
+        download, appname, api = (
+            configvars.data["phishtank"]["download"],
+            configvars.data["phishtank"]["appname"],
+            configvars.data["phishtank"]["api"],
+        )
+        phishtank.main(download, appname, api, url)
+    else:
+        print("Missing configuration for phishtank in the config.yaml file.")
 
 def extrasMenu():
     print("\n --------------------------------- ")

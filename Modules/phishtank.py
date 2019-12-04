@@ -29,10 +29,10 @@ import urllib
 import json
 
 
-def db_validity(db):
+def db_validity(db_file):
     # Checking if DB exists or is too old
-    if db_absent(db) or db_outdated(db) == 1:
-        if download_json(db) == False:
+    if db_absent(db_file) or db_outdated(db_file) == 1:
+        if download_json(db_file) == False:
             return False
         else:
             return True
@@ -41,25 +41,26 @@ def db_validity(db):
         return True
 
 
-def db_absent(db):
-    if os.path.isfile(db):
+def db_absent(db_file):
+    if os.path.isfile(db_file):
         return 0
     else:
+        print("Local database absent. Downloading...")
         return 1
 
 
-def db_outdated(db):
-    seconds = time.time() - os.path.getmtime(db)
+def db_outdated(db_file):
+    seconds = time.time() - os.path.getmtime(db_file)
     if seconds > 21600:
-        os.remove(db)
+        os.remove(db_file)
         print("Database is older than 6 hours. \nRe-downloading Phishtank database:")
         return 1
 
 
-def download_json(db):
+def download_json(db_file):
     # Need to redownload DB
     try:
-        wget.download("http://data.phishtank.com/data/online-valid.json", db)
+        wget.download("http://data.phishtank.com/data/online-valid.json", db_file)
         print("Download complete")
         return True
 
@@ -73,16 +74,16 @@ def download_json(db):
         return False
 
 
-def urlcheck_db(db, url, domain):
+def urlcheck_db(local_db, db_file, url, domain):
     related_urls = []
     print("Checking the local database.")
 
     # Opening the DB
-    with open(db) as json_file:
-        db = json.load(json_file)
+    with open(db_file) as json_file:
+        db_json = json.load(json_file)
 
     # Check every entry for a match
-    for entry in db:
+    for entry in db_json:
         if url == entry["url"]:
             # Results do not match 1-to-1 with the API results. Rewriting local DB result here
             result = {
@@ -109,7 +110,7 @@ def urlcheck_db(db, url, domain):
     # Test if variables exist. If db_hit exist, we have a direct hit. If related exists, we
     # have hits on the domain name.
     if "db_hit" in locals():
-        urlReport(result)
+        urlReport(local_db, result)
     elif "related" in locals():
         print("No direct entries found.\n\nRelated entries:")
         for url in related_urls:
@@ -123,7 +124,7 @@ def urlcheck_db(db, url, domain):
         print("No results found")
 
 
-def urlcheck_online(user_agent, api_key, url):
+def urlcheck_online(local_db, user_agent, api_key, url):
     print("Checking the online database.")
     # Setting up the API request
     try:
@@ -143,14 +144,14 @@ def urlcheck_online(user_agent, api_key, url):
         # Checking response from webpage
         if response.status_code == 200:
             reply = response.json()
-            urlReport(reply["results"])
+            urlReport(local_db, reply["results"])
         else:
             print("Error reaching PhishTank. Status code " + str(response.status_code))
     except Exception as exc:
         print(exc)
 
 
-def urlReport(result): # Purely a printing function
+def urlReport(local_db, result):  # Purely a printing function
     print("\nPhishTank Report:")
     print("   URL:           " + str(result["url"]))
     print("   In Database:   " + str(result["in_database"]))
@@ -160,21 +161,11 @@ def urlReport(result): # Purely a printing function
         print("   Verified:      " + str(result["verified"]))
         print("   Verified At:   " + str(result["verified_at"]))
         print("   Online:        " + str(result["valid"]))
-    if local_db == True: # This data is not returned from the API
+    if local_db == True:  # This data is not returned from the API
         print("   Target:        " + str(result["target"]))
 
 
-def main(args):
-    # Check if number of expected variables match, otherwise print the documentation.
-    if not len(args) == 4:
-        print(__doc__)
-        return
-
-    # Declare local_db as a global variable - saves a lot in passing args to functions
-    global local_db
-
-    # map input to variables
-    local_db, user_agent, api_key, url = args[0], args[1], args[2], args[3]
+def main(local_db, user_agent, api_key, url):
     if "true" in local_db.lower():
         local_db = True
         # Check for the subdirectory's existence
@@ -182,23 +173,34 @@ def main(args):
             os.mkdir("data")
         except Exception:
             pass
-        db = "data/phishtank.json"
+        db_file = "data/phishtank.json"
     else:
         local_db = False
-    
+
     # Test if URL is usable in the search
     valid_url = urllib.parse.urlparse(url)
     if valid_url.scheme == "http" or valid_url.scheme == "https":
         # Test if we want to verify locally and if DB exists and is recent enough.
-        if local_db and db_validity(db) == True:
+        if local_db and db_validity(db_file) == True:
             # Check DB status and then do URL lookup locally
-            urlcheck_db(db, url, valid_url.hostname)
+            urlcheck_db(local_db, db_file, url, valid_url.hostname)
         else:
             # Do a URL lookup online
-            urlcheck_online(user_agent, api_key, url)
+            urlcheck_online(local_db, user_agent, api_key, url)
     else:
         print("Not a valid http or https url. Please enter the full URL.")
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    # Check if number of expected variables match, otherwise print the documentation.
+    if not len(sys.argv) == 4:
+        print(__doc__)
+    else:
+        # map input to variables
+        local_db, user_agent, api_key, url = (
+            sys.argv[0],
+            sys.argv[1],
+            sys.argv[2],
+            sys.argv[3],
+        )
+        main(local_db, user_agent, api_key, url)
