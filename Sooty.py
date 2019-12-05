@@ -819,7 +819,7 @@ def analyzeEmail(email):
             if (len(req['details']['profiles']) != 0):
                 profileList = (req['details']['profiles'])
                 for each in profileList:
-                    print('   • %s' % each)
+                    print('   - %s' % each)
             else:
                 print('   No Profiles Found For This User')
 
