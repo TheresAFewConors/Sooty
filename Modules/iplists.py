@@ -58,40 +58,44 @@ class lookupLists:
                     if ipObj.lookup == line:
                         self.hitlist.append(ipObj.lookup)
 
-    def reporter(self):
+    def reporter(self, ipObjs):
         if len(self.hitlist) != 0:
-            print("\nFound hits in " + listObj.name + ": " + listObj.desc)
+            print("\nFound hits in " + self.name + ": " + self.desc)
         for ipObj in ipObjs:
             for item in self.hitlist:
                 if ipObj.lookup in item:
                     print(str(ipObj.lookup))
 
 
-userInputList = []
+def main():
+    userInputList = []
 
-ipObjs = [userInput(entry) for entry in userInputList]
-for ipObj in ipObjs:
-    ipObj.urlOrIP()
+    ipObjs = [userInput(entry) for entry in userInputList]
+    for ipObj in ipObjs:
+        ipObj.urlOrIP()
 
-with open("config/iplists.json") as settings:
-    blacklists = json.load(settings)
+    with open("config/iplists.json") as settings:
+        blacklists = json.load(settings)
 
-blacklistObjs = [
-    lookupLists(
-        blacklist["name"],
-        blacklist["desc"],
-        blacklist["category"],
-        blacklist["listURL"],
-        blacklist["period"],
-    )
-    for blacklist in blacklists
-]
+    blacklistObjs = [
+        lookupLists(
+            blacklist["name"],
+            blacklist["desc"],
+            blacklist["category"],
+            blacklist["listURL"],
+            blacklist["period"],
+        )
+        for blacklist in blacklists
+    ]
 
-for listObj in blacklistObjs:
-    print("Checking " + listObj.name + "...")
-    listObj.blacklistCheck(ipObjs)
+    for listObj in blacklistObjs:
+        print("Checking " + listObj.name + "...")
+        listObj.blacklistCheck(ipObjs)
 
-print("\nResults:\n")
-for listObj in blacklistObjs:
-    listObj.reporter()
+    print("\nResults:")
+    for listObj in blacklistObjs:
+        listObj.reporter(ipObjs)
 
+
+if __name__ == "__main__":
+    main()
