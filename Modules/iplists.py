@@ -47,6 +47,7 @@ class lookupLists:
         self.period = period
 
     def blacklistCheck(self, ipObjs):
+        self.hitlist = []
         req = requests.get(self.listURL)
         if req.status_code == 200:
             lines = req.text.splitlines()
@@ -55,17 +56,16 @@ class lookupLists:
             for line in lines:
                 for ipObj in ipObjs:
                     if ipObj.lookup == line:
-                        if not any(item.get(ipObj.lookup, None) for item in hitlist):
-                            hitlist.append({ipObj.lookup: [self.name]})
-                        else:
-                            for index in range(0, len(hitlist)):
-                                for key in hitlist[index]:
-                                    if key == ipObj.lookup:
-                                        hitlist[index][key].append(self.name)
+                        self.hitlist.append(ipObj.lookup)
 
+    def reporter(self):
+        if len(self.hitlist) != 0:
+            print("\nFound hits in " + listObj.name + ": " + listObj.desc)
+        for ipObj in ipObjs:
+            for item in self.hitlist:
+                if ipObj.lookup in item:
+                    print(str(ipObj.lookup))
 
-hitlist = []
-uniquehits = set()
 
 userInputList = []
 
@@ -90,11 +90,8 @@ blacklistObjs = [
 for listObj in blacklistObjs:
     print("Checking " + listObj.name + "...")
     listObj.blacklistCheck(ipObjs)
-    hit = 0
-    for ipObj in ipObjs:
-        for item in hitlist:
-            if ipObj.lookup in item:
-                print(str(ipObj.lookup) + " Found")
-                hit = 1
-    if hit == 1:
-        print(listObj.name + ": " + listObj.desc + "\n")
+
+print("\nResults:\n")
+for listObj in blacklistObjs:
+    listObj.reporter()
+
