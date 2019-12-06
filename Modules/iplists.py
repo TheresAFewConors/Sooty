@@ -13,8 +13,6 @@ import ipaddress
 import json
 import requests
 
-# import urllib
-
 
 class userInput:
     def __init__(self, userInput):
@@ -29,8 +27,6 @@ class userInput:
 
         # If value error, then it cannot be an IP
         except ValueError:
-            # valid_url = urllib.parse.urlparse(self.lookup)
-            # print(valid_url)
             print("URLs are not (yet) supported")
             exit()
 
@@ -63,8 +59,7 @@ class lookupLists:
     def reporter(self, ipObjs):
         # Lists without an entry in the hitlist are no further processed
         if len(self.hitlist) != 0:
-            for ip in self.hitlist:
-                return self.name, self.desc, self.hitlist
+            return self.name, self.desc, self.hitlist
         else:
             return self.name
 
