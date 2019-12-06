@@ -8,7 +8,7 @@ Minimal required Python version 3.3
 
 """
 
-# import argparse
+import argparse
 import ipaddress
 import json
 import requests
@@ -47,7 +47,9 @@ class lookupLists:
         self.period = period
 
     def blacklistCheck(self, ipObjs):
-        self.hitlist = []
+        # Create an unique list of IPs that match the list being searched
+        self.hitlist = set()
+
         req = requests.get(self.listURL)
         if req.status_code == 200:
             lines = req.text.splitlines()
@@ -56,27 +58,27 @@ class lookupLists:
             for line in lines:
                 for ipObj in ipObjs:
                     if ipObj.lookup == line:
-                        self.hitlist.append(ipObj.lookup)
+                        self.hitlist.add(ipObj.lookup)
 
     def reporter(self, ipObjs):
+        # Lists without an entry in the hitlist are no further processed
         if len(self.hitlist) != 0:
             print("\nFound hits in " + self.name + ": " + self.desc)
-        for ipObj in ipObjs:
-            for item in self.hitlist:
-                if ipObj.lookup in item:
-                    print(str(ipObj.lookup))
+            for ip in self.hitlist:
+                print(ip)
 
 
-def main():
-    userInputList = []
-
+def main(userInputList):
+    # Create objects for each user entry and check whether IPv4, IPv6 or URL
     ipObjs = [userInput(entry) for entry in userInputList]
     for ipObj in ipObjs:
         ipObj.urlOrIP()
 
+    # get the blacklist URLs and details
     with open("config/iplists.json") as settings:
         blacklists = json.load(settings)
 
+    # Instantiate the blacklists
     blacklistObjs = [
         lookupLists(
             blacklist["name"],
@@ -88,14 +90,20 @@ def main():
         for blacklist in blacklists
     ]
 
+    # For each list, perform a check on the ip-object (list of IPs)
     for listObj in blacklistObjs:
         print("Checking " + listObj.name + "...")
         listObj.blacklistCheck(ipObjs)
 
+    # For each list, run the reporter on the ip-object (list of IPs)
     print("\nResults:")
     for listObj in blacklistObjs:
         listObj.reporter(ipObjs)
 
 
 if __name__ == "__main__":
-    main()
+    # Create a unique list of userInput to prevent redundant lookups
+    userInputList = set(
+        input("Please provide one or multiple IP addresses to check: ").split()
+    )
+    main(userInputList)
