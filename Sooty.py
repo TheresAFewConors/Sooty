@@ -21,8 +21,9 @@ from ipwhois import IPWhois
 import tkinter
 import tkinter.filedialog
 
-from Modules import TitleOpen
+from Modules import iplists
 from Modules import phishtank
+from Modules import TitleOpen
 
 try:
     import win32com.client
@@ -333,7 +334,8 @@ def repChecker():
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
     print(" --------------------------------- ")
-    ip = str(input(" Enter IP, URL or Email Address: ").strip())
+    rawInput = input("Please provide one or multiple IP addresses to check: ").split()
+    ip = str(rawInput[0])
 
     s = re.findall(r'\S+@\S+', ip)
     if s:
@@ -438,6 +440,9 @@ def repChecker():
                 print("   Error Reaching ABUSE IPDB")
         except:
                 print('   IP Not Found')
+        
+        print("Checking against IP blacklists: ")
+        iplists.main(rawInput)
 
     mainMenu()
 
