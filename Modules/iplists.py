@@ -59,7 +59,7 @@ class lookupLists:
     def reporter(self, ipObjs):
         # Lists without an entry in the hitlist are no further processed
         if len(self.hitlist) != 0:
-            return self.name, self.desc, self.hitlist
+            return self.hitlist
         else:
             return self.name
 
@@ -96,12 +96,20 @@ def main(userInputList):
     for listObj in blacklistObjs:
         report = listObj.reporter(ipObjs)
         if len(listObj.hitlist) == 0:
-            print(report + " - no result")
+            print(listObj.name + " - no result")
         else:
             print(
-                report[0] + " - " + str(len(listObj.hitlist)) + " hit(s): " + report[1]
+                listObj.category,
+                ":",
+                listObj.name,
+                "-",
+                str(len(listObj.hitlist)),
+                "hit(s) - max age",
+                listObj.period,
+                ":",
+                listObj.desc,
             )
-            for ip in report[2]:
+            for ip in report:
                 print("     " + ip)
 
 
