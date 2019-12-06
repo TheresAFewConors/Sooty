@@ -63,9 +63,10 @@ class lookupLists:
     def reporter(self, ipObjs):
         # Lists without an entry in the hitlist are no further processed
         if len(self.hitlist) != 0:
-            print("\nFound hits in " + self.name + ": " + self.desc)
             for ip in self.hitlist:
-                print(ip)
+                return self.name, self.desc, self.hitlist
+        else:
+            return self.name
 
 
 def main(userInputList):
@@ -98,7 +99,15 @@ def main(userInputList):
     # For each list, run the reporter on the ip-object (list of IPs)
     print("\nResults:")
     for listObj in blacklistObjs:
-        listObj.reporter(ipObjs)
+        report = listObj.reporter(ipObjs)
+        if len(listObj.hitlist) == 0:
+            print(report + " - no result")
+        else:
+            print(
+                report[0] + " - " + str(len(listObj.hitlist)) + " hit(s): " + report[1]
+            )
+            for ip in report[2]:
+                print("     " + ip)
 
 
 if __name__ == "__main__":
