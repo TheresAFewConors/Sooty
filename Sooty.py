@@ -441,7 +441,7 @@ def repChecker():
         except:
                 print('   IP Not Found')
         
-        print("Checking against IP blacklists: ")
+        print("\n\nChecking against IP blacklists: ")
         iplists.main(rawInput)
 
     mainMenu()
