@@ -1,0 +1,23 @@
+[
+    {
+        "name": "myip.ms",
+        "desc": "IPs identified as web bots in the last 15 minutes, using several sites that require human action",
+        "category": "abuse",
+        "listURL": "http://www.myip.ms/files/blacklist/csf/latest_blacklist.txt",
+        "period": "10 days"
+    },
+    {
+        "name": "NiX Spam",
+        "desc": "IP addresses that have sent spam in the last twelve hours.",
+        "category": "spam",
+        "listURL": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/nixspam.ipset",
+        "period": ""
+    },
+    {
+        "name": "fake",
+        "desc": "Fake list",
+        "category": "spam",
+        "listURL": "https://raw.githubusercontent.com/naveci/blocklist-ipsets/master/fake.txt",
+        "period": ""
+    }
+]
