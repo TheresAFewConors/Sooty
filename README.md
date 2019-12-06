@@ -73,7 +73,7 @@ Want to contribute? Great!
   - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant if necessary.
   - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
   - All code modifications, enhancements or additions must be done through a pull request. 
-  - Once reviewed and merged, contibutors will be added to the ReadMe
+  - Once reviewed and merged, contributors will be added to the ReadMe
 
 Found a Bug? Show Me!
 
@@ -122,7 +122,7 @@ Found a Bug? Show Me!
  - Perform DKIM Verification
 
 #### Version 1.4 - The PCAP Analysis Update
-- Add ability to analze .pcap files and provide concise, enriched information.
+- Add ability to analyze .pcap files and provide concise, enriched information.
 
 #### Version 1.x - The Case Update
   - Add a 'New Case' Feature, allowing output of the tool to be output to a txt file.
