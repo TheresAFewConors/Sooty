@@ -88,16 +88,13 @@ blacklistObjs = [
 ]
 
 for listObj in blacklistObjs:
+    print("Checking " + listObj.name + "...")
     listObj.blacklistCheck(ipObjs)
-
-for entry in hitlist:
-    for key in entry:
-        for site in entry.get(key):
-            print("Found " + key + " in the list from " + site)
-            uniquehits.add(site)
-
-for uniquehit in uniquehits:
-    for blacklistObj in blacklistObjs:
-        if uniquehit == blacklistObj.name:
-            print(blacklistObj.name + ": " + blacklistObj.desc)
-
+    hit = 0
+    for ipObj in ipObjs:
+        for item in hitlist:
+            if ipObj.lookup in item:
+                print(str(ipObj.lookup) + " Found")
+                hit = 1
+    if hit == 1:
+        print(listObj.name + ": " + listObj.desc + "\n")
