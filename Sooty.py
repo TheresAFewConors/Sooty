@@ -334,7 +334,7 @@ def repChecker():
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
     print(" --------------------------------- ")
-    rawInput = input("Please provide one or multiple IP addresses to check: ").split()
+    rawInput = input("Enter IP, URL or Email Address: ").split()
     ip = str(rawInput[0])
 
     s = re.findall(r'\S+@\S+', ip)
