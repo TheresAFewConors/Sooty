@@ -496,14 +496,17 @@ def whoIsPrint(ip):
        # print("  Emails:    " + str(w['nets'][0]['emails']))
         print("  Created:   " + str(w['nets'][0]['created']))
         print("  Updated:   " + str(w['nets'][0]['updated']))
+        c = 0
     except:
         print("\n  IP Not Found - Checking Domains")
         ip = re.sub('https://', '', ip)
         ip = re.sub('http://', '', ip)
         try:
-            s = socket.gethostbyname(ip)
-            print( '  Resolved Address: %s' % s)
-            whoIsPrint(s)
+            if c == 0:
+                s = socket.gethostbyname(ip)
+                print( '  Resolved Address: %s' % s)
+                c = 1
+                whoIsPrint(s)
         except:
             print(' IP or Domain not Found')
     return
