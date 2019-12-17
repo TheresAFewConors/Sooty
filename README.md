@@ -67,21 +67,23 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  
 ## Development
 
-Want to contribute? Great!
+### Want to contribute? Great!
 
   #### Code Contributions
-  - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant if necessary.
   - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
   - All code modifications, enhancements or additions must be done through a pull request. 
   - Once reviewed and merged, contributors will be added to the ReadMe
 
-Found a Bug? Show Me!
+### Found a Bug? Show Me!
 
  #### Bugs and Issues
  - If an issue / bug is found please open a ticket in the issue tracker and use the bug report template. Fill in this template and include any additional relevant information.
  - If you wish to work on a known bug, leave a comment on the issue page and open a Pull Request to track progress. I will assign you to it.
  - If there is an issue with installation or usage, use the supplied template and I will respond asap.
 
+ #### Requesting Features
+ - - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant if necessary. Before creating a new issue please check the [Projects Tab](https://github.com/TheresAFewConors/Sooty/projects) to see if this issue has already been requested, or directly with the other open [issues.](https://github.com/TheresAFewConors/Sooty/issues)
+ 
 ## Changelog
 
 #### Version 1.3 - The Templating Update
