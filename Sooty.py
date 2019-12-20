@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.3.1
+    Version:    1.3.2
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -21,15 +21,15 @@ from ipwhois import IPWhois
 import tkinter
 import tkinter.filedialog
 
-from ipwhois import IPWhois
 from Modules import TitleOpen
+from Modules import phishtank
 
 try:
     import win32com.client
 except:
     print('Cant install Win32com package')
 
-versionNo = '1.3.1'
+versionNo = '1.3.2'
 
 try: 
     f = open("config.yaml", "r")
@@ -111,6 +111,8 @@ def phishingSwitch(choice):
         analyzeEmailInput()
     if choice == '3':
         emailTemplateGen()
+    if choice == '4':
+        phishtankModule()
     if choice == '9':
         haveIBeenPwned()
     else:
@@ -605,6 +607,7 @@ def phishingMenu():
     print(" OPTION 1: Analyze an Email ")
     print(" OPTION 2: Analyze an Email Address for Known Activity")
     print(" OPTION 3: Generate an Email Template based on Analysis")
+    print(" OPTION 4: Analyze an URL with Phishtank")
     print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
@@ -930,21 +933,21 @@ def emailTemplateGen():
         print('\nThe sender has a reputation score of %s,' % req['reputation'], 'for the following reasons: ')
 
         if req['details']['spam']:
-            print(' • The sender has been reported for sending spam in the past.')
+            print(' - The sender has been reported for sending spam in the past.')
         if req['suspicious']:
-            print(' • It has been marked as suspicious on reputation checking websites.')
+            print(' - It has been marked as suspicious on reputation checking websites.')
         if req['details']['free_provider']:
-            print(' • The sender is using a free provider.')
+            print(' - The sender is using a free provider.')
         if req['details']['days_since_domain_creation'] < 365:
-            print(' • The domain is less than a year old.')
+            print(' - The domain is less than a year old.')
         if req['details']['blacklisted']:
-            print(' • It has been blacklisted on several sites.')
+            print(' - It has been blacklisted on several sites.')
         if req['details']['data_breach']:
-            print(' • Has been seen in data breaches')
+            print(' - Has been seen in data breaches')
         if req['details']['credentials_leaked']:
-            print(' • The credentials have been leaked for this address')
+            print(' - The credentials have been leaked for this address')
         if req['details']['malicious_activity']:
-            print(' • This sender has been flagged for malicious activity.')
+            print(' - This sender has been flagged for malicious activity.')
 
         malLink = 0     # Controller for mal link text
         for each in linksDict.values():
@@ -955,26 +958,26 @@ def emailTemplateGen():
             print('\nThe following potentially malicious links were found embedded in the body of the mail:')
             for key, value in linksDict.items():
                 if int(value) >= int(threshold):
-                    print(' • %s' % key)
+                    print(' - %s' % key)
 
         print('\nAs such, I would recommend the following: ')
 
         if 'suspicious' in rc:
-            print(' • Delete and Ignore the mail for the time being.')
+            print(' - Delete and Ignore the mail for the time being.')
 
         if 'malicious' in rc:
-            print(' • If you clicked any links or entered information into any displayed webpages let us know asap.')
+            print(' - If you clicked any links or entered information into any displayed webpages let us know asap.')
 
         if 'spam' in rc:
-            print(' • If you were not expecting the mail, please delete and ignore.')
-            print(' • We would advise you to use your email vendors spam function to block further mails.')
+            print(' - If you were not expecting the mail, please delete and ignore.')
+            print(' - We would advise you to use your email vendors spam function to block further mails.')
 
         if 'task' in rc:
-            print(' • If you completed any tasks asked of you, please let us know asap.')
-            print(' • If you were not expecting the mail, please delete and ignore.')
+            print(' - If you completed any tasks asked of you, please let us know asap.')
+            print(' - If you were not expecting the mail, please delete and ignore.')
 
         if 'benign' in rc:
-            print(' • If you were not expecting this mail, please delete and ignore.')
+            print(' - If you were not expecting this mail, please delete and ignore.')
             print('\nIf you receive further mails from this sender, you can use your mail vendors spam function to block further mails.')
 
         if 'suspicious' or 'malicious' or 'task' in rc:
@@ -983,6 +986,18 @@ def emailTemplateGen():
             print('\nWe appreciate your diligence in reporting this mail.')
 
         print('\nRegards,')
+
+def phishtankModule():
+    if "phishtank" in configvars.data:
+        url = input(' Enter the URL to be checked: ').strip()
+        download, appname, api = (
+            configvars.data["phishtank"]["download"],
+            configvars.data["phishtank"]["appname"],
+            configvars.data["phishtank"]["api"],
+        )
+        phishtank.main(download, appname, api, url)
+    else:
+        print("Missing configuration for phishtank in the config.yaml file.")
 
 def extrasMenu():
     print("\n --------------------------------- ")
