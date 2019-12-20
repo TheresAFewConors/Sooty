@@ -45,6 +45,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   - Analyze email addresses for known malicious activity and report on domain reputation utilising [EmailRep.io](https://emailrep.io)
   - Create dynamic email templates that can be used as a base for phishing triage response.(.msg only, .eml coming in future update)
   - Perform analysis enrichment on phishing mails using the HaveIBeenPwned database, (Requires API Key).
+  - Submit URL's to [PhishTank](https://www.phishtank.com/).
 
 ![](readmeimages/email_analysis.gif)
 
@@ -56,9 +57,12 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
    - [URLScan.io API Key](https://urlscan.io/about-api/)
    - [AbuseIPDB API Key](https://www.abuseipdb.com/api)
    - [HaveIBeenPwned API Key](https://haveibeenpwned.com/API/Key)
+   - [PhishTank](https://www.phishtank.com/api_info.php)
  - Replace the corresponding key in the `example_config.yaml` file, and rename the file to `config.yaml`, example layout below:
+ - For PhishTank support, an unique app name is also required as an additional field. Simply update the `config.yaml` file with your unique name.
  
- ![](readmeimages/yaml.png)
+![](readmeimages/example_config.png)
+
  
  <!-- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
@@ -141,7 +145,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Eric Kelson](https://github.com/ekelson-bcove) for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.
  - [Jenetiks](https://github.com/jenetiks) for removing and tidying up duplicate imports that had accumulated over time.
  - [Nikosch86](https://github.com/nikosch86) for fixing an issue with hexdigest not correctly storing a file hash.
- - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future.
+ - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.
  - [Paralax](https://github.com/paralax) for fixing typo's in the readme.
 
  ![](readmeimages/vt_hashchecker.gif)
