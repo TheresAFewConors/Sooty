@@ -45,7 +45,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   - Analyze email addresses for known malicious activity and report on domain reputation utilising [EmailRep.io](https://emailrep.io)
   - Create dynamic email templates that can be used as a base for phishing triage response.(.msg only, .eml coming in future update)
   - Perform analysis enrichment on phishing mails using the HaveIBeenPwned database, (Requires API Key).
-  - Submit URL's to [PhishTank](https://www.phishtank.com/). (See equirements)
+  - Submit URL's to [PhishTank](https://www.phishtank.com/). (see requirements)
 
 ![](readmeimages/email_analysis.gif)
 
