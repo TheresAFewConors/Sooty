@@ -46,7 +46,47 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   - Create dynamic email templates that can be used as a base for phishing triage response.(.msg only, .eml coming in future update)
   - Perform analysis enrichment on phishing mails using the HaveIBeenPwned database, (Requires API Key).
   - Submit URL's to [PhishTank](https://www.phishtank.com/). (see requirements)
-  - Reference the [Wiki](https://github.com/TheresAFewConors/Sooty/wiki/Getting-Started#navigating-the-menus) for a map of the menu layout.
+  - See below for a full list and layout of currently available tools:
+  
+  
+```
+└── Main Menu
+   ├── Sanitize URL's for use in emails
+   |  └── URL Sanitizing Tool
+   ├── Decoders
+   |   ├── ProofPoint Decoder
+   |   ├── URL Decoder
+   |   ├── Office Safelinks Decoder
+   |   ├── URL Unshortener
+   |   ├── Base 64 Decoder
+   |   └── Cisco Password 7 Decoder
+   ├── Reputation Checker
+   |   └── Reputation Checker for IP's, URL's or email addresses
+   ├── DNS Tools
+   |   ├── Reverse DNS Lookup
+   |   ├── DNS Lookup
+   |   └── WhoIs Lookup
+   ├── Hashing Functions
+   |   ├── Hash a File
+   |   ├── Hash a Text Input
+   |   ├── Check a hash for known malicious activity
+   |   └── Hash a file and check for known malicious activity
+   ├── Phishing Analysis
+   |   ├── Analyze an Email
+   |   ├── Analyze an email address for known malicious activity
+   |   ├── Generate an email template based on analysis
+   |   ├── Analyze a URL with Phishtank
+   |   └──  HaveIBeenPwned Lookup
+   ├── URL Scan
+   |   └── URLScan.io lookup
+   ├── Extra's
+   |   ├── About
+   |   ├── Contributors
+   |   ├── Version
+   |   ├── Wiki
+   |   └── Github Repo
+   └── Exit
+```
   
 ![](readmeimages/email_analysis.gif)
 
