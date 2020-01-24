@@ -46,7 +46,8 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   - Create dynamic email templates that can be used as a base for phishing triage response.(.msg only, .eml coming in future update)
   - Perform analysis enrichment on phishing mails using the HaveIBeenPwned database, (Requires API Key).
   - Submit URL's to [PhishTank](https://www.phishtank.com/). (see requirements)
-
+  - Reference the [Wiki](https://github.com/TheresAFewConors/Sooty/wiki/Getting-Started#navigating-the-menus) for a map of the menu layout.
+  
 ![](readmeimages/email_analysis.gif)
 
 ## Requirements
