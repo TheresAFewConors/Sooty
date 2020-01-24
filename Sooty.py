@@ -519,7 +519,7 @@ def hashMenu():
     print(" --------------------------------- ")
     print(" What would you like to do? ")
     print(" OPTION 1: Hash a file")
-    print(" OPTION 2: Hash text")
+    print(" OPTION 2: Input and hash text")
     print(" OPTION 3: Check a hash for known malicious activity")
     print(" OPTION 4: Hash a file, check a hash for known malicious activity")
     print(" OPTION 0: Exit to Main Menu")
