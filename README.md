@@ -76,7 +76,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
    |   ├── Analyze an email address for known malicious activity
    |   ├── Generate an email template based on analysis
    |   ├── Analyze a URL with Phishtank
-   |   └──  HaveIBeenPwned Lookup
+   |   └── HaveIBeenPwned Lookup
    ├── URL Scan
    |   └── URLScan.io lookup
    ├── Extra's
