@@ -768,6 +768,12 @@ def analyzeEmail(email):
         emailDomain = re.split('@', email)[1]
 
         print('\n Email Analysis Report ')
+        if response.status_code == 400:
+            print(' Invalid Email / Bad Request')
+        if response.status_code == 401:
+            print(' Unauthorized / Invalid API Key (for Authenticated Requests)')
+        if response.status_code == 429:
+            print(' Too many requests, ')
         if response.status_code == 200:
             print('   Email:       %s' % req['email'])
             print('   Reputation:  %s' % req['reputation'])
