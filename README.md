@@ -15,7 +15,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 
 ## Contents
  - [Current Features](#sooty-can-currently)
- - [Requirements](#requirements-and-installation)
+ - [Requirements & Installation](#requirements-and-installation)
  - [Development](#development)
  - [Changelog](#changelog)
  - [Roadmap](#roadmap)
