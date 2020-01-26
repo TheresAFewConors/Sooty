@@ -93,7 +93,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 ## Requirements and Installation
  - [Python 3.x](https://www.python.org/)
  - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
- - Launch the tool by naivigating to the main directory, and executing with `python3 Sooty.py`, or simply `Sooty.py` 
+ - Launch the tool by navigating to the main directory, and executing with `python3 Sooty.py`, or simply `Sooty.py` 
  - Several API Keys are required to have full functionality with Sooty, however it will still function without these keys, just without the added functionality they provide, links are found below:
    - [VirusTotal API Key](https://developers.virustotal.com/reference)
    - [URLScan.io API Key](https://urlscan.io/about-api/)
