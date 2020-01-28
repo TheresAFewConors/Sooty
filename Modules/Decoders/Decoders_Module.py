@@ -5,7 +5,7 @@ import html.parser
 import requests
 import base64
 
-
+linksFoundList = []
 
 def urlSanitise():
     print("\n --------------------------------- ")
