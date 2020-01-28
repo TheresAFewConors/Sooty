@@ -1,5 +1,6 @@
 # Project specific files
 config.yaml
+data/
 
 # pyenv
 .python-version

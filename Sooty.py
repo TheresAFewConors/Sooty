@@ -2,7 +2,7 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.3.1
+    Version:    1.3.2
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
@@ -21,15 +21,15 @@ from ipwhois import IPWhois
 import tkinter
 import tkinter.filedialog
 
-from ipwhois import IPWhois
 from Modules import TitleOpen
+from Modules import phishtank
 
 try:
     import win32com.client
 except:
     print('Cant install Win32com package')
 
-versionNo = '1.3.1'
+versionNo = '1.3.2'
 
 try: 
     f = open("config.yaml", "r")
@@ -111,6 +111,8 @@ def phishingSwitch(choice):
         analyzeEmailInput()
     if choice == '3':
         emailTemplateGen()
+    if choice == '4':
+        phishtankModule()
     if choice == '9':
         haveIBeenPwned()
     else:
@@ -238,45 +240,53 @@ def safelinksDecoder():
     print(dcUrl)
     mainMenu()
 
-def urlscanio():
+def urlscanio():    
     print("\n --------------------------------- ")
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
     url_to_scan = str(input('\nEnter url: ').strip())
-    print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
-
+    
     headers = {
         'Content-Type': 'application/json',
         'API-Key': configvars.data['URLSCAN_IO_KEY'],
         }
+
     response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json()
-    uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
-    time.sleep(45) # sleep for 45 seconds. The scan takes awhile, if we try to retrieve the scan too soon, it will return an error.
-    scan_results = requests.get('https://urlscan.io/api/v1/result/%s/' % uuid_variable).json() # retrieving the scan using the uuid for this scan
 
-    task_url = scan_results['task']['url']
-    verdicts_overall_score = scan_results['verdicts']['overall']['score']
-    verdicts_overall_malicious = scan_results['verdicts']['overall']['malicious']
-    task_report_URL = scan_results['task']['reportURL']
+    try:
+        if 'successful' in response['message']:
+            print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
+            uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
+            time.sleep(45) # sleep for 45 seconds. The scan takes awhile, if we try to retrieve the scan too soon, it will return an error.
+            scan_results = requests.get('https://urlscan.io/api/v1/result/%s/' % uuid_variable).json() # retrieving the scan using the uuid for this scan
 
-    print("\nurlscan.io Report:")
-    print("\nURL: " + task_url)
-    print("\nOverall Verdict: " + str(verdicts_overall_score))
-    print("Malicious: " + str(verdicts_overall_malicious))
-    print("urlscan.io: " + str(scan_results['verdicts']['urlscan']['score']))
-    if scan_results['verdicts']['urlscan']['malicious']:
-        print("Malicious: " + str(scan_results['verdicts']['urlscan']['malicious'])) # True
-    if scan_results['verdicts']['urlscan']['categories']:
-        print("Categories: ")
-    for line in scan_results['verdicts']['urlscan']['categories']:
-        print("\t"+ str(line)) # phishing
-    for line in scan_results['verdicts']['engines']['verdicts']:
-        print(str(line['engine']) + " score: " + str(line['score'])) # googlesafebrowsing
-        print("Categories: ")
-        for item in line['categories']:
-            print("\t" + item) # social_engineering
-    print("\nSee full report for more details: " + str(task_report_URL))
-    print('')
+            task_url = scan_results['task']['url']
+            verdicts_overall_score = scan_results['verdicts']['overall']['score']
+            verdicts_overall_malicious = scan_results['verdicts']['overall']['malicious']
+            task_report_URL = scan_results['task']['reportURL']
+
+            print("\nurlscan.io Report:")
+            print("\nURL: " + task_url)
+            print("\nOverall Verdict: " + str(verdicts_overall_score))
+            print("Malicious: " + str(verdicts_overall_malicious))
+            print("urlscan.io: " + str(scan_results['verdicts']['urlscan']['score']))
+            if scan_results['verdicts']['urlscan']['malicious']:
+                print("Malicious: " + str(scan_results['verdicts']['urlscan']['malicious'])) # True
+            if scan_results['verdicts']['urlscan']['categories']:
+                print("Categories: ")
+            for line in scan_results['verdicts']['urlscan']['categories']:
+                print("\t"+ str(line)) # phishing
+            for line in scan_results['verdicts']['engines']['verdicts']:
+                print(str(line['engine']) + " score: " + str(line['score'])) # googlesafebrowsing
+                print("Categories: ")
+                for item in line['categories']:
+                    print("\t" + item) # social_engineering
+            print("\nSee full report for more details: " + str(task_report_URL))
+            print('')
+        else:
+            print(response['message'])
+    except:
+        print(' Error reaching URLScan.io')
 
 def unshortenUrl():
     print("\n --------------------------------- ")
@@ -517,7 +527,7 @@ def hashMenu():
     print(" --------------------------------- ")
     print(" What would you like to do? ")
     print(" OPTION 1: Hash a file")
-    print(" OPTION 2: Hash text")
+    print(" OPTION 2: Input and hash text")
     print(" OPTION 3: Check a hash for known malicious activity")
     print(" OPTION 4: Hash a file, check a hash for known malicious activity")
     print(" OPTION 0: Exit to Main Menu")
@@ -605,6 +615,7 @@ def phishingMenu():
     print(" OPTION 1: Analyze an Email ")
     print(" OPTION 2: Analyze an Email Address for Known Activity")
     print(" OPTION 3: Generate an Email Template based on Analysis")
+    print(" OPTION 4: Analyze an URL with Phishtank")
     print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
@@ -765,6 +776,12 @@ def analyzeEmail(email):
         emailDomain = re.split('@', email)[1]
 
         print('\n Email Analysis Report ')
+        if response.status_code == 400:
+            print(' Invalid Email / Bad Request')
+        if response.status_code == 401:
+            print(' Unauthorized / Invalid API Key (for Authenticated Requests)')
+        if response.status_code == 429:
+            print(' Too many requests, ')
         if response.status_code == 200:
             print('   Email:       %s' % req['email'])
             print('   Reputation:  %s' % req['reputation'])
@@ -930,21 +947,21 @@ def emailTemplateGen():
         print('\nThe sender has a reputation score of %s,' % req['reputation'], 'for the following reasons: ')
 
         if req['details']['spam']:
-            print(' • The sender has been reported for sending spam in the past.')
+            print(' - The sender has been reported for sending spam in the past.')
         if req['suspicious']:
-            print(' • It has been marked as suspicious on reputation checking websites.')
+            print(' - It has been marked as suspicious on reputation checking websites.')
         if req['details']['free_provider']:
-            print(' • The sender is using a free provider.')
+            print(' - The sender is using a free provider.')
         if req['details']['days_since_domain_creation'] < 365:
-            print(' • The domain is less than a year old.')
+            print(' - The domain is less than a year old.')
         if req['details']['blacklisted']:
-            print(' • It has been blacklisted on several sites.')
+            print(' - It has been blacklisted on several sites.')
         if req['details']['data_breach']:
-            print(' • Has been seen in data breaches')
+            print(' - Has been seen in data breaches')
         if req['details']['credentials_leaked']:
-            print(' • The credentials have been leaked for this address')
+            print(' - The credentials have been leaked for this address')
         if req['details']['malicious_activity']:
-            print(' • This sender has been flagged for malicious activity.')
+            print(' - This sender has been flagged for malicious activity.')
 
         malLink = 0     # Controller for mal link text
         for each in linksDict.values():
@@ -955,26 +972,26 @@ def emailTemplateGen():
             print('\nThe following potentially malicious links were found embedded in the body of the mail:')
             for key, value in linksDict.items():
                 if int(value) >= int(threshold):
-                    print(' • %s' % key)
+                    print(' - %s' % key)
 
         print('\nAs such, I would recommend the following: ')
 
         if 'suspicious' in rc:
-            print(' • Delete and Ignore the mail for the time being.')
+            print(' - Delete and Ignore the mail for the time being.')
 
         if 'malicious' in rc:
-            print(' • If you clicked any links or entered information into any displayed webpages let us know asap.')
+            print(' - If you clicked any links or entered information into any displayed webpages let us know asap.')
 
         if 'spam' in rc:
-            print(' • If you were not expecting the mail, please delete and ignore.')
-            print(' • We would advise you to use your email vendors spam function to block further mails.')
+            print(' - If you were not expecting the mail, please delete and ignore.')
+            print(' - We would advise you to use your email vendors spam function to block further mails.')
 
         if 'task' in rc:
-            print(' • If you completed any tasks asked of you, please let us know asap.')
-            print(' • If you were not expecting the mail, please delete and ignore.')
+            print(' - If you completed any tasks asked of you, please let us know asap.')
+            print(' - If you were not expecting the mail, please delete and ignore.')
 
         if 'benign' in rc:
-            print(' • If you were not expecting this mail, please delete and ignore.')
+            print(' - If you were not expecting this mail, please delete and ignore.')
             print('\nIf you receive further mails from this sender, you can use your mail vendors spam function to block further mails.')
 
         if 'suspicious' or 'malicious' or 'task' in rc:
@@ -983,6 +1000,18 @@ def emailTemplateGen():
             print('\nWe appreciate your diligence in reporting this mail.')
 
         print('\nRegards,')
+
+def phishtankModule():
+    if "phishtank" in configvars.data:
+        url = input(' Enter the URL to be checked: ').strip()
+        download, appname, api = (
+            configvars.data["phishtank"]["download"],
+            configvars.data["phishtank"]["appname"],
+            configvars.data["phishtank"]["api"],
+        )
+        phishtank.main(download, appname, api, url)
+    else:
+        print("Missing configuration for phishtank in the config.yaml file.")
 
 def extrasMenu():
     print("\n --------------------------------- ")
@@ -1011,7 +1040,7 @@ def contributors():
     print(" Eric Kelson for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.")
     print(" Jenetiks for removing and tidying up duplicate imports that had accumulated over time.")
     print(" Nikosch86 for fixing an issue with Hexdigest not storing hashes correctly")
-    print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding")
+    print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.")
     print(" Paralax for fixing typos in the readme")
     extrasMenu()
 
