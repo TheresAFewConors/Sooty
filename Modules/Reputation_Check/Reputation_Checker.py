@@ -3,6 +3,7 @@ import re
 import time
 import socket
 import requests
+import Logger
 from Modules.Phishing import Phishing_Module
 from Modules.DNS_Tools import DNS_Module
 
@@ -13,6 +14,7 @@ def repChecker(configvars):
     print(" --------------------------------- ")
     ip = str(input(" Enter IP, URL or Email Address: ").strip())
 
+    Logger.logMsg(Logger.loggerRepCheck, 'Rep check performed on %s' % ip)
     s = re.findall(r'\S+@\S+', ip)
     if s:
         print('   Email Detected...')
