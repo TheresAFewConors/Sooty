@@ -10,13 +10,13 @@ import os
 import strictyaml
 
 from Modules import TitleOpen
-
 from Modules.Reputation_Check import Reputation_Checker
 from Modules.DNS_Tools import DNS_Module
 from Modules.Phishing import Phishing_Module
 from Modules.Decoders import Decoders_Module
 from Modules.Hashing import Hashing_Module
 from Modules.Extras import Extras
+import Logger
 
 versionNo = '1.3.2'
 
@@ -24,8 +24,10 @@ try:
     f = open("config.yaml", "r")
     configvars = strictyaml.load(f.read())
     f.close()
+    Logger.logMsg(Logger.loggerMain, 'Config file successfully imported')
 except FileNotFoundError:
     print("Config.yaml not found. Check the example config file and rename to 'config.yaml'.")
+    Logger.logMsg(Logger.loggerMain, 'Unable to import config file')
 
 linksFoundList = []
 linksRatingList = []
@@ -227,5 +229,6 @@ def extrasMenu():
     extrasSwitch(input())
 
 if __name__ == '__main__':
+    Logger.logMsg(Logger.loggerMain, 'Sooty Launched')
     titleLogo()
     mainMenu()
