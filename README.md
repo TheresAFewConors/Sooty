@@ -134,7 +134,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 
 #### Version 1.3 - The Templating Update
  - Added first iteration of dynamic email templates that generate based on Sooty's analysis, example below:
-
+ - Added Logging functionality
 ![](readmeimages/templateGen.PNG)
 
 #### Version 1.2 - The Phishing Update
