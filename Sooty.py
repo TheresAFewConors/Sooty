@@ -2,24 +2,27 @@
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
     Author:     Connor Jackson
-    Version:    1.3.2
     GitHub URL: https://github.com/TheresAFewConors/Sooty
 """
 
 import base64
+import consolemenu as CM
+import consolemenu.format as CMF
+import consolemenu.items as CMI
 import hashlib
 import html.parser
-import re
+from ipwhois import IPWhois
 import json
-import time
 import os
+import re
+import requests
 import socket
 import strictyaml
-import urllib.parse
-import requests
-from ipwhois import IPWhois
+import sys
+import time
 import tkinter
 import tkinter.filedialog
+import urllib.parse
 
 from Modules import TitleOpen
 from Modules import phishtank
@@ -29,7 +32,7 @@ try:
 except:
     print('Cant install Win32com package')
 
-versionNo = '1.3.2'
+versionNo = '1.3.3'
 
 try: 
     f = open("config.yaml", "r")
@@ -43,94 +46,6 @@ linksRatingList = []
 linksSanitized = []
 linksDict = {}
 
-def switchMenu(choice):
-    if choice == '1':
-        urlSanitise()
-    if choice == '2':
-        decoderMenu()
-    if choice == '3':
-        repChecker()
-    if choice == '4':
-        dnsMenu()
-    if choice == '5':
-        hashMenu()
-    if choice == '6':
-        phishingMenu()
-    if choice == '7':
-        urlscanio()
-    if choice == '9':
-        extrasMenu()
-    if choice == '0':
-        exit()
-    else:
-        mainMenu()
-
-def decoderSwitch(choice):
-    if choice == '1':
-        proofPointDecoder()
-    if choice == '2':
-        urlDecoder()
-    if choice == '3':
-        safelinksDecoder()
-    if choice == '4':
-        unshortenUrl()
-    if choice == '5':
-        b64Decoder()
-    if choice == '6':
-        cisco7Decoder()
-    if choice == '0':
-        mainMenu()
-
-def dnsSwitch(choice):
-    if choice == '1':
-        reverseDnsLookup()
-    if choice == '2':
-        dnsLookup()
-    if choice == '3':
-        whoIs()
-
-    if choice == '0':
-        mainMenu()
-
-def hashSwitch(choice):
-    if choice == '1':
-        hashFile()
-    if choice == '2':
-        hashText()
-    if choice == '3':
-        hashRating()
-    if choice == '4':
-        hashAndFileUpload()
-    if choice == '0':
-        mainMenu()
-
-def phishingSwitch(choice):
-    if choice == '1':
-        analyzePhish()
-    if choice == '2':
-        analyzeEmailInput()
-    if choice == '3':
-        emailTemplateGen()
-    if choice == '4':
-        phishtankModule()
-    if choice == '9':
-        haveIBeenPwned()
-    else:
-        mainMenu()
-
-def extrasSwitch(choice):
-    if choice == '1':
-        aboutSooty()
-    if choice == '2':
-        contributors()
-    if choice == '3':
-        extrasVersion()
-    if choice == '4':
-        wikiLink()
-    if choice == '5':
-        ghLink()
-    else:
-        mainMenu()
 
 def decodev1(rewrittenurl):
     match = re.search(r'u=(.+?)&k=', rewrittenurl)
@@ -154,26 +69,6 @@ def decodev2(rewrittenurl):
         if url not in linksFoundList:
             linksFoundList.append(url)
 
-def titleLogo():
-    TitleOpen.titleOpen()
-    os.system('cls||clear')
-
-def mainMenu():
-    print("\n --------------------------------- ")
-    print("\n           S  O  O  T  Y           ")
-    print("\n --------------------------------- ")
-    print(" What would you like to do? ")
-    print("\n OPTION 1: Sanitise URL For emails ")
-    print(" OPTION 2: Decoders (PP, URL, SafeLinks) ")
-    print(" OPTION 3: Reputation Checker")
-    print(" OPTION 4: DNS Tools")
-    print(" OPTION 5: Hashing Function")
-    print(" OPTION 6: Phishing Analysis")
-    print(" OPTION 7: URL scan")
-    print(" OPTION 9: Extras")
-    print(" OPTION 0: Exit Tool")
-    switchMenu(input())
-
 def urlSanitise():
     print("\n --------------------------------- ")
     print(" U R L   S A N I T I S E   T O O L ")
@@ -183,21 +78,6 @@ def urlSanitise():
     x = re.sub("http://", "hxxp://", x)
     x = re.sub("https://", "hxxps://", x)
     print("\n" + x)
-    mainMenu()
-
-def decoderMenu():
-    print("\n --------------------------------- ")
-    print("           D E C O D E R S        ")
-    print(" --------------------------------- ")
-    print(" What would you like to do? ")
-    print(" OPTION 1: ProofPoint Decoder")
-    print(" OPTION 2: URL Decoder")
-    print(" OPTION 3: Office SafeLinks Decoder")
-    print(" OPTION 4: URL unShortener")
-    print(" OPTION 5: Base64 Decoder")
-    print(" OPTION 6: Cisco Password 7 Decoder")
-    print(" OPTION 0: Exit to Main Menu")
-    decoderSwitch(input())
 
 def proofPointDecoder():
     print("\n --------------------------------- ")
@@ -219,8 +99,6 @@ def proofPointDecoder():
     else:
         print(' No valid URL found in input: ', rewrittenurl)
 
-    mainMenu()
-
 def urlDecoder():
     print("\n --------------------------------- ")
     print("       U R L   D E C O D E R      ")
@@ -228,7 +106,6 @@ def urlDecoder():
     url = str(input(' Enter URL: ').strip())
     decodedUrl = urllib.parse.unquote(url)
     print(decodedUrl)
-    mainMenu()
 
 def safelinksDecoder():
     print("\n --------------------------------- ")
@@ -238,7 +115,6 @@ def safelinksDecoder():
     dcUrl = urllib.parse.unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
-    mainMenu()
 
 def urlscanio():    
     print("\n --------------------------------- ")
@@ -296,8 +172,6 @@ def unshortenUrl():
     req = requests.get(str('https://unshorten.me/s/' + link))
     print(req.text)
 
-    decoderMenu()
-
 def b64Decoder():
     url = str(input(' Enter URL: ').strip())
 
@@ -308,8 +182,6 @@ def b64Decoder():
         print(" Decoded String: " + a)
     except:
         print(' No Base64 Encoded String Found')
-
-    decoderMenu()
 
 def cisco7Decoder():
     pw = input(' Enter Cisco Password 7: ').strip()
@@ -334,8 +206,6 @@ def cisco7Decoder():
 
     except Exception as e:
         print(e)
-
-    decoderMenu()
 
 def repChecker():
     print("\n --------------------------------- ")
@@ -447,19 +317,6 @@ def repChecker():
         except:
                 print('   IP Not Found')
 
-    mainMenu()
-
-def dnsMenu():
-    print("\n --------------------------------- ")
-    print("         D N S    T O O L S        ")
-    print(" --------------------------------- ")
-    print(" What would you like to do? ")
-    print(" OPTION 1: Reverse DNS Lookup")
-    print(" OPTION 2: DNS Lookup")
-    print(" OPTION 3: WHOIS Lookup")
-    print(" OPTION 0: Exit to Main Menu")
-    dnsSwitch(input())
-
 def reverseDnsLookup():
     d = str(input(" Enter IP to check: ").strip())
     try:
@@ -467,7 +324,6 @@ def reverseDnsLookup():
         print('\n ' + s[0])
     except:
         print(" Hostname not found")
-    dnsMenu()
 
 def dnsLookup():
     d = str(input(" Enter Domain Name to check: ").strip())
@@ -478,13 +334,10 @@ def dnsLookup():
         print('\n ' + s)
     except:
         print("Website not found")
-    dnsMenu()
 
 def whoIs():
     ip = str(input(' Enter IP / Domain: ').strip())
     whoIsPrint(ip)
-
-    dnsMenu()
 
 def whoIsPrint(ip):
     try:
@@ -521,18 +374,6 @@ def whoIsPrint(ip):
             print(' IP or Domain not Found')
     return
 
-def hashMenu():
-    print("\n --------------------------------- ")
-    print(" H A S H I N G   F U N C T I O N S ")
-    print(" --------------------------------- ")
-    print(" What would you like to do? ")
-    print(" OPTION 1: Hash a file")
-    print(" OPTION 2: Input and hash text")
-    print(" OPTION 3: Check a hash for known malicious activity")
-    print(" OPTION 4: Hash a file, check a hash for known malicious activity")
-    print(" OPTION 0: Exit to Main Menu")
-    hashSwitch(input())
-
 def hashFile():
     root = tkinter.Tk()
     root.filename = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
@@ -542,12 +383,10 @@ def hashFile():
         hasher.update(buf)
     print(" MD5 Hash: " + hasher.hexdigest())
     root.destroy()
-    hashMenu()
 
 def hashText():
     userinput = input(" Enter the text to be hashed: ")
     print(" MD5 Hash: " + hashlib.md5(userinput.encode("utf-8")).hexdigest())
-    hashMenu()
 
 def hashRating():
     count = 0
@@ -572,7 +411,6 @@ def hashRating():
             print("\n Hash was not found in Malware Database")
     except:
         print("Error: Invalid API Key")
-    hashMenu()
 
 def hashAndFileUpload():
     root = tkinter.Tk()
@@ -605,20 +443,6 @@ def hashAndFileUpload():
             print("\n Hash was not found in Malware Database")
     except:
         print(" Error: Invalid API Key")
-    hashMenu()
-
-def phishingMenu():
-    print("\n --------------------------------- ")
-    print("          P H I S H I N G          ")
-    print(" --------------------------------- ")
-    print(" What would you like to do? ")
-    print(" OPTION 1: Analyze an Email ")
-    print(" OPTION 2: Analyze an Email Address for Known Activity")
-    print(" OPTION 3: Generate an Email Template based on Analysis")
-    print(" OPTION 4: Analyze an URL with Phishtank")
-    print(" OPTION 9: HaveIBeenPwned")
-    print(" OPTION 0: Exit to Main Menu")
-    phishingSwitch(input())
 
 def analyzePhish():
     try:
@@ -711,8 +535,6 @@ def analyzePhish():
     except:
         print('')
 
-    phishingMenu()
-
 def haveIBeenPwned():
     print("\n --------------------------------- ")
     print(" H A V E   I   B E E N   P W N E D  ")
@@ -723,7 +545,6 @@ def haveIBeenPwned():
         haveIBeenPwnedPrintOut(acc)
     except:
         print('')
-    phishingMenu()
 
 def haveIBeenPwnedPrintOut(acc):
     try:
@@ -761,7 +582,6 @@ def analyzeEmailInput():
     try:
         email = str(input(' Enter Email Address to Analyze: ').strip())
         analyzeEmail(email)
-        phishingMenu()
     except:
         print("   Error Scanning Email Address")
 
@@ -1013,22 +833,8 @@ def phishtankModule():
     else:
         print("Missing configuration for phishtank in the config.yaml file.")
 
-def extrasMenu():
-    print("\n --------------------------------- ")
-    print("            E X T R A S            ")
-    print(" --------------------------------- ")
-    print(" What would you like to do? ")
-    print(" OPTION 1: About SOOTY ")
-    print(" OPTION 2: Contributors ")
-    print(" OPTION 3: Version")
-    print(" OPTION 4: Wiki")
-    print(" OPTION 5: GitHub Repo")
-    print(" OPTION 0: Exit to Main Menu")
-    extrasSwitch(input())
-
 def aboutSooty():
     print(' SOOTY is a tool developed and targeted to help automate some tasks that SOC Analysts perform.')
-    extrasMenu()
 
 def contributors():
     print(' CONTRIBUTORS')
@@ -1042,22 +848,101 @@ def contributors():
     print(" Nikosch86 for fixing an issue with Hexdigest not storing hashes correctly")
     print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.")
     print(" Paralax for fixing typos in the readme")
-    extrasMenu()
 
 def extrasVersion():
     print(' Current Version: ' + versionNo)
-    extrasMenu()
 
 def wikiLink():
     print('\n The Sooty Wiki can be found at the following link:')
     print(' https://github.com/TheresAFewConors/Sooty/wiki')
-    extrasMenu()
 
 def ghLink():
     print('\n The Sooty Repo can be found at the following link:')
     print(' https://github.com/TheresAFewConors/Sooty')
-    extrasMenu()
+
+def titleLogo():
+    TitleOpen.titleOpen()
+    os.system('cls||clear')
+
+def main():
+    # Change some menu formatting1
+    menu_format = (
+        CM.MenuFormatBuilder()
+        .set_border_style_type(CMF.MenuBorderStyleType.HEAVY_BORDER)
+        .set_prompt("SELECT>")
+        .set_title_align("center")
+        .set_subtitle_align("center")
+        .set_left_margin(4)
+        .set_right_margin(4)
+        .show_header_bottom_border(True)
+    )
+    menu = CM.ConsoleMenu(
+        "Sooty", "The SOC Analysts all-in-one CLI tool.", formatter=menu_format
+    )
+
+    # Create a submenu using a Selection Menu, which takes a list of strings to create the menu items. This
+    # submenu is passed the same formatter object, to keep its formatting consistent.
+    menu_decoder = CM.ConsoleMenu("Decoders Menu", "Please choose one of the following decoders for your string",
+        formatter=menu_format,
+    )
+    menu_decoder.append_item(CMI.FunctionItem("ProofPoint Decoder", proofPointDecoder))
+    menu_decoder.append_item(CMI.FunctionItem("URL Decoder", urlDecoder))
+    menu_decoder.append_item(CMI.FunctionItem("Office Safelinks Decoder", safelinksDecoder))
+    menu_decoder.append_item(CMI.FunctionItem("URL Unshortener", unshortenUrl))
+    menu_decoder.append_item(CMI.FunctionItem("Base 64 Decoder", b64Decoder))
+    menu_decoder.append_item(CMI.FunctionItem("Cisco Password 7 Decoder", cisco7Decoder))
+
+    menu_dnsTools = CM.ConsoleMenu("DNS Tools", formatter=menu_format,)
+    menu_dnsTools.append_item(CMI.FunctionItem("Reverse DNS Lookup", reverseDnsLookup))
+    menu_dnsTools.append_item(CMI.FunctionItem("DNS Lookup", dnsLookup))
+    menu_dnsTools.append_item(CMI.FunctionItem("WhoIs Lookup", whoIs))
+
+    menu_hashing = CM.ConsoleMenu("Hashing Functions", formatter=menu_format,)
+    menu_hashing.append_item(CMI.FunctionItem("Hash a File", hashFile))
+    menu_hashing.append_item(CMI.FunctionItem("Hash a Text Input", hashText))
+    menu_hashing.append_item(CMI.FunctionItem("Check a hash for known malicious activity", hashRating))
+    menu_hashing.append_item(CMI.FunctionItem("Hash a file and check for known malicious activity", hashAndFileUpload))
+    
+    menu_phishing = CM.ConsoleMenu("Phishing Analysis", formatter=menu_format,)
+    menu_phishing.append_item(CMI.FunctionItem("Analyze an Email", analyzePhish))
+    menu_phishing.append_item(CMI.FunctionItem("Analyze an email address for known malicious activity", analyzeEmailInput))
+    menu_phishing.append_item(CMI.FunctionItem("Generate an email template based on analysis", emailTemplateGen))
+    menu_phishing.append_item(CMI.FunctionItem("Analyze a URL with Phishtank", phishtankModule))
+    menu_phishing.append_item(CMI.FunctionItem("HaveIBeenPwned Lookup", haveIBeenPwned))
+    
+    menu_extras = CM.ConsoleMenu("Extras", formatter=menu_format,)
+    menu_extras.append_item(CMI.FunctionItem("About", aboutSooty))
+    menu_extras.append_item(CMI.FunctionItem("Contributors", contributors))
+    menu_extras.append_item(CMI.FunctionItem("Version", extrasVersion))
+    menu_extras.append_item(CMI.FunctionItem("Wiki", wikiLink))
+    menu_extras.append_item(CMI.FunctionItem("Github Repo", ghLink))
+
+    # Create the menu item that opens the Selection submenu
+    submenu_decoder = CMI.SubmenuItem(menu_decoder.title, submenu=menu_decoder)
+    submenu_decoder.set_menu(menu)
+    submenu_dnsTools = CMI.SubmenuItem(menu_dnsTools.title, submenu=menu_dnsTools)
+    submenu_dnsTools.set_menu(menu)
+    submenu_hashing = CMI.SubmenuItem(menu_hashing.title, submenu=menu_hashing)
+    submenu_hashing.set_menu(menu)
+    submenu_phishing = CMI.SubmenuItem(menu_phishing.title, submenu=menu_phishing)
+    submenu_phishing.set_menu(menu)
+    submenu_extras = CMI.SubmenuItem(menu_extras.title, submenu=menu_extras)
+    submenu_extras.set_menu(menu)
+
+    # Add all the items to the root menu
+    menu.append_item(CMI.FunctionItem("Sanitize URLs for use in emails", urlSanitise))
+    menu.append_item(submenu_decoder)
+    menu.append_item(CMI.FunctionItem("Reputation Checker for IP's, URL's or email addresses", repChecker))
+    menu.append_item(submenu_dnsTools)
+    menu.append_item(submenu_hashing)
+    menu.append_item(submenu_phishing)
+    menu.append_item(CMI.FunctionItem("URLScan.io lookup", urlscanio))
+    menu.append_item(submenu_extras)
+
+    # Show the menu
+    menu.start()
+    menu.join()
 
 if __name__ == '__main__':
     titleLogo()
-    mainMenu()
+    main()
