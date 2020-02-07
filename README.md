@@ -53,15 +53,17 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 └── Main Menu
    ├── Sanitize URL's for use in emails
    |  └── URL Sanitizing Tool
-   ├── Decoders
+   ├── Decoders and Link Sanitizers
    |   ├── ProofPoint Decoder
    |   ├── URL Decoder
    |   ├── Office Safelinks Decoder
    |   ├── URL Unshortener
    |   ├── Base 64 Decoder
-   |   └── Cisco Password 7 Decoder
+   |   ├── Cisco Password 7 Decoder
+   |   └── URL Sanitizing Tool
    ├── Reputation Checker
-   |   └── Reputation Checker for IP's, URL's or email addresses
+   |   ├── Reputation Checker for IP's, URL's or email addresses
+   |   └── URLScan.io lookup
    ├── DNS Tools
    |   ├── Reverse DNS Lookup
    |   ├── DNS Lookup
@@ -77,8 +79,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
    |   ├── Generate an email template based on analysis
    |   ├── Analyze a URL with Phishtank
    |   └── HaveIBeenPwned Lookup
-   ├── URL Scan
-   |   └── URLScan.io lookup
+   ├── EMPTY
    ├── Extra's
    |   ├── About
    |   ├── Contributors
