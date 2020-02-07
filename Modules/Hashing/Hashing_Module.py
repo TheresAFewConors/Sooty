@@ -22,7 +22,7 @@ def hashText():
     print(" MD5 Hash: " + hashlib.md5(userinput.encode("utf-8")).hexdigest())
 
 def hashRating(configvars):
-    count = 0
+    apierror = False
     # VT Hash Checker
     fileHash = str(input(" Enter Hash of file: ").strip())
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
@@ -32,18 +32,18 @@ def hashRating(configvars):
 
     try:  # EAFP
         result = response.json()
-        try:
-            if result['positives'] != 0:
-                print("\n Malware Detection")
-                for value in result['scans'].items():
-                    if value['detected'] == True:
-                        count = count + 1
-            print(" VirusTotal Report: " + str(count) + " detections found")
-            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
-        except:
-            print("\n Hash was not found in Malware Database")
     except:
+        apierror = True
         print("Error: Invalid API Key")
+    if not apierror:
+        if result['response_code'] == 0:
+            print("\n Hash was not found in Malware Database")
+        elif result['response_code'] == 1:
+            print(" VirusTotal Report: " + str(result['positives']) + "/" + str(result['total']) + " detections found")
+            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
+        else:
+            print("No Response")
+
 
 def hashAndFileUpload(configvars):
     root = tkinter.Tk()
@@ -55,7 +55,7 @@ def hashAndFileUpload(configvars):
     fileHash = hasher.hexdigest()
     print(" MD5 Hash: " + fileHash)
     root.destroy()
-    count = 0
+    apierror = False
     # VT Hash Checker
     url = 'https://www.virustotal.com/vtapi/v2/file/report'
 
@@ -64,16 +64,16 @@ def hashAndFileUpload(configvars):
 
     try:  # EAFP
         result = response.json()
-        try:
-            if result['positives'] != 0:
-                print("\n Malware Detection")
-                for value in result['scans'].items():
-                    if value['detected'] == True:
-                        count = count + 1
-            print(" VirusTotal Report: " + str(count) + " detections found")
-            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
-        except:
-            print("\n Hash was not found in Malware Database")
     except:
-        print(" Error: Invalid API Key")
+        apierror = True
+        print("Error: Invalid API Key")
+    if not apierror:
+        if result['response_code'] == 0:
+            print("\n Hash was not found in Malware Database")
+        elif result['response_code'] == 1:
+            print(" VirusTotal Report: " + str(result['positives']) + "/" + str(result['total']) + " detections found")
+            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
+        else:
+            print("No Response")
+
 
