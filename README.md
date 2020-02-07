@@ -188,5 +188,6 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Nikosch86](https://github.com/nikosch86) for fixing an issue with hexdigest not correctly storing a file hash.
  - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.
  - [Paralax](https://github.com/paralax) for fixing typo's in the readme.
+ - [MrMeeseeks2014](https://github.com/mrmeeseeks2014) fox fixing a bug relating to hash uploads
 
  ![](readmeimages/vt_hashchecker.gif)
