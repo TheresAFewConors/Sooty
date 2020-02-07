@@ -550,6 +550,7 @@ def hashText():
     hashMenu()
 
 def hashRating():
+    apierror = False
     count = 0
     # VT Hash Checker
     fileHash = str(input(" Enter Hash of file: ").strip())
@@ -560,18 +561,18 @@ def hashRating():
 
     try:  # EAFP
         result = response.json()
-        try:
-            if result['positives'] != 0:
-                print("\n Malware Detection")
-                for value in result['scans'].items():
-                    if value['detected'] == True:
-                        count = count + 1
-            print(" VirusTotal Report: " + str(count) + " detections found")
-            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
-        except:
-            print("\n Hash was not found in Malware Database")
     except:
+        apierror = True
         print("Error: Invalid API Key")
+    
+    if not apierror:
+        if result['response_code'] == 0:
+            print("\n Hash was not found in Malware Database")
+        elif result['response_code'] == 1:
+            print(" VirusTotal Report: " + str(result['positives']) + "/" + str(result['total']) + " detections found")
+            print("   Report Link: " + "https://www.virustotal.com/gui/file/" + fileHash + "/detection")
+        else:
+            print("No Reponse")
     hashMenu()
 
 def hashAndFileUpload():
