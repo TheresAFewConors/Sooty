@@ -51,8 +51,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   
 ```
 └── Main Menu
-   ├── Sanitize URL's for use in emails
-   |  └── URL Sanitizing Tool
+   ├── EMPTY
    ├── Decoders and Link Sanitizers
    |   ├── ProofPoint Decoder
    |   ├── URL Decoder
