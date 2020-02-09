@@ -1041,6 +1041,7 @@ def contributors():
     print(" Nikosch86 for fixing an issue with Hexdigest not storing hashes correctly")
     print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.")
     print(" Paralax for fixing typos in the readme")
+    print(" MrMeeseeks2014 fox fixing a bug relating to hash uploads")
     extrasMenu()
 
 def extrasVersion():
