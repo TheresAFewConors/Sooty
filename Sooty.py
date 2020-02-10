@@ -73,9 +73,6 @@ def decodev2(rewrittenurl):
             linksFoundList.append(url)
 
 def urlSanitise():
-    print("\n --------------------------------- ")
-    print(" U R L   S A N I T I S E   T O O L ")
-    print(" --------------------------------- ")
     url = str(input("Enter URL to sanitize: ").strip())
     x = re.sub(r"\.", "[.]", url)
     x = re.sub("http://", "hxxp://", x)
@@ -84,9 +81,6 @@ def urlSanitise():
     PromptUtils(screen).enter_to_continue()
 
 def proofPointDecoder():
-    print("\n --------------------------------- ")
-    print(" P R O O F P O I N T D E C O D E R ")
-    print(" --------------------------------- ")
     rewrittenurl = str(input(" Enter ProofPoint Link: ").strip())
     match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
     if match:
@@ -105,28 +99,19 @@ def proofPointDecoder():
     PromptUtils(screen).enter_to_continue()
 
 def urlDecoder():
-    print("\n --------------------------------- ")
-    print("       U R L   D E C O D E R      ")
-    print(" --------------------------------- ")
     url = str(input(' Enter URL: ').strip())
     decodedUrl = urllib.parse.unquote(url)
     print(decodedUrl)
     PromptUtils(screen).enter_to_continue()
 
 def safelinksDecoder():
-    print("\n --------------------------------- ")
-    print(" S A F E L I N K S   D E C O D E R  ")
-    print(" --------------------------------- ")
     url = str(input(' Enter URL: ').strip())
     dcUrl = urllib.parse.unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
     PromptUtils(screen).enter_to_continue()
 
-def urlscanio():    
-    print("\n --------------------------------- ")
-    print("\n        U R L S C A N . I O        ")
-    print("\n --------------------------------- ")
+def urlscanio():
     url_to_scan = str(input('\nEnter url: ').strip())
     
     headers = {
@@ -173,9 +158,6 @@ def urlscanio():
     PromptUtils(screen).enter_to_continue()
 
 def unshortenUrl():
-    print("\n --------------------------------- ")
-    print("   U R L   U N S H O R T E N E R  ")
-    print(" --------------------------------- ")
     link = str(input(' Enter URL: ').strip())
     req = requests.get(str('https://unshorten.me/s/' + link))
     print(req.text)
@@ -219,9 +201,6 @@ def cisco7Decoder():
     PromptUtils(screen).enter_to_continue()
 
 def repChecker():
-    print("\n --------------------------------- ")
-    print(" R E P U T A T I O N     C H E C K ")
-    print(" --------------------------------- ")
     ip = str(input(" Enter IP, URL or Email Address: ").strip())
 
     s = re.findall(r'\S+@\S+', ip)
@@ -556,10 +535,6 @@ def analyzePhish():
     PromptUtils(screen).enter_to_continue()
 
 def haveIBeenPwned():
-    print("\n --------------------------------- ")
-    print(" H A V E   I   B E E N   P W N E D  ")
-    print(" --------------------------------- ")
-
     try:
         acc = str(input(' Enter email: ').strip())
         haveIBeenPwnedPrintOut(acc)
@@ -597,9 +572,6 @@ def haveIBeenPwnedPrintOut(acc):
         print('')
 
 def analyzeEmailInput():
-    print("\n --------------------------------- ")
-    print("    E M A I L   A N A L Y S I S    ")
-    print(" --------------------------------- ")
     try:
         email = str(input(' Enter Email Address to Analyze: ').strip())
         analyzeEmail(email)
@@ -699,10 +671,6 @@ def virusTotalAnalyze(result, sanitizedLink):
     #print(str(result['positives']))
 
 def emailTemplateGen():
-    print('\n--------------------')
-    print('  Phishing Response')
-    print('--------------------')
-
     try:
         file = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
         with open(file, encoding='Latin-1') as f:
