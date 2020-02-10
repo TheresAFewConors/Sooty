@@ -8,7 +8,7 @@ Minimal required Python version 3.3
 
 """
 
-import argparse
+import argparse             # Doesn't seem to be used?
 import ipaddress
 import json
 import requests
