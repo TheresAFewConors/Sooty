@@ -32,7 +32,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
     - [VirusTotal](https://www.virustotal.com)
     - [BadIP's](https://www.badips.com/)
     - [Abuse IPDB](https://www.abuseipdb.com/)
-  - Identify if an address is malicious, used for spam, web bots:
+  - Identify if an address is potentially malicious, used for spam, web bots:
     - [Botvrij.eu](https://botvrij.eu)
     - [myip.ms](https://myip.ms)
     - [Firehol](https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/nixspam.ipset)
