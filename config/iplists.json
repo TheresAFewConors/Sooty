@@ -1,0 +1,30 @@
+[
+    {
+        "name": "botvrij.eu",
+        "desc": "Indicators of Compromise (IOCS) about malicious destination IPs, gathered via open source information feeds",
+        "category": "attacks",
+        "listURL": "http://www.botvrij.eu/data/ioclist.ip-dst.raw",
+        "period": "6 months"
+    },
+    {
+        "name": "myip.ms",
+        "desc": "IPs identified as web bots in the last 15 minutes, using several sites that require human action",
+        "category": "abuse",
+        "listURL": "http://www.myip.ms/files/blacklist/csf/latest_blacklist.txt",
+        "period": "10 days"
+    },
+    {
+        "name": "NiX Spam",
+        "desc": "IP addresses that have sent spam in the last twelve hours.",
+        "category": "spam",
+        "listURL": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/nixspam.ipset",
+        "period": "12 hours"
+    },
+    {
+        "name": "Tor Exit Nodes",
+        "desc": "Tor Exit Nodes in the last 30 days",
+        "category": "anonymizers",
+        "listURL": "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/tor_exits_30d.ipset",
+        "period": "30 days"
+    }
+]
