@@ -9,6 +9,7 @@ import base64
 import consolemenu as CM
 import consolemenu.format as CMF
 import consolemenu.items as CMI
+from consolemenu.prompt_utils import PromptUtils
 import hashlib
 import html.parser
 from ipwhois import IPWhois
@@ -46,6 +47,8 @@ linksRatingList = []
 linksSanitized = []
 linksDict = {}
 
+# Used for the enter_to_continue prompt before clearing the screen and spawning the menu.
+screen = CM.Screen()
 
 def decodev1(rewrittenurl):
     match = re.search(r'u=(.+?)&k=', rewrittenurl)
@@ -78,6 +81,7 @@ def urlSanitise():
     x = re.sub("http://", "hxxp://", x)
     x = re.sub("https://", "hxxps://", x)
     print("\n" + x)
+    PromptUtils(screen).enter_to_continue()
 
 def proofPointDecoder():
     print("\n --------------------------------- ")
@@ -98,6 +102,7 @@ def proofPointDecoder():
             print('Unrecognized version in: ', rewrittenurl)
     else:
         print(' No valid URL found in input: ', rewrittenurl)
+    PromptUtils(screen).enter_to_continue()
 
 def urlDecoder():
     print("\n --------------------------------- ")
@@ -106,6 +111,7 @@ def urlDecoder():
     url = str(input(' Enter URL: ').strip())
     decodedUrl = urllib.parse.unquote(url)
     print(decodedUrl)
+    PromptUtils(screen).enter_to_continue()
 
 def safelinksDecoder():
     print("\n --------------------------------- ")
@@ -115,6 +121,7 @@ def safelinksDecoder():
     dcUrl = urllib.parse.unquote(url)
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
+    PromptUtils(screen).enter_to_continue()
 
 def urlscanio():    
     print("\n --------------------------------- ")
@@ -163,6 +170,7 @@ def urlscanio():
             print(response['message'])
     except:
         print(' Error reaching URLScan.io')
+    PromptUtils(screen).enter_to_continue()
 
 def unshortenUrl():
     print("\n --------------------------------- ")
@@ -171,6 +179,7 @@ def unshortenUrl():
     link = str(input(' Enter URL: ').strip())
     req = requests.get(str('https://unshorten.me/s/' + link))
     print(req.text)
+    PromptUtils(screen).enter_to_continue()
 
 def b64Decoder():
     url = str(input(' Enter URL: ').strip())
@@ -182,6 +191,7 @@ def b64Decoder():
         print(" Decoded String: " + a)
     except:
         print(' No Base64 Encoded String Found')
+    PromptUtils(screen).enter_to_continue()
 
 def cisco7Decoder():
     pw = input(' Enter Cisco Password 7: ').strip()
@@ -206,6 +216,7 @@ def cisco7Decoder():
 
     except Exception as e:
         print(e)
+    PromptUtils(screen).enter_to_continue()
 
 def repChecker():
     print("\n --------------------------------- ")
@@ -316,6 +327,7 @@ def repChecker():
                 print("   Error Reaching ABUSE IPDB")
         except:
                 print('   IP Not Found')
+    PromptUtils(screen).enter_to_continue()
 
 def reverseDnsLookup():
     d = str(input(" Enter IP to check: ").strip())
@@ -324,6 +336,7 @@ def reverseDnsLookup():
         print('\n ' + s[0])
     except:
         print(" Hostname not found")
+    PromptUtils(screen).enter_to_continue()
 
 def dnsLookup():
     d = str(input(" Enter Domain Name to check: ").strip())
@@ -334,10 +347,12 @@ def dnsLookup():
         print('\n ' + s)
     except:
         print("Website not found")
+    PromptUtils(screen).enter_to_continue()
 
 def whoIs():
     ip = str(input(' Enter IP / Domain: ').strip())
     whoIsPrint(ip)
+    PromptUtils(screen).enter_to_continue()
 
 def whoIsPrint(ip):
     try:
@@ -383,10 +398,12 @@ def hashFile():
         hasher.update(buf)
     print(" MD5 Hash: " + hasher.hexdigest())
     root.destroy()
+    PromptUtils(screen).enter_to_continue()
 
 def hashText():
     userinput = input(" Enter the text to be hashed: ")
     print(" MD5 Hash: " + hashlib.md5(userinput.encode("utf-8")).hexdigest())
+    PromptUtils(screen).enter_to_continue(message=None)
 
 def hashRating():
     count = 0
@@ -411,6 +428,7 @@ def hashRating():
             print("\n Hash was not found in Malware Database")
     except:
         print("Error: Invalid API Key")
+    PromptUtils(screen).enter_to_continue()
 
 def hashAndFileUpload():
     root = tkinter.Tk()
@@ -443,6 +461,7 @@ def hashAndFileUpload():
             print("\n Hash was not found in Malware Database")
     except:
         print(" Error: Invalid API Key")
+    PromptUtils(screen).enter_to_continue()
 
 def analyzePhish():
     try:
@@ -534,6 +553,7 @@ def analyzePhish():
         analyzeEmail(msg.SenderEmailAddress)
     except:
         print('')
+    PromptUtils(screen).enter_to_continue()
 
 def haveIBeenPwned():
     print("\n --------------------------------- ")
@@ -545,6 +565,7 @@ def haveIBeenPwned():
         haveIBeenPwnedPrintOut(acc)
     except:
         print('')
+    PromptUtils(screen).enter_to_continue()
 
 def haveIBeenPwnedPrintOut(acc):
     try:
@@ -584,6 +605,7 @@ def analyzeEmailInput():
         analyzeEmail(email)
     except:
         print("   Error Scanning Email Address")
+    PromptUtils(screen).enter_to_continue()
 
 def analyzeEmail(email):
 
@@ -832,9 +854,11 @@ def phishtankModule():
         phishtank.main(download, appname, api, url)
     else:
         print("Missing configuration for phishtank in the config.yaml file.")
+    PromptUtils(screen).enter_to_continue()
 
 def aboutSooty():
     print(' SOOTY is a tool developed and targeted to help automate some tasks that SOC Analysts perform.')
+    PromptUtils(screen).enter_to_continue()
 
 def contributors():
     print(' CONTRIBUTORS')
@@ -848,21 +872,24 @@ def contributors():
     print(" Nikosch86 for fixing an issue with Hexdigest not storing hashes correctly")
     print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.")
     print(" Paralax for fixing typos in the readme")
+    PromptUtils(screen).enter_to_continue()
 
 def extrasVersion():
     print(' Current Version: ' + versionNo)
+    PromptUtils(screen).enter_to_continue()
 
 def wikiLink():
     print('\n The Sooty Wiki can be found at the following link:')
     print(' https://github.com/TheresAFewConors/Sooty/wiki')
+    PromptUtils(screen).enter_to_continue()
 
 def ghLink():
     print('\n The Sooty Repo can be found at the following link:')
     print(' https://github.com/TheresAFewConors/Sooty')
+    PromptUtils(screen).enter_to_continue()
 
 def titleLogo():
     TitleOpen.titleOpen()
-    os.system('cls||clear')
 
 def main():
     # Change some menu formatting1
