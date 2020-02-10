@@ -32,6 +32,10 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
     - [VirusTotal](https://www.virustotal.com)
     - [BadIP's](https://www.badips.com/)
     - [Abuse IPDB](https://www.abuseipdb.com/)
+  - Identify if an address is malicious, used for spam, web bots:
+    - [Botvrij.eu](https://botvrij.eu)
+    - [myip.ms](https://myip.ms)
+    - [Firehol](https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/nixspam.ipset)
   - Check if an IP address is a TOR exit node
   - Decode Proofpoint URL's, UTF-8 encoded URLS, Office SafeLink URL's, Base64 Strings and Cisco7 Passwords.
   - Get file hashes and compare them against [VirusTotal](https://www.virustotal.com) (see requirements)
@@ -185,7 +189,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Eric Kelson](https://github.com/ekelson-bcove) for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.
  - [Jenetiks](https://github.com/jenetiks) for removing and tidying up duplicate imports that had accumulated over time.
  - [Nikosch86](https://github.com/nikosch86) for fixing an issue with hexdigest not correctly storing a file hash.
- - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.
+ - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added, and additional IP blacklists for the reputation checker. 
  - [Paralax](https://github.com/paralax) for fixing typo's in the readme.
  - [MrMeeseeks2014](https://github.com/mrmeeseeks2014) fox fixing a bug relating to hash uploads
 
