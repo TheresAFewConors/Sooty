@@ -32,7 +32,7 @@ except:
 
 versionNo = '1.3.2'
 
-try: 
+try:
     f = open("config.yaml", "r")
     configvars = strictyaml.load(f.read())
     f.close()
@@ -241,18 +241,26 @@ def safelinksDecoder():
     print(dcUrl)
     mainMenu()
 
-def urlscanio():    
+def urlscanio():
     print("\n --------------------------------- ")
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
     url_to_scan = str(input('\nEnter url: ').strip())
-    
+
     headers = {
         'Content-Type': 'application/json',
         'API-Key': configvars.data['URLSCAN_IO_KEY'],
         }
 
-    response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json()
+    try:
+        user_response = input('Do you want change scan privacy? "yes" or "no" (Default = private, yes makes public): ')
+        if user_response == 'yes':
+            response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json() #change_response
+        else:
+            response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "private": "on" }' % url_to_scan).json() #no_change_response
+    except:
+        print(' Please make selection again')
+
 
     try:
         if 'successful' in response['message']:
@@ -448,7 +456,7 @@ def repChecker():
                 print("   Error Reaching ABUSE IPDB")
         except:
                 print('   IP Not Found')
-        
+
         print("\n\nChecking against IP blacklists: ")
         iplists.main(rawInput)
 
@@ -568,7 +576,7 @@ def hashRating():
     except:
         apierror = True
         print("Error: Invalid API Key")
-    
+
     if not apierror:
         if result['response_code'] == 0:
             print("\n Hash was not found in Malware Database")
