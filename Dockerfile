@@ -1,5 +1,4 @@
 FROM python:3.7-slim-buster
-RUN uname -ra
 RUN apt-get update
 RUN apt-get install g++ tk -y
 RUN mkdir /app
