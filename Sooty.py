@@ -7,6 +7,7 @@
 """
 
 import base64
+from unfurl import core
 import hashlib
 import html.parser
 import re
@@ -32,7 +33,7 @@ except:
 
 versionNo = '1.3.2'
 
-try: 
+try:
     f = open("config.yaml", "r")
     configvars = strictyaml.load(f.read())
     f.close()
@@ -79,6 +80,8 @@ def decoderSwitch(choice):
         b64Decoder()
     if choice == '6':
         cisco7Decoder()
+    if choice == '7':
+        unfurlUrl()
     if choice == '0':
         mainMenu()
 
@@ -197,6 +200,7 @@ def decoderMenu():
     print(" OPTION 4: URL unShortener")
     print(" OPTION 5: Base64 Decoder")
     print(" OPTION 6: Cisco Password 7 Decoder")
+    print(" OPTION 7: Unfurl URL")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -241,12 +245,12 @@ def safelinksDecoder():
     print(dcUrl)
     mainMenu()
 
-def urlscanio():    
+def urlscanio():
     print("\n --------------------------------- ")
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
     url_to_scan = str(input('\nEnter url: ').strip())
-    
+
     headers = {
         'Content-Type': 'application/json',
         'API-Key': configvars.data['URLSCAN_IO_KEY'],
@@ -335,6 +339,15 @@ def cisco7Decoder():
 
     except Exception as e:
         print(e)
+
+    decoderMenu()
+
+def unfurlUrl():
+    url_to_unfurl = str(input('Enter URL to Unfurl: ')).strip()
+    unfurl_instance = core.Unfurl()
+    unfurl_instance.add_to_queue(data_type='url', key=None, value=url_to_unfurl)
+    unfurl_instance.parse_queue()
+    print(unfurl_instance.generate_text_tree())
 
     decoderMenu()
 
