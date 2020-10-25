@@ -197,9 +197,11 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Nikosch86](https://github.com/nikosch86) for fixing an issue with hexdigest not correctly storing a file hash.
  - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added, and additional IP blacklists for the reputation checker. 
  - [MrMeeseeks2014](https://github.com/mrmeeseeks2014) fox fixing a bug relating to hash uploads
+ - [mrn42](https://github.com/mrn42) for adding Docker Support
 
 #### Documentation Contributors:
-- [Danielf-5](https://github.com/danielf-5) for improvements in the readability 
+ - [Danielf-5](https://github.com/danielf-5) for improvements in the readability 
  - [Paralax](https://github.com/paralax) for fixing typo's in the readme.
+ - [mrn42](https://github.com/mrn42) for adding Docker documentation to the readme
 
  ![](readmeimages/vt_hashchecker.gif)
