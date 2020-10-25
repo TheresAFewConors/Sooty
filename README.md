@@ -181,6 +181,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 
 ## Contributors:
 
+#### Code Contributions:
  - [Aaron J Copley](https://github.com/aaronjcopley) for his modified version of [ProofPoint's code](https://files.mtstatic.com/site_6638/177/1?Expires=1570188425&Signature=QWXGWsG0AID7Nyilm8i3vL9ETfRVPCnSmGZA5RtEAPUduQ38Mxh1ReqY6vk-PSLfnPoF6YY76jLUUokZP1gnXSyLTyKIzsiS15f5k1IgY~kwZbekQ6wvMLqPTlM3RjxJbm~iLbPE9qg9W8aX09QhBganS91SwISCPrdJJRJnMko_&Key-Pair-Id=APKAJ5Y6AV4GI7A555NA) to decode ProofPoint URL's
  - [James Duarte](https://github.com/GarnetSunset) for adding a hash and auto-check option to the hashing function
  - [mrpnkt](https://github.com/mrpnkt) for adding the missing whois requirement to requirements.txt
@@ -190,7 +191,10 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Jenetiks](https://github.com/jenetiks) for removing and tidying up duplicate imports that had accumulated over time.
  - [Nikosch86](https://github.com/nikosch86) for fixing an issue with hexdigest not correctly storing a file hash.
  - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added, and additional IP blacklists for the reputation checker. 
- - [Paralax](https://github.com/paralax) for fixing typo's in the readme.
  - [MrMeeseeks2014](https://github.com/mrmeeseeks2014) fox fixing a bug relating to hash uploads
+
+#### Documentation Contributors:
+- [Danielf-5](https://github.com/danielf-5) for improvements in the readability 
+ - [Paralax](https://github.com/paralax) for fixing typo's in the readme.
 
  ![](readmeimages/vt_hashchecker.gif)
