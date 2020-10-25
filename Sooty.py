@@ -7,6 +7,7 @@
 """
 
 import base64
+from unfurl import core
 import hashlib
 import html.parser
 import re
@@ -79,6 +80,8 @@ def decoderSwitch(choice):
         b64Decoder()
     if choice == '6':
         cisco7Decoder()
+    if choice == '7':
+        unfurlUrl()
     if choice == '0':
         mainMenu()
 
@@ -197,6 +200,7 @@ def decoderMenu():
     print(" OPTION 4: URL unShortener")
     print(" OPTION 5: Base64 Decoder")
     print(" OPTION 6: Cisco Password 7 Decoder")
+    print(" OPTION 7: Unfurl URL")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
@@ -246,21 +250,14 @@ def urlscanio():
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
     url_to_scan = str(input('\nEnter url: ').strip())
+    scan_type = configvars.data['URLSCAN_TYPE']
 
     headers = {
         'Content-Type': 'application/json',
         'API-Key': configvars.data['URLSCAN_IO_KEY'],
         }
 
-    try:
-        user_response = input('Do you want change scan privacy? "yes" or "no" (Default = private, yes makes public): ')
-        if user_response == 'yes':
-            response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json() #change_response
-        else:
-            response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "private": "on" }' % url_to_scan).json() #no_change_response
-    except:
-        print(' Please make selection again')
-
+    response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "%s": "on"}' % (url_to_scan, scan_type)).json()
 
     try:
         if 'successful' in response['message']:
@@ -343,6 +340,15 @@ def cisco7Decoder():
 
     except Exception as e:
         print(e)
+
+    decoderMenu()
+
+def unfurlUrl():
+    url_to_unfurl = str(input('Enter URL to Unfurl: ')).strip()
+    unfurl_instance = core.Unfurl()
+    unfurl_instance.add_to_queue(data_type='url', key=None, value=url_to_unfurl)
+    unfurl_instance.parse_queue()
+    print(unfurl_instance.generate_text_tree())
 
     decoderMenu()
 
