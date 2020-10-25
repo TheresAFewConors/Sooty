@@ -108,6 +108,8 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  
 ![](readmeimages/example_config.png)
 
+## Launch with Docker
+- docker build -t sooty . && docker run --rm -it sooty 
  
  <!-- - To use the Hash comparison with VirusTotal requires an [API key](https://developers.virustotal.com/reference), replace the key `VT_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
  - To use the Reputation Checker with AbuseIPDB requires an [API Key](https://www.abuseipdb.com/api), replace the key `AB_API_KEY` in the code with your own key. The tool will still function without this key, however this feature will not work.
@@ -134,6 +136,9 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant if necessary. Before creating a new issue, please check the [Projects Tab](https://github.com/TheresAFewConors/Sooty/projects) to see if this issue has already been requested, or directly with the other open [issues.](https://github.com/TheresAFewConors/Sooty/issues)
  
 ## Changelog
+
+#### Version 1.4 - The Templating Update
+ - Added Docker Image
 
 #### Version 1.3 - The Templating Update
  - Added first iteration of dynamic email templates that generate based on Sooty's analysis, example below:
