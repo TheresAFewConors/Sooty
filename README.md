@@ -9,7 +9,7 @@
 [![](readmeimages/tines_banner.png)](https://tines.io?utm_source=github&utm_medium=sponsorship&utm_campaign=sooty)
 # Overview
 
-Sooty is a tool developed with the task of aiding SOC analysts with automating part of their workflow. One of the goals of Sooty is to perform as much of the routines checks as possible, allowing the analyst more time to spend on deeper analysis within the same time-frame. Details for many of Sooty's feature can be found below.
+Sooty is a tool developed with the task of aiding SOC analysts with automating part of their workflow. One of the goals of Sooty is to perform as many of the routine checks as possible, allowing the analyst more time to spend on deeper analysis within the same time-frame. Details for many of Sooty's features can be found below.
 
 Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&utm_medium=sponsorship&utm_campaign=sooty)! The SOAR Platform for Enterprise Security Teams.
 
@@ -97,7 +97,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Python 3.x](https://www.python.org/)
  - Install all dependencies from the requirements.txt file. `pip install -r requirements.txt`
  - Launch the tool by navigating to the main directory, and executing with `python3 Sooty.py`, or simply `Sooty.py` 
- - Several API Keys are required to have full functionality with Sooty, however it will still function without these keys, just without the added functionality they provide, links are found below:
+ - Several API Keys are required to have full functionality with Sooty. However, it will still function without these keys, just without the added functionality they provide. Links are found below:
    - [VirusTotal API Key](https://developers.virustotal.com/reference)
    - [URLScan.io API Key](https://urlscan.io/about-api/)
    - [AbuseIPDB API Key](https://www.abuseipdb.com/api)
@@ -121,17 +121,17 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   #### Code Contributions
   - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
   - All code modifications, enhancements or additions must be done through a pull request. 
-  - Once reviewed and merged, contributors will be added to the ReadMe
+  - Once reviewed and merged, contributors will be added to the ReadMe.
 
 ### Found a Bug? Show Me!
 
  #### Bugs and Issues
- - If an issue / bug is found please open a ticket in the issue tracker and use the bug report template. Fill in this template and include any additional relevant information.
+ - If an issue / bug is found, please open a ticket in the issue tracker and use the bug report template. Fill in this template and include any additional relevant information.
  - If you wish to work on a known bug, leave a comment on the issue page and open a Pull Request to track progress. I will assign you to it.
- - If there is an issue with installation or usage, use the supplied template and I will respond asap.
+ - If there is an issue with installation or usage, use the supplied template and I will respond ASAP.
 
  #### Requesting Features
- - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant if necessary. Before creating a new issue please check the [Projects Tab](https://github.com/TheresAFewConors/Sooty/projects) to see if this issue has already been requested, or directly with the other open [issues.](https://github.com/TheresAFewConors/Sooty/issues)
+ - New features / requests should start by opening an issue. Please use the accompanying template when creating a new issue. This helps track new features and prevent crossover. Attach any additional info that seems relevant if necessary. Before creating a new issue, please check the [Projects Tab](https://github.com/TheresAFewConors/Sooty/projects) to see if this issue has already been requested, or directly with the other open [issues.](https://github.com/TheresAFewConors/Sooty/issues)
  
 ## Changelog
 
@@ -154,13 +154,13 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  
 #### Version 1.0
  - Initial Release
- - URL and ProofPoint Decoder
+ - URL and Proofpoint Decoder
  - Initial implementation of Reputation Checker
  - Sanitize links to be safe for email
 
 
 
-## RoadMap
+## Roadmap
   This is an outline of what features *will* be coming in future versions.
   
 #### Version 1.2 - The Phishing Update
