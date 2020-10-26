@@ -49,6 +49,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
   - Create dynamic email templates that can be used as a base for phishing triage response.(.msg only, .eml coming in future update)
   - Perform analysis enrichment on phishing mails using the HaveIBeenPwned database, and can identify if an email address has been compromised in the past, when it happened and where the breach occurred. (Requires API Key).
   - Submit URL's to [PhishTank](https://www.phishtank.com/). (see requirements)
+  - [Unfurl](https://github.com/obsidianforensics/unfurl) URL's via the CLI version of Unfurl. 
   - See below for a full list and layout of currently available tools:
   
   
@@ -62,7 +63,8 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
    |   ├── Office Safelinks Decoder
    |   ├── URL Unshortener
    |   ├── Base 64 Decoder
-   |   └── Cisco Password 7 Decoder
+   |   ├── Cisco Password 7 Decoder
+   |   └── Unfurl URL
    ├── Reputation Checker
    |   └── Reputation Checker for IP's, URL's or email addresses
    ├── DNS Tools
@@ -199,7 +201,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Naveci](https://github.com/naveci) for numerous bug fixes, QoL improvements, Cisco 7 Password Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added, and additional IP blacklists for the reputation checker. 
  - [MrMeeseeks2014](https://github.com/mrmeeseeks2014) fox fixing a bug relating to hash uploads.
  - [mrn42](https://github.com/mrn42) for adding Docker Support.
- - [Ryan Benson](https://github.com/mrn42) for adding Unfurl to the decoders section.
+ - [Ryan Benson](https://github.com/obsidianforensics) for adding [Unfurl](https://github.com/obsidianforensics/unfurl) support to the decoders section.
 
 #### Documentation Contributors:
  - [Danielf-5](https://github.com/danielf-5) for improvements in the readability 
