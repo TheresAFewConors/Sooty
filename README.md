@@ -122,6 +122,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
 
   #### Code Contributions
   - If you wish to work on a feature, leave a comment on the issue page and I will assign you to it.
+  - Under the projects tab is a list of features that are waiting to be started / completed. 
   - All code modifications, enhancements or additions must be done through a pull request. 
   - Once reviewed and merged, contributors will be added to the ReadMe.
 
