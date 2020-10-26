@@ -250,7 +250,15 @@ def urlscanio():
     print("\n        U R L S C A N . I O        ")
     print("\n --------------------------------- ")
     url_to_scan = str(input('\nEnter url: ').strip())
-    scan_type = configvars.data['URLSCAN_TYPE']
+
+    try:
+        type_prompt = str(input('\nSet scan visibility to Public? \nType "1" for Public or "2" for Private: '))
+        if type_prompt == '1':
+            scan_type = configvars.data['URLSCAN_PUBLIC']
+        else:
+            scan_type = configvars.data['URLSCAN_PRIVATE']
+    except:
+        print('Please make a selection again.. ')
 
     headers = {
         'Content-Type': 'application/json',

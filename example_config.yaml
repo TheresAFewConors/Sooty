@@ -1,7 +1,8 @@
 VT_API_KEY: 'Enter VirusTotal API Key Here'
 AB_API_KEY: 'Enter AbuseIPDB API Key Here'
 URLSCAN_IO_KEY: 'Enter urlscan.io API Key Here'
-URLSCAN_TYPE: 'private'
+URLSCAN_PRIVATE: 'private'
+URLSCAN_PUBLIC: 'public'
 HIBP_API_KEY: 'Enter HaveIBeenPwned API Key Here'
 EMAILREP_API_KEY: 'Enter EmailRep.io API Key Here'
 
