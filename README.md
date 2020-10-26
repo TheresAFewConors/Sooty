@@ -92,7 +92,8 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
    |   └── Github Repo
    └── Exit
 ```
-  
+![](https://github.com/TheresAFewConors/Sooty/blob/master/readmeimages/unfurl.PNG)
+
 ![](readmeimages/email_analysis.gif)
 
 ## Requirements and Installation
@@ -140,12 +141,12 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  
 ## Changelog
 
-#### Version 1.4 - The Templating Update
- - Added Docker Image
 
 #### Version 1.3 - The Templating Update
  - Added first iteration of dynamic email templates that generate based on Sooty's analysis, example below:
 ![](readmeimages/templateGen.PNG)
+- Docker Image added
+- Unfurl added 
 
 #### Version 1.2 - The Phishing Update
  - Added first iteration of the Phishing tool.
