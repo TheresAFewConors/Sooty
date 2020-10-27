@@ -426,10 +426,18 @@ def repChecker():
             response = requests.get(BAD_IPS_URL)
             if response.status_code == 200:
                 result = response.json()
-
-                sc = result['Score']['ssh']
+                sc = 0
+                for each in result['Categories']:
+                    temp = each
+                    sc += result['Score']['temp']
                 print("  " + str(result['suc']))
+                print("  Total Reports :  " + str(result['ReporterCount']['sum']))
                 print("  Score: " + str(sc))
+                if sc == 0:
+                      print('  Score 0 indicates, this might be a false positive')
+                 print("\n IP reported in following Categories :\n")
+                 for each in result['Categories']:
+                     print(" *. " + each)        
             else:
                 print('  Error reaching BadIPs')
         except:
