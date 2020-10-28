@@ -367,8 +367,13 @@ def repChecker():
 
         whoIsPrint(ip)
         wIP = socket.gethostbyname(ip)
-
+        
+        f= open(str(rawInput) + ".txt","a+")
+        
         print("\n VirusTotal Report:")
+        f.write("\n --------------------------------- ")
+        f.write("\n VirusTotal Report:")
+        f.write("\n --------------------------------- \n")       
         url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
         params = {'apikey': configvars.data['VT_API_KEY'], 'ip': wIP}
         response = requests.get(url, params=params)
@@ -386,8 +391,12 @@ def repChecker():
                     print("   No of Reportings: " + str(tot))
                     print("   Average Score:    " + str(pos / tot))
                     print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
+                    f.write("\n\n No of Reportings :     " + str(tot))
+                    f.write("\n Average Score :          " + str(pos / tot))
+                    f.write("\n\n VirusTotal Report Link : " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
                 else:
                     print("   No of Reportings: " + str(tot))
+                    f.write("\n No of Reportings :       " + str(tot))
             except:
                 try: #EAFP
                     url = 'https://www.virustotal.com/vtapi/v2/url/report'
@@ -397,8 +406,12 @@ def repChecker():
                     print("\n VirusTotal Report:")
                     print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
                     print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
+                    f.write("\n URL Malicious Reportings:\t" + str(result['positives']) + "/" + str(result['total']))
+                    f.write("\n\n VirusTotal Report Link:\t" + str(result['permalink']))  # gives URL for report (further info)
+
                 except:
                     print(" Not found in database")
+                    f.write("\n Not found in database")
         else:
             print(" There's been an error - check your API key, or VirusTotal is possible down")
 
@@ -406,22 +419,32 @@ def repChecker():
             TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
             req = requests.get(TOR_URL)
             print("\n TOR Exit Node Report: ")
+            f.write("\n\n --------------------------------- ")
+            f.write("\n TOR Exit Node Report: ")
+            f.write("\n --------------------------------- \n")
             if req.status_code == 200:
                 tl = req.text.split('\n')
                 c = 0
                 for i in tl:
                     if wIP == i:
                         print("  " + i + " is a TOR Exit Node")
+                        f.write("\n " + "  " + i + " is a TOR Exit Node")
                         c = c+1
                 if c == 0:
                     print("  " + wIP + " is NOT a TOR Exit Node")
+                    f.write("\n " + wIP + " is NOT a TOR Exit Node")
             else:
                 print("   TOR LIST UNREACHABLE")
+                f.write("\n TOR LIST UNREACHABLE")
         except Exception as e:
             print("There is an error with checking for Tor exit nodes:\n" + str(e))
 
 
         print("\n Checking BadIP's... ")
+        f.write("\n\n ---------------------------------")
+        f.write("\n BadIP's Report : ")
+        f.write("\n --------------------------------- \n")
+
         try:
             BAD_IPS_URL = 'https://www.badips.com/get/info/' + wIP
             response = requests.get(BAD_IPS_URL)
@@ -430,15 +453,24 @@ def repChecker():
                 print("  " + str(result['suc']))
                 print("  Total Reports : " + str(result['ReporterCount']['sum']))
                 print("\n  IP has been reported in the following Categories:")
+                f.write("  " + str(result['suc']))
+                f.write("\n  Total Reports : " + str(result['ReporterCount']['sum']))
+                f.write("\n  IP has been reported in the following Categories:")
                 for each in result['LastReport']:
                     timeReport = datetime.fromtimestamp(result['LastReport'].get(each))
                     print('   - ' + each + ': ' + str(timeReport))
+                    f.write('\n   - ' + each + ': ' + str(timeReport))
             else:
                 print('  Error reaching BadIPs')
         except:
             print('  IP not found') #Defaults to IP not found - not actually accurate
+            f.write('\n  IP not found')
 
         print("\n ABUSEIPDB Report:")
+        f.write("\n\n ---------------------------------")
+        f.write("\n ABUSEIPDB Report:")
+        f.write("\n ---------------------------------\n")
+
         try:
             AB_URL = 'https://api.abuseipdb.com/api/v2/check'
             days = '180'
@@ -460,10 +492,18 @@ def repChecker():
                 print("   Reports:     " + str(req['data']['totalReports']))
                 print("   Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
                 print("   Last Report: " + str(req['data']['lastReportedAt']))
+                f.write("\n\n IP:        " + str(req['data']['ipAddress']))
+                f.write("\n Reports:     " + str(req['data']['totalReports']))
+                f.write("\n Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
+                f.write("\n Last Report: " + str(req['data']['lastReportedAt']))
+                f.close()
+
             else:
                 print("   Error Reaching ABUSE IPDB")
         except:
                 print('   IP Not Found')
+                f.write('\n IP Not Found in AbuseIPDB\n\n')
+                f.close()
         
         print("\n\nChecking against IP blacklists: ")
         iplists.main(rawInput)
@@ -803,6 +843,11 @@ def analyzeEmail(email):
         if response.status_code == 429:
             print(' Too many requests, ')
         if response.status_code == 200:
+            f= open(str(email) + ".txt","w+")
+            f.write("\n --------------------------------- ")
+            f.write('\n   Email Analysis Report : ')
+            f.write("\n ---------------------------------\n ")
+            
             print('   Email:       %s' % req['email'])
             print('   Reputation:  %s' % req['reputation'])
             print('   Suspicious:  %s' % req['suspicious'])
@@ -810,6 +855,14 @@ def analyzeEmail(email):
             print('   Blacklisted: %s' % req['details']['blacklisted'])
             print('   Last Seen:   %s' % req['details']['last_seen'])
             print('   Known Spam:  %s' % req['details']['spam'])
+            
+            f.write('  Email:       %s' % req['email'])
+            f.write('\n   Reputation:  %s' % req['reputation'])
+            f.write('\n   Suspicious:  %s' % req['suspicious'])
+            f.write('\n   Spotted:     %s' % req['references'] + ' Times')
+            f.write('\n   Blacklisted: %s' % req['details']['blacklisted'])
+            f.write('\n   Last Seen:   %s' % req['details']['last_seen'])
+            f.write('\n   Known Spam:  %s' % req['details']['spam'])
 
             print('\n Domain Report ')
             print('   Domain:        @%s' % emailDomain)
@@ -821,12 +874,34 @@ def analyzeEmail(email):
             print('   Free Provider: %s' % req['details']['free_provider'])
             print('   Disposable:    %s' % req['details']['disposable'])
             print('   Spoofable:     %s' % req['details']['spoofable'])
+            
+            f.write("\n\n --------------------------------- ")
+            f.write('\n   Domain Report ')
+            f.write("\n --------------------------------- \n")
+            f.write('\n   Domain:        @%s' % emailDomain)
+            f.write('\n   Domain Exists: %s' % req['details']['domain_exists'])
+            f.write('\n   Domain Rep:    %s' % req['details']['domain_reputation'])
+            f.write('\n   Domain Age:    %s' % req['details']['days_since_domain_creation'] + ' Days')
+            f.write('\n   New Domain:    %s' % req['details']['new_domain'])
+            f.write('\n   Deliverable:   %s' % req['details']['deliverable'])
+            f.write('\n   Free Provider: %s' % req['details']['free_provider'])
+            f.write('\n   Disposable:    %s' % req['details']['disposable'])
+            f.write('\n   Spoofable:     %s' % req['details']['spoofable'])
+
 
             print('\n Malicious Activity Report ')
             print('   Malicious Activity: %s' % req['details']['malicious_activity'])
             print('   Recent Activity:    %s' % req['details']['malicious_activity_recent'])
             print('   Credentials Leaked: %s' % req['details']['credentials_leaked'])
             print('   Found in breach:    %s' % req['details']['data_breach'])
+            
+            f.write("\n\n --------------------------------- ")
+            f.write('\n   Malicious Activity Report ')
+            f.write("\n --------------------------------- \n")
+            f.write('\n   Malicious Activity: %s' % req['details']['malicious_activity'])
+            f.write('\n   Recent Activity:    %s' % req['details']['malicious_activity_recent'])
+            f.write('\n   Credentials Leaked: %s' % req['details']['credentials_leaked'])
+            f.write('\n   Found in breach:    %s' % req['details']['data_breach'])
 
             if (req['details']['data_breach']):
                 try:
@@ -847,30 +922,48 @@ def analyzeEmail(email):
                                 breachList = []
                                 print('   Title:        %s' % breachResponse['Title'])
                                 print('   Breach Date:  %s' % breachResponse['BreachDate'])
+                                f.write('\n   Title:        %s' % breachResponse['Title'])
+                                f.write('\n   Breach Date:  %s' % breachResponse['BreachDate'])
 
                                 for each in breachResponse['DataClasses']:
                                     breachList.append(each)
                                 print('   Data leaked: %s' % breachList,'\n')
+                                f.write('\n   Data leaked: %s' % breachList,'\n')
                     except:
                         print(' Error')
                 except:
                     print(' No API Key Found')
             print('\n Profiles Found ')
+            f.write("\n\n --------------------------------- ")
+            f.write('\n   Profiles Found ')
+            f.write("\n --------------------------------- \n")
+
             if (len(req['details']['profiles']) != 0):
                 profileList = (req['details']['profiles'])
                 for each in profileList:
                     print('   - %s' % each)
+                    f.write('\n   - %s' % each)
             else:
                 print('   No Profiles Found For This User')
+                f.write(' \n  No Profiles Found For This User')
 
             print('\n Summary of Report: ')
+            f.write("\n\n --------------------------------- ")
+            f.write('\n   Summary of Report: ')
+            f.write("\n ---------------------------------\n ")
             repSum = req['summary']
             repSum = re.split(r"\.\s*", repSum)
             for each in repSum:
                 print('   %s' % each)
+                f.write('\n   %s' % each)
+            f.close()
+
 
     except:
         print(' Error Analyzing Submitted Email')
+        f.write('\n Error Analyzing Submitted Email')
+        f.close()
+
 
 def virusTotalAnalyze(result, sanitizedLink):
     linksDict['%s' % sanitizedLink] = str(result['positives'])
@@ -1063,6 +1156,7 @@ def contributors():
     print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.")
     print(" Paralax for fixing typos in the readme")
     print(" MrMeeseeks2014 fox fixing a bug relating to hash uploads")
+
     extrasMenu()
 
 def extrasVersion():
