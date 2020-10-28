@@ -434,10 +434,10 @@ def repChecker():
                 print("  Total Reports :  " + str(result['ReporterCount']['sum']))
                 print("  Score: " + str(sc))
                 if sc == 0:
-                      print('  Score 0 indicates, this might be a false positive')
-                 print("\n IP reported in following Categories :\n")
-                 for each in result['Categories']:
-                     print(" *. " + each)        
+                    print('  Score 0 indicates, this might be a false positive')
+                print("\n IP reported in following Categories :\n")
+                for each in result['Categories']:
+                    print(" *. " + each)        
             else:
                 print('  Error reaching BadIPs')
         except:
