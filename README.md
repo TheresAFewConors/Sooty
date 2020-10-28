@@ -204,6 +204,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [MrMeeseeks2014](https://github.com/mrmeeseeks2014) fox fixing a bug relating to hash uploads.
  - [mrn42](https://github.com/mrn42) for adding Docker Support.
  - [Ryan Benson](https://github.com/obsidianforensics) for adding [Unfurl](https://github.com/obsidianforensics/unfurl) support to the decoders section.
+ - [Nitin Mukesh](https://github.com/nitin-techie) identified and fixed a bug with the BadIP's reputation lookup. 
 
 #### Documentation Contributors:
  - [Danielf-5](https://github.com/danielf-5) for improvements in the readability 
