@@ -25,6 +25,7 @@ import tkinter.filedialog
 from Modules import iplists
 from Modules import phishtank
 from Modules import TitleOpen
+from datetime import datetime, date
 
 try:
     import win32com.client
@@ -426,14 +427,16 @@ def repChecker():
             response = requests.get(BAD_IPS_URL)
             if response.status_code == 200:
                 result = response.json()
-
-                sc = result['Score']['ssh']
                 print("  " + str(result['suc']))
-                print("  Score: " + str(sc))
+                print("  Total Reports : " + str(result['ReporterCount']['sum']))
+                print("\n  IP has been reported in the following Categories:")
+                for each in result['LastReport']:
+                    timeReport = datetime.fromtimestamp(result['LastReport'].get(each))
+                    print('   - ' + each + ': ' + str(timeReport))
             else:
                 print('  Error reaching BadIPs')
         except:
-            print('  IP not found')
+            print('  IP not found') #Defaults to IP not found - not actually accurate
 
         print("\n ABUSEIPDB Report:")
         try:
