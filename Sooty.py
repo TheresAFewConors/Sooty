@@ -254,9 +254,9 @@ def urlscanio():
     try:
         type_prompt = str(input('\nSet scan visibility to Public? \nType "1" for Public or "2" for Private: '))
         if type_prompt == '1':
-            scan_type = configvars.data['URLSCAN_PUBLIC']
+            scan_type = 'public'
         else:
-            scan_type = configvars.data['URLSCAN_PRIVATE']
+            scan_type = 'private'
     except:
         print('Please make a selection again.. ')
 
