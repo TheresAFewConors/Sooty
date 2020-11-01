@@ -367,9 +367,14 @@ def repChecker():
 
         whoIsPrint(ip)
         wIP = socket.gethostbyname(ip)
-        
-        f= open(str(rawInput) + ".txt","a+")
-        
+        now = datetime.now() 
+
+        today = now.strftime("%m-%d-%Y")
+	
+        if not os.path.exists('output/'+today):
+            os.makedirs('output/'+today)
+        f= open('output/'+today+'/'+str(rawInput) + ".txt","a+")
+
         print("\n VirusTotal Report:")
         f.write("\n --------------------------------- ")
         f.write("\n VirusTotal Report:")
@@ -567,6 +572,30 @@ def whoIsPrint(ip):
        # print("  Emails:    " + str(w['nets'][0]['emails']))
         print("  Created:   " + str(w['nets'][0]['created']))
         print("  Updated:   " + str(w['nets'][0]['updated']))
+        
+        now = datetime.now() # current date and time
+        today = now.strftime("%m-%d-%Y")
+        if not os.path.exists('output/'+today):
+            os.makedirs('output/'+today)
+        f= open('output/'+today+'/'+str(ip.split()) + ".txt","a+")
+        
+        f.write("\n ---------------------------------")
+        f.write("\n WHO IS REPORT:")
+        f.write("\n ---------------------------------\n")
+        f.write("\n CIDR:      " + str(w['nets'][0]['cidr']))
+        f.write("\n Name:      " + str(w['nets'][0]['name']))
+       # print("  Handle:    " + str(w['nets'][0]['handle']))
+        f.write("\n Range:     " + str(w['nets'][0]['range']))
+        f.write("\n Descr:     " + str(w['nets'][0]['description']))
+        f.write("\n Country:   " + str(w['nets'][0]['country']))
+        f.write("\n State:     " + str(w['nets'][0]['state']))
+        f.write("\n City:      " + str(w['nets'][0]['city']))
+        f.write("\n Address:   " + addr)
+        f.write("\n Post Code: " + str(w['nets'][0]['postal_code']))
+       # print("  Emails:    " + str(w['nets'][0]['emails']))
+        f.write("\n Created:   " + str(w['nets'][0]['created']))
+        f.write("\n Updated:   " + str(w['nets'][0]['updated']))
+        f.close();
         c = 0
     except:
         print("\n  IP Not Found - Checking Domains")
@@ -843,7 +872,11 @@ def analyzeEmail(email):
         if response.status_code == 429:
             print(' Too many requests, ')
         if response.status_code == 200:
-            f= open(str(email) + ".txt","w+")
+            now = datetime.now() # current date and time
+            today = now.strftime("%m-%d-%Y")
+            if not os.path.exists('output/'+today):
+                os.makedirs('output/'+today)
+        f= open('output/'+today+'/'+str(email) + ".txt","w+")
             f.write("\n --------------------------------- ")
             f.write('\n   Email Analysis Report : ')
             f.write("\n ---------------------------------\n ")
