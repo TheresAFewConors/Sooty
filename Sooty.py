@@ -252,12 +252,21 @@ def urlscanio():
     print("\n --------------------------------- ")
     url_to_scan = str(input('\nEnter url: ').strip())
 
+    try:
+        type_prompt = str(input('\nSet scan visibility to Public? \nType "1" for Public or "2" for Private: '))
+        if type_prompt == '1':
+            scan_type = 'public'
+        else:
+            scan_type = 'private'
+    except:
+        print('Please make a selection again.. ')
+
     headers = {
         'Content-Type': 'application/json',
         'API-Key': configvars.data['URLSCAN_IO_KEY'],
         }
 
-    response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "public": "on" }' % url_to_scan).json()
+    response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "%s": "on"}' % (url_to_scan, scan_type)).json()
 
     try:
         if 'successful' in response['message']:
@@ -507,9 +516,7 @@ def repChecker():
                 print("   Error Reaching ABUSE IPDB")
         except:
                 print('   IP Not Found')
-                f.write('\n IP Not Found in AbuseIPDB\n\n')
-                f.close()
-        
+
         print("\n\nChecking against IP blacklists: ")
         iplists.main(rawInput)
 
@@ -653,7 +660,7 @@ def hashRating():
     except:
         apierror = True
         print("Error: Invalid API Key")
-    
+
     if not apierror:
         if result['response_code'] == 0:
             print("\n Hash was not found in Malware Database")
