@@ -798,9 +798,15 @@ def analyzeEmail(email):
 
     try:
         url = 'https://emailrep.io/'
+        userAgent = 'Sooty'
         summary = '?summary=true'
         url = url + email + summary
-        response = requests.get(url)
+        if 'API Key' not in configvars.data['EMAILREP_API_KEY']:
+            erep_key = configvars.data['EMAILREP_API_KEY']
+            headers = {'Content-Type': 'application/json', 'Key': configvars.data['EMAILREP_API_KEY'], 'User-Agent': userAgent}
+            response = requests.get(url, headers=headers)
+        else:
+            response = requests.get(url)
         req = response.json()
         emailDomain = re.split('@', email)[1]
 
@@ -840,7 +846,6 @@ def analyzeEmail(email):
             if (req['details']['data_breach']):
                 try:
                     url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % email
-                    userAgent = 'Sooty'
                     headers = {'Content-Type': 'application/json', 'hibp-api-key': configvars.data['HIBP_API_KEY'], 'user-agent': userAgent}
 
                     try:

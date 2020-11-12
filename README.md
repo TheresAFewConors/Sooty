@@ -107,6 +107,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
    - [AbuseIPDB API Key](https://www.abuseipdb.com/api)
    - [HaveIBeenPwned API Key](https://haveibeenpwned.com/API/Key)
    - [PhishTank API Key](https://www.phishtank.com/api_info.php)
+   - [EMAILREP API KEY](https://emailrep.io/key)
  - Replace the corresponding key in the `example_config.yaml` file, and rename the file to `config.yaml`, example layout below:
  - For PhishTank support, an unique app name is also required as an additional field. Simply update the `config.yaml` file with your unique name.
  
