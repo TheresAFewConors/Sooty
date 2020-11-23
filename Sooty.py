@@ -883,7 +883,7 @@ def analyzeEmail(email):
             today = now.strftime("%m-%d-%Y")
             if not os.path.exists('output/'+today):
                 os.makedirs('output/'+today)
-        f= open('output/'+today+'/'+str(email) + ".txt","w+")
+            f = open('output/'+today+'/'+str(email) + ".txt","w+")
             f.write("\n --------------------------------- ")
             f.write('\n   Email Analysis Report : ')
             f.write("\n ---------------------------------\n ")
