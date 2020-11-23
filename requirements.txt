@@ -2,7 +2,7 @@ asn1crypto==0.24.0
 certifi==2019.6.16
 cffi==1.12.3
 chardet==3.0.4
-cryptography==2.7
+cryptography==3.2
 dfir-unfurl==20200812
 dnspython==1.16.0
 idna==2.8
