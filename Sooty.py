@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
     Title:      Sooty
     Desc:       The SOC Analysts all-in-one CLI tool to automate and speed up workflow.
