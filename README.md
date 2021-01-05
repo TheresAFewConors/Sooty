@@ -207,6 +207,7 @@ Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&
  - [Ryan Benson](https://github.com/obsidianforensics) for adding [Unfurl](https://github.com/obsidianforensics/unfurl) support to the decoders section.
  - [Nitin Mukesh](https://github.com/nitin-techie) identified and fixed a bug with the BadIP's reputation lookup, and creating a stored txt output of Sooty's analysis. 
  - [Sarthak](https://github.com/sarthak9426) for fixing an issue related to the emailrep API key.
+ - [Lesander](https://github.com/lesander) who fixed an issue with bash not recognizing Sooty as an executable file.
 
 #### Documentation Contributors:
  - [Danielf-5](https://github.com/danielf-5) for improvements in the readability 
