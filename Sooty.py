@@ -390,45 +390,48 @@ def repChecker():
         f.write("\n VirusTotal Report:")
         f.write("\n --------------------------------- \n")       
         url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-        params = {'apikey': configvars.data['VT_API_KEY'], 'ip': wIP}
-        response = requests.get(url, params=params)
+        try:
+            params = {'apikey': configvars.data['VT_API_KEY'], 'ip': wIP}
+            response = requests.get(url, params=params)
 
-        pos = 0
-        tot = 0
-        if response.status_code == 200:
-            try:    # try IP else fall through to URL
-                result = response.json()
-                for each in result['detected_urls']:
-                    tot = tot + 1
-                    pos = pos + each['positives']
-
-                if tot != 0:
-                    print("   No of Reportings: " + str(tot))
-                    print("   Average Score:    " + str(pos / tot))
-                    print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
-                    f.write("\n\n No of Reportings :     " + str(tot))
-                    f.write("\n Average Score :          " + str(pos / tot))
-                    f.write("\n\n VirusTotal Report Link : " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
-                else:
-                    print("   No of Reportings: " + str(tot))
-                    f.write("\n No of Reportings :       " + str(tot))
-            except:
-                try: #EAFP
-                    url = 'https://www.virustotal.com/vtapi/v2/url/report'
-                    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
-                    response = requests.get(url, params=params)
+            pos = 0
+            tot = 0
+            if response.status_code == 200:
+                try:    # try IP else fall through to URL
                     result = response.json()
-                    print("\n VirusTotal Report:")
-                    print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
-                    print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
-                    f.write("\n URL Malicious Reportings:\t" + str(result['positives']) + "/" + str(result['total']))
-                    f.write("\n\n VirusTotal Report Link:\t" + str(result['permalink']))  # gives URL for report (further info)
+                    for each in result['detected_urls']:
+                        tot = tot + 1
+                        pos = pos + each['positives']
 
+                    if tot != 0:
+                        print("   No of Reportings: " + str(tot))
+                        print("   Average Score:    " + str(pos / tot))
+                        print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
+                        f.write("\n\n No of Reportings :     " + str(tot))
+                        f.write("\n Average Score :          " + str(pos / tot))
+                        f.write("\n\n VirusTotal Report Link : " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
+                    else:
+                        print("   No of Reportings: " + str(tot))
+                        f.write("\n No of Reportings :       " + str(tot))
                 except:
-                    print(" Not found in database")
-                    f.write("\n Not found in database")
-        else:
-            print(" There's been an error - check your API key, or VirusTotal is possible down")
+                    try: #EAFP
+                        url = 'https://www.virustotal.com/vtapi/v2/url/report'
+                        params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
+                        response = requests.get(url, params=params)
+                        result = response.json()
+                        print("\n VirusTotal Report:")
+                        print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
+                        print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
+                        f.write("\n URL Malicious Reportings:\t" + str(result['positives']) + "/" + str(result['total']))
+                        f.write("\n\n VirusTotal Report Link:\t" + str(result['permalink']))  # gives URL for report (further info)
+
+                    except:
+                        print(" Not found in database")
+                        f.write("\n Not found in database")
+            else:
+                print(" There's been an error - check your API key, or VirusTotal is possible down")
+        except:
+            print('  VT API Key Requirement Not Satisfied')
 
         try:
             TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
