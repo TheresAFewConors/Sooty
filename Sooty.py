@@ -265,7 +265,7 @@ def urlscanio():
     headers = {
         'Content-Type': 'application/json',
         'API-Key': configvars.data['URLSCAN_IO_KEY'],
-        }
+    }
 
     response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "%s": "on"}' % (url_to_scan, scan_type)).json()
 
@@ -331,8 +331,8 @@ def cisco7Decoder():
     pw = input(' Enter Cisco Password 7: ').strip()
 
     key = [0x64, 0x73, 0x66, 0x64, 0x3b, 0x6b, 0x66, 0x6f, 0x41,
-    0x2c, 0x2e, 0x69, 0x79, 0x65, 0x77, 0x72, 0x6b, 0x6c,
-    0x64, 0x4a, 0x4b, 0x44, 0x48, 0x53, 0x55, 0x42]
+           0x2c, 0x2e, 0x69, 0x79, 0x65, 0x77, 0x72, 0x6b, 0x6c,
+           0x64, 0x4a, 0x4b, 0x44, 0x48, 0x53, 0x55, 0x42]
 
     try:
         # the first 2 characters of the password are the starting index in the key array
@@ -377,10 +377,10 @@ def repChecker():
 
         whoIsPrint(ip)
         wIP = socket.gethostbyname(ip)
-        now = datetime.now() 
+        now = datetime.now()
 
         today = now.strftime("%m-%d-%Y")
-	
+
         if not os.path.exists('output/'+today):
             os.makedirs('output/'+today)
         f= open('output/'+today+'/'+str(rawInput) + ".txt","a+")
@@ -388,141 +388,124 @@ def repChecker():
         print("\n VirusTotal Report:")
         f.write("\n --------------------------------- ")
         f.write("\n VirusTotal Report:")
-        f.write("\n --------------------------------- \n")       
-        url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-        try:
-            params = {'apikey': configvars.data['VT_API_KEY'], 'ip': wIP}
-            response = requests.get(url, params=params)
-
-            pos = 0
-            tot = 0
-            if response.status_code == 200:
-                try:    # try IP else fall through to URL
-                    result = response.json()
-                    for each in result['detected_urls']:
-                        tot = tot + 1
-                        pos = pos + each['positives']
-
-                    if tot != 0:
-                        print("   No of Reportings: " + str(tot))
-                        print("   Average Score:    " + str(pos / tot))
-                        print("   VirusTotal Report Link: " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
-                        f.write("\n\n No of Reportings :     " + str(tot))
-                        f.write("\n Average Score :          " + str(pos / tot))
-                        f.write("\n\n VirusTotal Report Link : " + "https://www.virustotal.com/gui/ip-address/" + str(ip))
-                    else:
-                        print("   No of Reportings: " + str(tot))
-                        f.write("\n No of Reportings :       " + str(tot))
-                except:
-                    try: #EAFP
-                        url = 'https://www.virustotal.com/vtapi/v2/url/report'
-                        params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
-                        response = requests.get(url, params=params)
-                        result = response.json()
-                        print("\n VirusTotal Report:")
-                        print("   URL Malicious Reportings: " + str(result['positives']) + "/" + str(result['total']))
-                        print("   VirusTotal Report Link: " + str(result['permalink']))  # gives URL for report (further info)
-                        f.write("\n URL Malicious Reportings:\t" + str(result['positives']) + "/" + str(result['total']))
-                        f.write("\n\n VirusTotal Report Link:\t" + str(result['permalink']))  # gives URL for report (further info)
-
-                    except:
-                        print(" Not found in database")
-                        f.write("\n Not found in database")
-            else:
-                print(" There's been an error - check your API key, or VirusTotal is possible down")
-        except:
-            print('  VT API Key Requirement Not Satisfied')
-
-        try:
-            TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
-            req = requests.get(TOR_URL)
-            print("\n TOR Exit Node Report: ")
-            f.write("\n\n --------------------------------- ")
-            f.write("\n TOR Exit Node Report: ")
-            f.write("\n --------------------------------- \n")
-            if req.status_code == 200:
-                tl = req.text.split('\n')
-                c = 0
-                for i in tl:
-                    if wIP == i:
-                        print("  " + i + " is a TOR Exit Node")
-                        f.write("\n " + "  " + i + " is a TOR Exit Node")
-                        c = c+1
-                if c == 0:
-                    print("  " + wIP + " is NOT a TOR Exit Node")
-                    f.write("\n " + wIP + " is NOT a TOR Exit Node")
-            else:
-                print("   TOR LIST UNREACHABLE")
-                f.write("\n TOR LIST UNREACHABLE")
-        except Exception as e:
-            print("There is an error with checking for Tor exit nodes:\n" + str(e))
-
-
-        print("\n Checking BadIP's... ")
-        f.write("\n\n ---------------------------------")
-        f.write("\n BadIP's Report : ")
         f.write("\n --------------------------------- \n")
 
-        try:
-            BAD_IPS_URL = 'https://www.badips.com/get/info/' + wIP
-            response = requests.get(BAD_IPS_URL)
-            if response.status_code == 200:
+        url = 'https://www.virustotal.com/vtapi/v2/url/report'
+        params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
+        response = requests.get(url, params=params)
+        pos = 0 # Total positives found in VT
+        tot = 0 # Total number of scans
+        if response.status_code == 200:
+            try:
                 result = response.json()
-                print("  " + str(result['suc']))
-                print("  Total Reports : " + str(result['ReporterCount']['sum']))
-                print("\n  IP has been reported in the following Categories:")
-                f.write("  " + str(result['suc']))
-                f.write("\n  Total Reports : " + str(result['ReporterCount']['sum']))
-                f.write("\n  IP has been reported in the following Categories:")
-                for each in result['LastReport']:
-                    timeReport = datetime.fromtimestamp(result['LastReport'].get(each))
-                    print('   - ' + each + ': ' + str(timeReport))
-                    f.write('\n   - ' + each + ': ' + str(timeReport))
-            else:
-                print('  Error reaching BadIPs')
-        except:
-            print('  IP not found') #Defaults to IP not found - not actually accurate
-            f.write('\n  IP not found')
+                for each in result:
+                    tot = result['total']
+                    if result['positives'] != 0:
+                        pos = pos +1
+                avg = pos/tot
+                print("   No of Databases Checked: " + str(tot))
+                print("   No of Reportings: " + str(pos))
+                print("   Average Score:    " + str(avg))
+                print("   VirusTotal Report Link: " + result['permalink'])
+                f.write("\n\n No of Databases Checked: " + str(tot))
+                f.write("\n No of Reportings: " + str(pos))
+                f.write("\n Average Score: " + str(avg))
+                f.write("\n VirusTotal Report Link: " + result['permalink'])
+            except:
+                print('error')
+        else:
+            print(" There's been an error, check your API Key or VirusTotal may be down")
 
-        print("\n ABUSEIPDB Report:")
-        f.write("\n\n ---------------------------------")
-        f.write("\n ABUSEIPDB Report:")
-        f.write("\n ---------------------------------\n")
+    try:
+        TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
+        req = requests.get(TOR_URL)
+        print("\n TOR Exit Node Report: ")
+        f.write("\n\n --------------------------------- ")
+        f.write("\n TOR Exit Node Report: ")
+        f.write("\n --------------------------------- \n")
+        if req.status_code == 200:
+            tl = req.text.split('\n')
+            c = 0
+            for i in tl:
+                if wIP == i:
+                    print("  " + i + " is a TOR Exit Node")
+                    f.write("\n " + "  " + i + " is a TOR Exit Node")
+                    c = c+1
+            if c == 0:
+                print("  " + wIP + " is NOT a TOR Exit Node")
+                f.write("\n " + wIP + " is NOT a TOR Exit Node")
+        else:
+            print("   TOR LIST UNREACHABLE")
+            f.write("\n TOR LIST UNREACHABLE")
+    except Exception as e:
+        print("There is an error with checking for Tor exit nodes:\n" + str(e))
 
-        try:
-            AB_URL = 'https://api.abuseipdb.com/api/v2/check'
-            days = '180'
 
-            querystring = {
-                'ipAddress': wIP,
-                'maxAgeInDays': days
-            }
+    print("\n Checking BadIP's... ")
+    f.write("\n\n ---------------------------------")
+    f.write("\n BadIP's Report : ")
+    f.write("\n --------------------------------- \n")
 
-            headers = {
-                'Accept': 'application/json',
-                'Key': configvars.data['AB_API_KEY']
-            }
-            response = requests.request(method='GET', url=AB_URL, headers=headers, params=querystring)
-            if response.status_code == 200:
-                req = response.json()
+    try:
+        BAD_IPS_URL = 'https://www.badips.com/get/info/' + wIP
+        response = requests.get(BAD_IPS_URL)
+        if response.status_code == 200:
+            result = response.json()
+            print("  " + str(result['suc']))
+            print("  Total Reports : " + str(result['ReporterCount']['sum']))
+            print("\n  IP has been reported in the following Categories:")
+            f.write("  " + str(result['suc']))
+            f.write("\n  Total Reports : " + str(result['ReporterCount']['sum']))
+            f.write("\n  IP has been reported in the following Categories:")
+            for each in result['LastReport']:
+                timeReport = datetime.fromtimestamp(result['LastReport'].get(each))
+                print('   - ' + each + ': ' + str(timeReport))
+                f.write('\n   - ' + each + ': ' + str(timeReport))
+        else:
+            print('  Error reaching BadIPs')
+    except:
+        print('  IP not found') #Defaults to IP not found - not actually accurate
+        f.write('\n  IP not found')
 
-                print("   IP:          " + str(req['data']['ipAddress']))
-                print("   Reports:     " + str(req['data']['totalReports']))
-                print("   Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
-                print("   Last Report: " + str(req['data']['lastReportedAt']))
-                f.write("\n\n IP:        " + str(req['data']['ipAddress']))
-                f.write("\n Reports:     " + str(req['data']['totalReports']))
-                f.write("\n Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
-                f.write("\n Last Report: " + str(req['data']['lastReportedAt']))
-                f.close()
+    print("\n ABUSEIPDB Report:")
+    f.write("\n\n ---------------------------------")
+    f.write("\n ABUSEIPDB Report:")
+    f.write("\n ---------------------------------\n")
 
-            else:
-                print("   Error Reaching ABUSE IPDB")
-        except:
-                print('   IP Not Found')
+    try:
+        AB_URL = 'https://api.abuseipdb.com/api/v2/check'
+        days = '180'
 
-        print("\n\nChecking against IP blacklists: ")
-        iplists.main(rawInput)
+        querystring = {
+            'ipAddress': wIP,
+            'maxAgeInDays': days
+        }
+
+        headers = {
+            'Accept': 'application/json',
+            'Key': configvars.data['AB_API_KEY']
+        }
+        response = requests.request(method='GET', url=AB_URL, headers=headers, params=querystring)
+        if response.status_code == 200:
+            req = response.json()
+
+            print("   IP:          " + str(req['data']['ipAddress']))
+            print("   Reports:     " + str(req['data']['totalReports']))
+            print("   Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
+            print("   Last Report: " + str(req['data']['lastReportedAt']))
+            f.write("\n\n IP:        " + str(req['data']['ipAddress']))
+            f.write("\n Reports:     " + str(req['data']['totalReports']))
+            f.write("\n Abuse Score: " + str(req['data']['abuseConfidenceScore']) + "%")
+            f.write("\n Last Report: " + str(req['data']['lastReportedAt']))
+            f.close()
+
+        else:
+            print("   Error Reaching ABUSE IPDB")
+    except:
+        print('   IP Not Found')
+
+    print("\n\nChecking against IP blacklists: ")
+    iplists.main(rawInput)
 
     mainMenu()
 
@@ -572,7 +555,7 @@ def whoIsPrint(ip):
         print("\n WHO IS REPORT:")
         print("  CIDR:      " + str(w['nets'][0]['cidr']))
         print("  Name:      " + str(w['nets'][0]['name']))
-       # print("  Handle:    " + str(w['nets'][0]['handle']))
+        # print("  Handle:    " + str(w['nets'][0]['handle']))
         print("  Range:     " + str(w['nets'][0]['range']))
         print("  Descr:     " + str(w['nets'][0]['description']))
         print("  Country:   " + str(w['nets'][0]['country']))
@@ -580,22 +563,22 @@ def whoIsPrint(ip):
         print("  City:      " + str(w['nets'][0]['city']))
         print("  Address:   " + addr)
         print("  Post Code: " + str(w['nets'][0]['postal_code']))
-       # print("  Emails:    " + str(w['nets'][0]['emails']))
+        # print("  Emails:    " + str(w['nets'][0]['emails']))
         print("  Created:   " + str(w['nets'][0]['created']))
         print("  Updated:   " + str(w['nets'][0]['updated']))
-        
+
         now = datetime.now() # current date and time
         today = now.strftime("%m-%d-%Y")
         if not os.path.exists('output/'+today):
             os.makedirs('output/'+today)
         f= open('output/'+today+'/'+str(ip.split()) + ".txt","a+")
-        
+
         f.write("\n ---------------------------------")
         f.write("\n WHO IS REPORT:")
         f.write("\n ---------------------------------\n")
         f.write("\n CIDR:      " + str(w['nets'][0]['cidr']))
         f.write("\n Name:      " + str(w['nets'][0]['name']))
-       # print("  Handle:    " + str(w['nets'][0]['handle']))
+        # print("  Handle:    " + str(w['nets'][0]['handle']))
         f.write("\n Range:     " + str(w['nets'][0]['range']))
         f.write("\n Descr:     " + str(w['nets'][0]['description']))
         f.write("\n Country:   " + str(w['nets'][0]['country']))
@@ -603,7 +586,7 @@ def whoIsPrint(ip):
         f.write("\n City:      " + str(w['nets'][0]['city']))
         f.write("\n Address:   " + addr)
         f.write("\n Post Code: " + str(w['nets'][0]['postal_code']))
-       # print("  Emails:    " + str(w['nets'][0]['emails']))
+        # print("  Emails:    " + str(w['nets'][0]['emails']))
         f.write("\n Created:   " + str(w['nets'][0]['created']))
         f.write("\n Updated:   " + str(w['nets'][0]['updated']))
         f.close();
@@ -897,7 +880,7 @@ def analyzeEmail(email):
             f.write("\n --------------------------------- ")
             f.write('\n   Email Analysis Report : ')
             f.write("\n ---------------------------------\n ")
-            
+
             print('   Email:       %s' % req['email'])
             print('   Reputation:  %s' % req['reputation'])
             print('   Suspicious:  %s' % req['suspicious'])
@@ -905,7 +888,7 @@ def analyzeEmail(email):
             print('   Blacklisted: %s' % req['details']['blacklisted'])
             print('   Last Seen:   %s' % req['details']['last_seen'])
             print('   Known Spam:  %s' % req['details']['spam'])
-            
+
             f.write('  Email:       %s' % req['email'])
             f.write('\n   Reputation:  %s' % req['reputation'])
             f.write('\n   Suspicious:  %s' % req['suspicious'])
@@ -924,7 +907,7 @@ def analyzeEmail(email):
             print('   Free Provider: %s' % req['details']['free_provider'])
             print('   Disposable:    %s' % req['details']['disposable'])
             print('   Spoofable:     %s' % req['details']['spoofable'])
-            
+
             f.write("\n\n --------------------------------- ")
             f.write('\n   Domain Report ')
             f.write("\n --------------------------------- \n")
@@ -944,7 +927,7 @@ def analyzeEmail(email):
             print('   Recent Activity:    %s' % req['details']['malicious_activity_recent'])
             print('   Credentials Leaked: %s' % req['details']['credentials_leaked'])
             print('   Found in breach:    %s' % req['details']['data_breach'])
-            
+
             f.write("\n\n --------------------------------- ")
             f.write('\n   Malicious Activity Report ')
             f.write("\n --------------------------------- \n")
