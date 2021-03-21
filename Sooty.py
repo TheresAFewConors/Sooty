@@ -8,6 +8,7 @@
 """
 
 import base64
+
 from unfurl import core
 import hashlib
 import html.parser
@@ -160,6 +161,15 @@ def decodev2(rewrittenurl):
         if url not in linksFoundList:
             linksFoundList.append(url)
 
+def decodev3(rewrittenurl):
+    match = re.search(r'v3/__(?P<url>.+?)__;', rewrittenurl)
+    if match:
+        url = match.group('url')
+        if re.search(r'\*(\*.)?', url):
+            url = re.sub('\*', '+', url)
+            if url not in linksFoundList:
+                linksFoundList.append(url)
+
 def titleLogo():
     TitleOpen.titleOpen()
     os.system('cls||clear')
@@ -212,22 +222,30 @@ def proofPointDecoder():
     print(" --------------------------------- ")
     rewrittenurl = str(input(" Enter ProofPoint Link: ").strip())
     match = re.search(r'https://urldefense.proofpoint.com/(v[0-9])/', rewrittenurl)
+    matchv3 = re.search(r'urldefense.com/(v3)/', rewrittenurl)
     if match:
         if match.group(1) == 'v1':
             decodev1(rewrittenurl)
             for each in linksFoundList:
                 print('\n Decoded Link: %s' % each)
+                linksFoundList.clear()
         elif match.group(1) == 'v2':
             decodev2(rewrittenurl)
             for each in linksFoundList:
                 print('\n Decoded Link: %s' % each)
+                linksFoundList.clear()
+
+    if matchv3 is not None:
+        if matchv3.group(1) == 'v3':
+            decodev3(rewrittenurl)
+            for each in linksFoundList:
+                print('\n Decoded Link: %s' % each)
+                linksFoundList.clear()
         else:
-            print('Unrecognized version in: ', rewrittenurl)
-    else:
-        print(' No valid URL found in input: ', rewrittenurl)
+            print(' No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
-
+    
 def urlDecoder():
     print("\n --------------------------------- ")
     print("       U R L   D E C O D E R      ")
