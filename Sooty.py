@@ -30,7 +30,6 @@ from Modules import phishtank
 from Modules import TitleOpen
 from datetime import datetime, date
 
-
 try:
     import win32com.client
 except:
@@ -169,7 +168,6 @@ def decodev3(rewrittenurl):
         url = match.group('url')
         if re.search(r'\*(\*.)?', url):
             url = re.sub('\*', '+', url)
-            print(url)
             if url not in linksFoundList:
                 linksFoundList.append(url)
 
@@ -231,7 +229,7 @@ def proofPointDecoder():
             decodev1(rewrittenurl)
             for each in linksFoundList:
                 print('\n Decoded Link: %s' % each)
-        if match.group(1) == 'v2':
+        elif match.group(1) == 'v2':
             decodev2(rewrittenurl)
             for each in linksFoundList:
                 print('\n Decoded Link: %s' % each)
