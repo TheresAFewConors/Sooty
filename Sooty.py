@@ -233,12 +233,13 @@ def proofPointDecoder():
             for each in linksFoundList:
                 print('\n Decoded Link: %s' % each)
 
-    if matchv3.group(1) == 'v3':
-        decodev3(rewrittenurl)
-        for each in linksFoundList:
-            print('\n Decoded Link: %s' % each)
-    else:
-        print(' No valid URL found in input: ', rewrittenurl)
+    if matchv3 is not None:
+        if matchv3.group(1) == 'v3':
+            decodev3(rewrittenurl)
+            for each in linksFoundList:
+                print('\n Decoded Link: %s' % each)
+        else:
+            print(' No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
 
