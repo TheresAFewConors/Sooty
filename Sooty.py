@@ -8,7 +8,6 @@
 """
 
 import base64
-import sys
 
 from unfurl import core
 import hashlib
