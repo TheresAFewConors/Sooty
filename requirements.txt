@@ -14,7 +14,7 @@ pywin32==224; sys_platform == 'win32'
 requests==2.22.0
 six==1.12.0
 strictyaml==1.0.6
-urllib3==1.24.2
+urllib3==1.25.9
 win-inet-pton==1.1.0
 wincertstore==0.2
 wget==3.2
