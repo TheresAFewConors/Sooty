@@ -10,7 +10,7 @@ ipwhois==1.1.0
 pycparser==2.19
 pyOpenSSL==19.0.0
 PySocks==1.7.0
-pywin32==224; sys_platform == 'win32'
+pywin32==301; sys_platform == 'win32'
 requests==2.22.0
 six==1.12.0
 strictyaml==1.0.6
