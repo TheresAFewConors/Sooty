@@ -22,7 +22,7 @@ import urllib.parse
 import requests
 from ipwhois import IPWhois
 import tkinter
-import tkinter.filedialog
+import sys
 
 from Modules import iplists
 from Modules import phishtank
@@ -66,7 +66,7 @@ def switchMenu(choice):
     if choice == '9':
         extrasMenu()
     if choice == '0':
-        exit()
+        sys.exit("Exiting Sooty... done")
     else:
         mainMenu()
 
