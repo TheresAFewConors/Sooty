@@ -1076,6 +1076,9 @@ def emailTemplateGen():
                 params = {'apikey': configvars.data['VT_API_KEY'], 'resource': link}
                 response = requests.get(url, params=params)
                 result = response.json()
+                if result['response_code'] == 0:
+                    print(" [Warn] URL not found in VirusTotal database!")
+                    continue
                 if response.status_code == 200:
                     virusTotalAnalyze(result, sanitizedLink)
 
