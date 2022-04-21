@@ -66,7 +66,8 @@ class lookupLists:
 
 def main(userInputList):
     # Create objects for each user entry and check whether IPv4, IPv6 or URL
-    ipObjs = [userInput(entry) for entry in userInputList]
+    # ipObjs = [userInput(entry) for entry in userInputList]
+    ipObjs = userInputList
     for ipObj in ipObjs:
         ipObj.urlOrIP()
 

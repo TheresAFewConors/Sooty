@@ -27,6 +27,8 @@ import tkinter.filedialog
 from Modules import iplists
 from Modules import phishtank
 from Modules import TitleOpen
+from Modules import vpnio
+from Modules import importcsv
 from datetime import datetime, date
 
 try:
@@ -54,7 +56,8 @@ def switchMenu(choice):
     if choice == '2':
         decoderMenu()
     if choice == '3':
-        repChecker()
+        ip = ''
+        repChecker(ip)
     if choice == '4':
         dnsMenu()
     if choice == '5':
@@ -63,6 +66,8 @@ def switchMenu(choice):
         phishingMenu()
     if choice == '7':
         urlscanio()
+    if choice == '8':
+        analyzeCSV()
     if choice == '9':
         extrasMenu()
     if choice == '0':
@@ -186,6 +191,7 @@ def mainMenu():
     print(" OPTION 5: Hashing Function")
     print(" OPTION 6: Phishing Analysis")
     print(" OPTION 7: URL scan")
+    print(" OPTION 8: Analyze CSV File with IP addresses")
     print(" OPTION 9: Extras")
     print(" OPTION 0: Exit Tool")
     switchMenu(input())
@@ -216,6 +222,7 @@ def decoderMenu():
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
 
+
 def proofPointDecoder():
     print("\n --------------------------------- ")
     print(" P R O O F P O I N T D E C O D E R ")
@@ -245,7 +252,8 @@ def proofPointDecoder():
             print(' No valid URL found in input: ', rewrittenurl)
 
     mainMenu()
-    
+
+
 def urlDecoder():
     print("\n --------------------------------- ")
     print("       U R L   D E C O D E R      ")
@@ -322,6 +330,7 @@ def urlscanio():
     except:
         print(' Error reaching URLScan.io')
 
+
 def unshortenUrl():
     print("\n --------------------------------- ")
     print("   U R L   U N S H O R T E N E R  ")
@@ -331,6 +340,7 @@ def unshortenUrl():
     print(req.text)
 
     decoderMenu()
+
 
 def b64Decoder():
     url = str(input(' Enter URL: ').strip())
@@ -344,6 +354,7 @@ def b64Decoder():
         print(' No Base64 Encoded String Found')
 
     decoderMenu()
+
 
 def cisco7Decoder():
     pw = input(' Enter Cisco Password 7: ').strip()
@@ -371,6 +382,7 @@ def cisco7Decoder():
 
     decoderMenu()
 
+
 def unfurlUrl():
     url_to_unfurl = str(input('Enter URL to Unfurl: ')).strip()
     unfurl_instance = core.Unfurl()
@@ -380,46 +392,56 @@ def unfurlUrl():
 
     decoderMenu()
 
-def repChecker():
+
+def repChecker(ip):
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
     print(" --------------------------------- ")
-    rawInput = input("Enter IP, URL or Email Address: ").split()
-    ip = str(rawInput[0])
+    wIP = ''
+    if not ip:
+        rawInput = input("Enter IP, URL or Email Address: ").split()
+        ip = str(rawInput[0])
+        s = re.findall(r'\S+@\S+', ip)
+        if s:
+            print(' Email Detected...')
+            analyzeEmail(''.join(s))
+        else:
 
-    s = re.findall(r'\S+@\S+', ip)
-    if s:
-        print(' Email Detected...')
-        analyzeEmail(''.join(s))
-    else:
+            whoIsPrint(ip)
+            wIP = socket.gethostbyname(ip)
+    now = datetime.now()
 
-        whoIsPrint(ip)
-        wIP = socket.gethostbyname(ip)
-        now = datetime.now()
+    today = now.strftime("%m-%d-%Y")
+    if not os.path.exists('output/'+today):
+        os.makedirs('output/'+today)
+    f = open('output/' + str(ip), "a+")
+    vpn_response = vpnio.check_vpn(ip, configvars.data['VPNIO_API_KEY'])
+    f.write(today + "\n")
+    print("\nVPNIO Response:\n")
+    print("\n --------------------------------- ")
+    print(json.dumps(vpn_response, indent=4, sort_keys=True))
+    print("\n --------------------------------- ")
+    f.write("\nVPNIO Response:\n")
+    f.write("\n --------------------------------- ")
+    f.write(json.dumps(vpn_response, indent=4, sort_keys=True))
+    f.write("\n --------------------------------- ")
+    print("\n VirusTotal Report:")
+    f.write("\n --------------------------------- ")
+    f.write("\n VirusTotal Report:")
+    f.write("\n --------------------------------- \n")
 
-        today = now.strftime("%m-%d-%Y")
-
-        if not os.path.exists('output/'+today):
-            os.makedirs('output/'+today)
-        f= open('output/'+today+'/'+str(rawInput) + ".txt","a+")
-
-        print("\n VirusTotal Report:")
-        f.write("\n --------------------------------- ")
-        f.write("\n VirusTotal Report:")
-        f.write("\n --------------------------------- \n")
-
-        url = 'https://www.virustotal.com/vtapi/v2/url/report'
-        params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
-        response = requests.get(url, params=params)
-        pos = 0 # Total positives found in VT
-        tot = 0 # Total number of scans
-        if response.status_code == 200:
-            try:
-                result = response.json()
-                for each in result:
-                    tot = result['total']
-                    if result['positives'] != 0:
-                        pos = pos +1
+    url = 'https://www.virustotal.com/vtapi/v2/url/report'
+    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
+    response = requests.get(url, params=params)
+    pos = 0 # Total positives found in VT
+    tot = 0 # Total number of scans
+    if response.status_code == 200:
+        try:
+            result = response.json()
+            for each in result:
+                tot = result['total']
+                if result['positives'] != 0:
+                    pos = pos + 1
                 avg = pos/tot
                 print("   No of Databases Checked: " + str(tot))
                 print("   No of Reportings: " + str(pos))
@@ -429,10 +451,11 @@ def repChecker():
                 f.write("\n No of Reportings: " + str(pos))
                 f.write("\n Average Score: " + str(avg))
                 f.write("\n VirusTotal Report Link: " + result['permalink'])
-            except:
-                print('error')
-        else:
-            print(" There's been an error, check your API Key or VirusTotal may be down")
+        except:
+            print('error')
+    else:
+        print(" There's been an error, check your API Key or VirusTotal may be down")
+
 
     try:
         TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
@@ -492,10 +515,10 @@ def repChecker():
 
     try:
         AB_URL = 'https://api.abuseipdb.com/api/v2/check'
-        days = '180'
+        days = configvars.data['ABIP_DAYS']
 
         querystring = {
-            'ipAddress': wIP,
+            'ipAddress': ip,
             'maxAgeInDays': days
         }
 
@@ -523,9 +546,9 @@ def repChecker():
         print('   IP Not Found')
 
     print("\n\nChecking against IP blacklists: ")
-    iplists.main(rawInput)
+    #iplists.main(rawInput)
 
-    mainMenu()
+    #mainMenu()
 
 def dnsMenu():
     print("\n --------------------------------- ")
@@ -1163,6 +1186,19 @@ def emailTemplateGen():
             print('\nWe appreciate your diligence in reporting this mail.')
 
         print('\nRegards,')
+
+
+def analyzeCSV():
+    for csv_file in os.listdir('csv/'):
+        ip_list = importcsv.read_csv_ips('csv/' + csv_file)
+        print("analyzing IPs:\n")
+        if(ip_list):
+            for ip, fields in ip_list.items():
+                if(ip not in os.listdir('output/')):
+                    print(ip)
+                    print('\n')
+                    repChecker(ip)
+
 
 def phishtankModule():
     if "phishtank" in configvars.data:

@@ -1,6 +1,8 @@
 # Project specific files
 config.yaml
 data/
+csv/
+output/
 
 # pyenv
 .python-version
