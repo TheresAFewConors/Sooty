@@ -616,10 +616,11 @@ def whoIsPrint(ip, secondpass=0):
     except:
         print("\n  IP Not Found - Checking Domains")
         try:
-            print("  Resolving "+ip)
-            s = socket.gethostbyname(ip)
-            print( '  Resolved Address: %s' % s)
-            whoIsPrint(s, secondpass+1)
+            if secondpass == 0:
+                print("  Resolving "+ip)
+                s = socket.gethostbyname(ip)
+                print( '  Resolved Address: %s' % s)
+                whoIsPrint(s, secondpass+1)
         except:
             print(' IP or Domain not Found')
     return
