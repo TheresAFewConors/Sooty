@@ -23,6 +23,7 @@ import requests
 from ipwhois import IPWhois
 import tkinter
 import sys
+import ipaddress
 
 from Modules import iplists
 from Modules import phishtank
@@ -384,55 +385,59 @@ def repChecker():
     print("\n --------------------------------- ")
     print(" R E P U T A T I O N     C H E C K ")
     print(" --------------------------------- ")
-    rawInput = input("Enter IP, URL or Email Address: ").split()
+    rawInput = input("Enter IP, domain name or Email Address: ").split()
     ip = str(rawInput[0])
 
     s = re.findall(r'\S+@\S+', ip)
     if s:
         print(' Email Detected...')
         analyzeEmail(''.join(s))
-    else:
+        return
 
-        whoIsPrint(ip)
+    whoIsPrint(ip)
+    try:
         wIP = socket.gethostbyname(ip)
-        now = datetime.now()
+    except:
+        print("Unable to resolve "+ip)
+        return
+    now = datetime.now()
 
-        today = now.strftime("%m-%d-%Y")
+    today = now.strftime("%m-%d-%Y")
 
-        if not os.path.exists('output/'+today):
-            os.makedirs('output/'+today)
-        f= open('output/'+today+'/'+str(rawInput) + ".txt","a+")
+    if not os.path.exists('output/'+today):
+        os.makedirs('output/'+today)
+    f= open('output/'+today+'/'+str(rawInput) + ".txt","a+")
 
-        print("\n VirusTotal Report:")
-        f.write("\n --------------------------------- ")
-        f.write("\n VirusTotal Report:")
-        f.write("\n --------------------------------- \n")
+    print("\n VirusTotal Report:")
+    f.write("\n --------------------------------- ")
+    f.write("\n VirusTotal Report:")
+    f.write("\n --------------------------------- \n")
 
-        url = 'https://www.virustotal.com/vtapi/v2/url/report'
-        params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
-        response = requests.get(url, params=params)
-        pos = 0 # Total positives found in VT
-        tot = 0 # Total number of scans
-        if response.status_code == 200:
-            try:
-                result = response.json()
-                for each in result:
-                    tot = result['total']
-                    if result['positives'] != 0:
-                        pos = pos +1
-                avg = pos/tot
-                print("   No of Databases Checked: " + str(tot))
-                print("   No of Reportings: " + str(pos))
-                print("   Average Score:    " + str(avg))
-                print("   VirusTotal Report Link: " + result['permalink'])
-                f.write("\n\n No of Databases Checked: " + str(tot))
-                f.write("\n No of Reportings: " + str(pos))
-                f.write("\n Average Score: " + str(avg))
-                f.write("\n VirusTotal Report Link: " + result['permalink'])
-            except:
-                print('error')
-        else:
-            print(" There's been an error, check your API Key or VirusTotal may be down")
+    url = 'https://www.virustotal.com/vtapi/v2/url/report'
+    params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
+    response = requests.get(url, params=params)
+    pos = 0 # Total positives found in VT
+    tot = 0 # Total number of scans
+    if response.status_code == 200:
+        try:
+            result = response.json()
+            for each in result:
+                tot = result['total']
+                if result['positives'] != 0:
+                    pos = pos +1
+            avg = pos/tot
+            print("   No of Databases Checked: " + str(tot))
+            print("   No of Reportings: " + str(pos))
+            print("   Average Score:    " + str(avg))
+            print("   VirusTotal Report Link: " + result['permalink'])
+            f.write("\n\n No of Databases Checked: " + str(tot))
+            f.write("\n No of Reportings: " + str(pos))
+            f.write("\n Average Score: " + str(avg))
+            f.write("\n VirusTotal Report Link: " + result['permalink'])
+        except:
+            print('error')
+    else:
+        print(" There's been an error, check your API Key or VirusTotal may be down")
 
     try:
         TOR_URL = "https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1"
@@ -523,7 +528,7 @@ def repChecker():
         print('   IP Not Found')
 
     print("\n\nChecking against IP blacklists: ")
-    iplists.main(rawInput)
+    iplists.main([ipaddress.ip_address(wIP)])
 
     mainMenu()
 
@@ -564,7 +569,7 @@ def whoIs():
 
     dnsMenu()
 
-def whoIsPrint(ip):
+def whoIsPrint(ip, secondpass=0):
     try:
         w = IPWhois(ip)
         w = w.lookup_whois()
@@ -608,17 +613,13 @@ def whoIsPrint(ip):
         f.write("\n Created:   " + str(w['nets'][0]['created']))
         f.write("\n Updated:   " + str(w['nets'][0]['updated']))
         f.close();
-        c = 0
     except:
         print("\n  IP Not Found - Checking Domains")
-        ip = re.sub('https://', '', ip)
-        ip = re.sub('http://', '', ip)
         try:
-            if c == 0:
-                s = socket.gethostbyname(ip)
-                print( '  Resolved Address: %s' % s)
-                c = 1
-                whoIsPrint(s)
+            print("  Resolving "+ip)
+            s = socket.gethostbyname(ip)
+            print( '  Resolved Address: %s' % s)
+            whoIsPrint(s, secondpass+1)
         except:
             print(' IP or Domain not Found')
     return
