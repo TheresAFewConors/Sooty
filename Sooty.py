@@ -22,6 +22,7 @@ import urllib.parse
 import requests
 from ipwhois import IPWhois
 import tkinter
+import tkinter.filedialog
 import sys
 
 from Modules import iplists
