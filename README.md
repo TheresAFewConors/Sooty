@@ -7,12 +7,12 @@
 
 
 ![](readmeimages/sooty_logo.png)
-[![](readmeimages/tines_banner.png)](https://tines.io?utm_source=github&utm_medium=sponsorship&utm_campaign=sooty)
+[![](readmeimages/Tines-Logo-Dark.png)](https://tines.com?utm_source=github&utm_medium=sponsorship&utm_campaign=sooty)
 # Overview
 
 Sooty is a tool developed with the task of aiding SOC analysts with automating part of their workflow. One of the goals of Sooty is to perform as many of the routine checks as possible, allowing the analyst more time to spend on deeper analysis within the same time-frame. Details for many of Sooty's features can be found below.
 
-Sooty is now proudly supported by [Tines.io](https://tines.io?utm_source=github&utm_medium=sponsorship&utm_campaign=sooty)! The SOAR Platform for Enterprise Security Teams.
+Sooty is now proudly supported by [Tines.com](https://tines.com?utm_source=github&utm_medium=sponsorship&utm_campaign=sooty)! The SOAR Platform for Enterprise Security Teams.
 
 ## Contents
  - [Current Features](#sooty-can-currently)
