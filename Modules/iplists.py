@@ -8,10 +8,10 @@ Minimal required Python version 3.3
 
 """
 
-import argparse             # Doesn't seem to be used?
 import ipaddress
 import json
 import requests
+import sys
 
 
 class userInput:
@@ -27,8 +27,7 @@ class userInput:
 
         # If value error, then it cannot be an IP
         except ValueError:
-            print("URLs are not (yet) supported")
-            exit()
+            sys.exit("URLs are not (yet) supported")
 
         except Exception as exc:
             print(exc)

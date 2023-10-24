@@ -22,7 +22,7 @@ import urllib.parse
 import requests
 from ipwhois import IPWhois
 import tkinter
-import tkinter.filedialog
+import sys
 
 from Modules import iplists
 from Modules import phishtank
@@ -66,7 +66,7 @@ def switchMenu(choice):
     if choice == '9':
         extrasMenu()
     if choice == '0':
-        exit()
+        sys.exit("Exiting Sooty... done")
     else:
         mainMenu()
 
@@ -1076,6 +1076,9 @@ def emailTemplateGen():
                 params = {'apikey': configvars.data['VT_API_KEY'], 'resource': link}
                 response = requests.get(url, params=params)
                 result = response.json()
+                if result['response_code'] == 0:
+                    print(" [Warn] URL not found in VirusTotal database!")
+                    continue
                 if response.status_code == 200:
                     virusTotalAnalyze(result, sanitizedLink)
 

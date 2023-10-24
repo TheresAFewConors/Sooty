@@ -1,8 +1,8 @@
 asn1crypto==0.24.0
 certifi==2019.6.16
-cffi==1.12.3
+cffi==1.14.5
 chardet==3.0.4
-cryptography==2.7
+cryptography==3.3.2
 dfir-unfurl==20200812
 dnspython==1.16.0
 idna==2.8
@@ -10,11 +10,11 @@ ipwhois==1.1.0
 pycparser==2.19
 pyOpenSSL==19.0.0
 PySocks==1.7.0
-pywin32==224; sys_platform == 'win32'
+pywin32==301; sys_platform == 'win32'
 requests==2.22.0
 six==1.12.0
 strictyaml==1.0.6
-urllib3==1.24.2
+urllib3==1.25.9
 win-inet-pton==1.1.0
 wincertstore==0.2
 wget==3.2
