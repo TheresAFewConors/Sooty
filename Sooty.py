@@ -287,13 +287,30 @@ def urlscanio():
 
     response = requests.post('https://urlscan.io/api/v1/scan/', headers=headers, data='{"url": "%s", "%s": "on"}' % (url_to_scan, scan_type)).json()
 
-    try:
-        if 'successful' in response['message']:
-            print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
-            uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
-            time.sleep(45) # sleep for 45 seconds. The scan takes awhile, if we try to retrieve the scan too soon, it will return an error.
-            scan_results = requests.get('https://urlscan.io/api/v1/result/%s/' % uuid_variable).json() # retrieving the scan using the uuid for this scan
+    if 'successful' in response['message']:
+        print('\nNow scanning %s. Check back in around 1 minute.' % url_to_scan)
+        uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
+        time.sleep(20)
+        sleep_time = 20
+        got_results = False
+        while got_results == False and sleep_time < 120:
+            try:
+                scan_r = requests.get('https://urlscan.io/api/v1/result/%s/' % uuid_variable)
+                if scan_r.status_code == requests.codes.ok:
+                    got_results = True
+                else:
+                    time.sleep(5)
+                    sleep_time += 5
+            except:
+                time.sleep(5)
+                sleep_time += 5
+            else:
+                scan_results = scan_r.json()
+        if got_results == False:
+            print(' Error retrieving results from URLScan.io')
+            return
 
+        try:
             task_url = scan_results['task']['url']
             verdicts_overall_score = scan_results['verdicts']['overall']['score']
             verdicts_overall_malicious = scan_results['verdicts']['overall']['malicious']
@@ -308,19 +325,20 @@ def urlscanio():
                 print("Malicious: " + str(scan_results['verdicts']['urlscan']['malicious'])) # True
             if scan_results['verdicts']['urlscan']['categories']:
                 print("Categories: ")
-            for line in scan_results['verdicts']['urlscan']['categories']:
-                print("\t"+ str(line)) # phishing
-            for line in scan_results['verdicts']['engines']['verdicts']:
-                print(str(line['engine']) + " score: " + str(line['score'])) # googlesafebrowsing
-                print("Categories: ")
-                for item in line['categories']:
-                    print("\t" + item) # social_engineering
+                for line in scan_results['verdicts']['urlscan']['categories']:
+                    print("\t"+ str(line)) # phishing
+            if scan_results['verdicts']['urlscan']['hasVerdicts']:
+                for line in scan_results['verdicts']['engines']['verdicts']:
+                    print(str(line['engine']) + " score: " + str(line['score'])) # googlesafebrowsing
+                    print("Categories: ")
+                    for item in line['categories']:
+                        print("\t" + item) # social_engineering
             print("\nSee full report for more details: " + str(task_report_URL))
             print('')
-        else:
-            print(response['message'])
-    except:
-        print(' Error reaching URLScan.io')
+        except:
+            print(' Error paring results from URLScan.io')
+    else:
+        print(response['message'])
 
 def unshortenUrl():
     print("\n --------------------------------- ")
