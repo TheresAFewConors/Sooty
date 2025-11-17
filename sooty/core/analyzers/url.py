@@ -305,6 +305,25 @@ class URLAnalyzer:
         else:
             return self.urlscan.submit_url(url, public=False)
 
+    def sanitize_url(self, url: str) -> str:
+        """
+        Sanitize URL for safe display in emails and reports.
+
+        Defangs the URL by replacing protocols and dots to prevent
+        accidental clicking in emails and reports.
+
+        Args:
+            url: URL to sanitize
+
+        Returns:
+            Defanged URL (e.g., hxxps://malicious[.]com/path)
+
+        Example:
+            >>> analyzer.sanitize_url("https://malicious.com/evil")
+            "hxxps://malicious[.]com/evil"
+        """
+        return URLDecoder.sanitize_url(url)
+
     def close(self):
         """Close all API client sessions"""
         self.virustotal.close()

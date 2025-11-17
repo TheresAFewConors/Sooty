@@ -228,3 +228,45 @@ class URLDecoder:
             return True
 
         return False
+
+    @staticmethod
+    def sanitize_url(url: str) -> str:
+        """
+        Sanitize URL for safe display in emails and reports.
+
+        Defangs URLs by replacing:
+        - http:// with hxxp://
+        - https:// with hxxps://
+        - . with [.]
+
+        Args:
+            url: URL to sanitize
+
+        Returns:
+            Defanged URL safe for display
+
+        Example:
+            >>> URLDecoder.sanitize_url("https://malicious.com/evil")
+            "hxxps://malicious[.]com/evil"
+        """
+        if not url:
+            return url
+
+        sanitized = url
+
+        # Replace protocol
+        sanitized = sanitized.replace("https://", "hxxps://")
+        sanitized = sanitized.replace("http://", "hxxp://")
+
+        # Replace dots with [.]
+        # Split on :// to avoid replacing dots in the protocol
+        if "://" in sanitized:
+            protocol, rest = sanitized.split("://", 1)
+            rest = rest.replace(".", "[.]")
+            sanitized = f"{protocol}://{rest}"
+        else:
+            sanitized = sanitized.replace(".", "[.]")
+
+        logger.debug(f"Sanitized URL: {url} -> {sanitized}")
+
+        return sanitized
