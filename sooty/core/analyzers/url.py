@@ -161,7 +161,7 @@ class URLAnalyzer:
             result["is_phishing"] = is_phishing
             if is_phishing:
                 result["is_malicious"] = True
-                logger.warning(f"URL flagged as phishing by PhishTank")
+                logger.warning("URL flagged as phishing by PhishTank")
 
             # Get full PhishTank details
             phish_data = self.phishtank.check_url(decoded_url)

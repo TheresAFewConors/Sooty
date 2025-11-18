@@ -13,7 +13,6 @@ from unfurl import core
 import hashlib
 import html.parser
 import re
-import json
 import time
 import os
 import socket
@@ -27,7 +26,7 @@ import sys
 from Modules import iplists
 from Modules import phishtank
 from Modules import TitleOpen
-from datetime import datetime, date
+from datetime import datetime
 
 try:
     import win32com.client
@@ -54,6 +53,7 @@ linksRatingList = []
 linksSanitized = []
 linksDict = {}
 
+
 def switchMenu(choice):
     if choice == '1':
         urlSanitise()
@@ -76,6 +76,7 @@ def switchMenu(choice):
     else:
         mainMenu()
 
+
 def decoderSwitch(choice):
     if choice == '1':
         proofPointDecoder()
@@ -94,6 +95,7 @@ def decoderSwitch(choice):
     if choice == '0':
         mainMenu()
 
+
 def dnsSwitch(choice):
     if choice == '1':
         reverseDnsLookup()
@@ -104,6 +106,7 @@ def dnsSwitch(choice):
 
     if choice == '0':
         mainMenu()
+
 
 def hashSwitch(choice):
     if choice == '1':
@@ -116,6 +119,7 @@ def hashSwitch(choice):
         hashAndFileUpload()
     if choice == '0':
         mainMenu()
+
 
 def phishingSwitch(choice):
     if choice == '1':
@@ -131,6 +135,7 @@ def phishingSwitch(choice):
     else:
         mainMenu()
 
+
 def extrasSwitch(choice):
     if choice == '1':
         aboutSooty()
@@ -145,6 +150,7 @@ def extrasSwitch(choice):
     else:
         mainMenu()
 
+
 def decodev1(rewrittenurl):
     match = re.search(r'u=(.+?)&k=', rewrittenurl)
     if match:
@@ -154,6 +160,7 @@ def decodev1(rewrittenurl):
         url = re.sub("http://", "", url)
         if url not in linksFoundList:
             linksFoundList.append(url)
+
 
 def decodev2(rewrittenurl):
     match = re.search(r'u=(.+?)&[dc]=', rewrittenurl)
@@ -167,18 +174,21 @@ def decodev2(rewrittenurl):
         if url not in linksFoundList:
             linksFoundList.append(url)
 
+
 def decodev3(rewrittenurl):
     match = re.search(r'v3/__(?P<url>.+?)__;', rewrittenurl)
     if match:
         url = match.group('url')
         if re.search(r'\*(\*.)?', url):
-            url = re.sub('\*', '+', url)
+            url = re.sub('\\*', '+', url)
             if url not in linksFoundList:
                 linksFoundList.append(url)
+
 
 def titleLogo():
     TitleOpen.titleOpen()
     os.system('cls||clear')
+
 
 def mainMenu():
     print("\n --------------------------------- ")
@@ -196,6 +206,7 @@ def mainMenu():
     print(" OPTION 0: Exit Tool")
     switchMenu(input())
 
+
 def urlSanitise():
     print("\n --------------------------------- ")
     print(" U R L   S A N I T I S E   T O O L ")
@@ -206,6 +217,7 @@ def urlSanitise():
     x = re.sub("https://", "hxxps://", x)
     print("\n" + x)
     mainMenu()
+
 
 def decoderMenu():
     print("\n --------------------------------- ")
@@ -221,6 +233,7 @@ def decoderMenu():
     print(" OPTION 7: Unfurl URL")
     print(" OPTION 0: Exit to Main Menu")
     decoderSwitch(input())
+
 
 def proofPointDecoder():
     print("\n --------------------------------- ")
@@ -251,7 +264,8 @@ def proofPointDecoder():
             print(f' No valid URL found in input: {rewrittenurl}')
 
     mainMenu()
-    
+
+
 def urlDecoder():
     print("\n --------------------------------- ")
     print("       U R L   D E C O D E R      ")
@@ -260,6 +274,7 @@ def urlDecoder():
     decodedUrl = urllib.parse.unquote(url)
     print(decodedUrl)
     mainMenu()
+
 
 def safelinksDecoder():
     print("\n --------------------------------- ")
@@ -270,6 +285,7 @@ def safelinksDecoder():
     dcUrl = dcUrl.replace('https://nam02.safelinks.protection.outlook.com/?url=', '')
     print(dcUrl)
     mainMenu()
+
 
 def urlscanio():
     print("\n --------------------------------- ")
@@ -300,9 +316,12 @@ def urlscanio():
     try:
         if 'successful' in response['message']:
             print(f'\nNow scanning {url_to_scan}. Check back in around 1 minute.')
-            uuid_variable = str(response['uuid']) # uuid, this is the factor that identifies the scan
-            time.sleep(45) # sleep for 45 seconds. The scan takes awhile, if we try to retrieve the scan too soon, it will return an error.
-            scan_results = requests.get(f'https://urlscan.io/api/v1/result/{uuid_variable}/').json() # retrieving the scan using the uuid for this scan
+            uuid_variable = str(response['uuid'])  # uuid, this is the factor that identifies the scan
+            # sleep for 45 seconds. The scan takes awhile, if we try to retrieve the
+            # scan too soon, it will return an error.
+            time.sleep(45)
+            # retrieving the scan using the uuid for this scan
+            scan_results = requests.get(f'https://urlscan.io/api/v1/result/{uuid_variable}/').json()
 
             task_url = scan_results['task']['url']
             verdicts_overall_score = scan_results['verdicts']['overall']['score']
@@ -315,22 +334,23 @@ def urlscanio():
             print(f"Malicious: {verdicts_overall_malicious}")
             print(f"urlscan.io: {scan_results['verdicts']['urlscan']['score']}")
             if scan_results['verdicts']['urlscan']['malicious']:
-                print(f"Malicious: {scan_results['verdicts']['urlscan']['malicious']}") # True
+                print(f"Malicious: {scan_results['verdicts']['urlscan']['malicious']}")  # True
             if scan_results['verdicts']['urlscan']['categories']:
                 print("Categories: ")
             for line in scan_results['verdicts']['urlscan']['categories']:
-                print(f"\t{line}") # phishing
+                print(f"\t{line}")  # phishing
             for line in scan_results['verdicts']['engines']['verdicts']:
-                print(f"{line['engine']} score: {line['score']}") # googlesafebrowsing
+                print(f"{line['engine']} score: {line['score']}")  # googlesafebrowsing
                 print("Categories: ")
                 for item in line['categories']:
-                    print(f"\t{item}") # social_engineering
+                    print(f"\t{item}")  # social_engineering
             print(f"\nSee full report for more details: {task_report_URL}")
             print('')
         else:
             print(response['message'])
     except (KeyError, requests.RequestException) as e:
         print(f' Error reaching URLScan.io: {e}')
+
 
 def unshortenUrl():
     print("\n --------------------------------- ")
@@ -341,6 +361,7 @@ def unshortenUrl():
     print(req.text)
 
     decoderMenu()
+
 
 def b64Decoder():
     url = str(input(' Enter URL: ').strip())
@@ -355,6 +376,7 @@ def b64Decoder():
 
     decoderMenu()
 
+
 def cisco7Decoder():
     pw = input(' Enter Cisco Password 7: ').strip()
 
@@ -364,14 +386,14 @@ def cisco7Decoder():
 
     try:
         # the first 2 characters of the password are the starting index in the key array
-        index = int(pw[:2],16)
+        index = int(pw[:2], 16)
 
         # the remaining values are the characters in the password, as hex bytes
         pw_text = pw[2:]
-        pw_hex_values = [pw_text[start:start+2] for start in range(0,len(pw_text),2)]
+        pw_hex_values = [pw_text[start:start + 2] for start in range(0, len(pw_text), 2)]
 
         # XOR those values against the key values, starting at the index, and convert to ASCII
-        pw_chars = [chr(key[index+i] ^ int(pw_hex_values[i],16)) for i in range(0,len(pw_hex_values))]
+        pw_chars = [chr(key[index + i] ^ int(pw_hex_values[i], 16)) for i in range(0, len(pw_hex_values))]
 
         pw_plaintext = ''.join(pw_chars)
         print(f"Password: {pw_plaintext}")
@@ -381,6 +403,7 @@ def cisco7Decoder():
 
     decoderMenu()
 
+
 def unfurlUrl():
     url_to_unfurl = str(input('Enter URL to Unfurl: ')).strip()
     unfurl_instance = core.Unfurl()
@@ -389,6 +412,7 @@ def unfurlUrl():
     print(unfurl_instance.generate_text_tree())
 
     decoderMenu()
+
 
 def repChecker():
     print("\n --------------------------------- ")
@@ -430,16 +454,16 @@ def repChecker():
         url = 'https://www.virustotal.com/vtapi/v2/url/report'
         params = {'apikey': configvars.data['VT_API_KEY'], 'resource': wIP}
         response = requests.get(url, params=params)
-        pos = 0 # Total positives found in VT
-        tot = 0 # Total number of scans
+        pos = 0  # Total positives found in VT
+        tot = 0  # Total number of scans
         if response.status_code == 200:
             try:
                 result = response.json()
                 for each in result:
                     tot = result['total']
                     if result['positives'] != 0:
-                        pos = pos +1
-                avg = pos/tot
+                        pos = pos + 1
+                avg = pos / tot
                 print("   No of Databases Checked: " + str(tot))
                 print("   No of Reportings: " + str(pos))
                 print("   Average Score:    " + str(avg))
@@ -467,7 +491,7 @@ def repChecker():
                     if wIP == i:
                         print("  " + i + " is a TOR Exit Node")
                         f.write("\n " + "  " + i + " is a TOR Exit Node")
-                        c = c+1
+                        c = c + 1
                 if c == 0:
                     print("  " + wIP + " is NOT a TOR Exit Node")
                     f.write("\n " + wIP + " is NOT a TOR Exit Node")
@@ -476,7 +500,6 @@ def repChecker():
                 f.write("\n TOR LIST UNREACHABLE")
         except (requests.RequestException, ValueError) as e:
             print(f"There is an error with checking for Tor exit nodes: {e}")
-
 
         print("\n Checking BadIP's... ")
         f.write("\n\n ---------------------------------")
@@ -548,6 +571,7 @@ def repChecker():
 
     mainMenu()
 
+
 def dnsMenu():
     print("\n --------------------------------- ")
     print("         D N S    T O O L S        ")
@@ -559,6 +583,7 @@ def dnsMenu():
     print(" OPTION 0: Exit to Main Menu")
     dnsSwitch(input())
 
+
 def reverseDnsLookup():
     d = str(input(" Enter IP to check: ").strip())
     try:
@@ -567,6 +592,7 @@ def reverseDnsLookup():
     except (socket.herror, socket.gaierror, OSError) as e:
         print(f" Hostname not found: {e}")
     dnsMenu()
+
 
 def dnsLookup():
     d = str(input(" Enter Domain Name to check: ").strip())
@@ -579,11 +605,13 @@ def dnsLookup():
         print(f"Website not found: {e}")
     dnsMenu()
 
+
 def whoIs():
     ip = str(input(' Enter IP / Domain: ').strip())
     whoIsPrint(ip)
 
     dnsMenu()
+
 
 def whoIsPrint(ip):
     try:
@@ -606,7 +634,7 @@ def whoIsPrint(ip):
         print("  Created:   " + str(w['nets'][0]['created']))
         print("  Updated:   " + str(w['nets'][0]['updated']))
 
-        now = datetime.now() # current date and time
+        now = datetime.now()  # current date and time
         today = now.strftime("%m-%d-%Y")
 
         # Fix: Use pathlib for safer path handling
@@ -654,6 +682,7 @@ def whoIsPrint(ip):
             print(f' IP or Domain not Found: {e}')
     return
 
+
 def hashMenu():
     print("\n --------------------------------- ")
     print(" H A S H I N G   F U N C T I O N S ")
@@ -666,6 +695,7 @@ def hashMenu():
     print(" OPTION 0: Exit to Main Menu")
     hashSwitch(input())
 
+
 def hashFile():
     root = tkinter.Tk()
     root.filename = tkinter.filedialog.askopenfilename(initialdir="/", title="Select file")
@@ -677,10 +707,12 @@ def hashFile():
     root.destroy()
     hashMenu()
 
+
 def hashText():
     userinput = input(" Enter the text to be hashed: ")
     print(f" MD5 Hash: {hashlib.md5(userinput.encode('utf-8')).hexdigest()}")
     hashMenu()
+
 
 def hashRating():
     apierror = False
@@ -706,6 +738,7 @@ def hashRating():
         else:
             print("No Response")
     hashMenu()
+
 
 def hashAndFileUpload():
     root = tkinter.Tk()
@@ -739,6 +772,7 @@ def hashAndFileUpload():
             print("No Response")
     hashMenu()
 
+
 def phishingMenu():
     print("\n --------------------------------- ")
     print("          P H I S H I N G          ")
@@ -751,6 +785,7 @@ def phishingMenu():
     print(" OPTION 9: HaveIBeenPwned")
     print(" OPTION 0: Exit to Main Menu")
     phishingSwitch(input())
+
 
 def analyzePhish():
     try:
@@ -843,6 +878,7 @@ def analyzePhish():
 
     phishingMenu()
 
+
 def haveIBeenPwned():
     print("\n --------------------------------- ")
     print(" H A V E   I   B E E N   P W N E D  ")
@@ -855,11 +891,15 @@ def haveIBeenPwned():
         print('\nOperation cancelled')
     phishingMenu()
 
+
 def haveIBeenPwnedPrintOut(acc):
     try:
         url = f'https://haveibeenpwned.com/api/v3/breachedaccount/{acc}'
         userAgent = 'Sooty'
-        headers = {'Content-Type': 'application/json', 'hibp-api-key': configvars.data['HIBP_API_KEY'], 'user-agent': userAgent}
+        headers = {
+            'Content-Type': 'application/json',
+            'hibp-api-key': configvars.data['HIBP_API_KEY'],
+            'user-agent': userAgent}
         try:
             req = requests.get(url, headers=headers)
             response = req.json()
@@ -884,6 +924,7 @@ def haveIBeenPwnedPrintOut(acc):
     except (requests.RequestException, KeyError, ValueError) as e:
         print(f'Error checking Have I Been Pwned: {e}')
 
+
 def analyzeEmailInput():
     print("\n --------------------------------- ")
     print("    E M A I L   A N A L Y S I S    ")
@@ -898,6 +939,7 @@ def analyzeEmailInput():
     except (ValueError, requests.RequestException) as e:
         print(f"   Error Scanning Email Address: {e}")
 
+
 def analyzeEmail(email):
 
     try:
@@ -906,8 +948,10 @@ def analyzeEmail(email):
         summary = '?summary=true'
         url = url + email + summary
         if 'API Key' not in configvars.data['EMAILREP_API_KEY']:
-            erep_key = configvars.data['EMAILREP_API_KEY']
-            headers = {'Content-Type': 'application/json', 'Key': configvars.data['EMAILREP_API_KEY'], 'User-Agent': userAgent}
+            headers = {
+                'Content-Type': 'application/json',
+                'Key': configvars.data['EMAILREP_API_KEY'],
+                'User-Agent': userAgent}
             response = requests.get(url, headers=headers)
         else:
             response = requests.get(url)
@@ -922,7 +966,7 @@ def analyzeEmail(email):
         if response.status_code == 429:
             print(' Too many requests, ')
         if response.status_code == 200:
-            now = datetime.now() # current date and time
+            now = datetime.now()  # current date and time
             today = now.strftime("%m-%d-%Y")
 
             # Fix: Use pathlib for safer path handling
@@ -981,7 +1025,6 @@ def analyzeEmail(email):
             f.write('\n   Disposable:    %s' % req['details']['disposable'])
             f.write('\n   Spoofable:     %s' % req['details']['spoofable'])
 
-
             print('\n Malicious Activity Report ')
             print('   Malicious Activity: %s' % req['details']['malicious_activity'])
             print('   Recent Activity:    %s' % req['details']['malicious_activity_recent'])
@@ -999,7 +1042,10 @@ def analyzeEmail(email):
             if (req['details']['data_breach']):
                 try:
                     url = 'https://haveibeenpwned.com/api/v3/breachedaccount/%s' % email
-                    headers = {'Content-Type': 'application/json', 'hibp-api-key': configvars.data['HIBP_API_KEY'], 'user-agent': userAgent}
+                    headers = {
+                        'Content-Type': 'application/json',
+                        'hibp-api-key': configvars.data['HIBP_API_KEY'],
+                        'user-agent': userAgent}
 
                     try:
                         reqHIBP = requests.get(url, headers=headers)
@@ -1019,8 +1065,8 @@ def analyzeEmail(email):
 
                                 for each in breachResponse['DataClasses']:
                                     breachList.append(each)
-                                print('   Data leaked: %s' % breachList,'\n')
-                                f.write('\n   Data leaked: %s' % breachList,'\n')
+                                print('   Data leaked: %s' % breachList, '\n')
+                                f.write('\n   Data leaked: %s' % breachList, '\n')
                     except (requests.RequestException, KeyError, ValueError) as e:
                         print(f' Error: {e}')
                 except (KeyError, ValueError) as e:
@@ -1050,7 +1096,6 @@ def analyzeEmail(email):
                 f.write('\n   %s' % each)
             f.close()
 
-
     except (requests.RequestException, KeyError, ValueError, re.error) as e:
         print(f' Error Analyzing Submitted Email: {e}')
         try:
@@ -1063,7 +1108,8 @@ def analyzeEmail(email):
 
 def virusTotalAnalyze(result, sanitizedLink):
     linksDict[sanitizedLink] = str(result['positives'])
-    #print(str(result['positives']))
+    # print(str(result['positives']))
+
 
 def emailTemplateGen():
     print('\n--------------------')
@@ -1216,6 +1262,7 @@ def emailTemplateGen():
 
         print('\nRegards,')
 
+
 def phishtankModule():
     if "phishtank" in configvars.data:
         url = input(' Enter the URL to be checked: ').strip()
@@ -1227,6 +1274,7 @@ def phishtankModule():
         phishtank.main(download, appname, api, url)
     else:
         print("Missing configuration for phishtank in the config.yaml file.")
+
 
 def extrasMenu():
     print("\n --------------------------------- ")
@@ -1241,9 +1289,11 @@ def extrasMenu():
     print(" OPTION 0: Exit to Main Menu")
     extrasSwitch(input())
 
+
 def aboutSooty():
     print(' SOOTY is a tool developed and targeted to help automate some tasks that SOC Analysts perform.')
     extrasMenu()
+
 
 def contributors():
     print(' CONTRIBUTORS')
@@ -1261,19 +1311,23 @@ def contributors():
 
     extrasMenu()
 
+
 def extrasVersion():
     print(f' Current Version: {versionNo}')
     extrasMenu()
+
 
 def wikiLink():
     print('\n The Sooty Wiki can be found at the following link:')
     print(' https://github.com/TheresAFewConors/Sooty/wiki')
     extrasMenu()
 
+
 def ghLink():
     print('\n The Sooty Repo can be found at the following link:')
     print(' https://github.com/TheresAFewConors/Sooty')
     extrasMenu()
+
 
 if __name__ == '__main__':
     titleLogo()

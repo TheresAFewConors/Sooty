@@ -32,7 +32,7 @@ import json
 def db_validity(db_file):
     # Checking if DB exists or is too old
     if db_absent(db_file) or db_outdated(db_file) == 1:
-        if download_json(db_file) == False:
+        if not download_json(db_file):
             return False
         else:
             return True
@@ -178,7 +178,7 @@ def main(local_db, user_agent, api_key, url):
     valid_url = urllib.parse.urlparse(url)
     if valid_url.scheme == "http" or valid_url.scheme == "https":
         # Test if we want to verify locally and if DB exists and is recent enough.
-        if local_db and db_validity(db_file) == True:
+        if local_db and db_validity(db_file):
             # Check DB status and then do URL lookup locally
             urlcheck_db(local_db, db_file, url, valid_url.hostname)
         else:

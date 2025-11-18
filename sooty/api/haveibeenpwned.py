@@ -150,18 +150,18 @@ class HaveIBeenPwnedClient(BaseAPIClient):
         # Hash password with SHA-1
         sha1_hash = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
         prefix = sha1_hash[:5]
-        suffix = sha1_hash[5:]
+        _suffix = sha1_hash[5:]  # Will be used when feature is implemented
 
         # Query API with hash prefix
         endpoint = f"https://api.pwnedpasswords.com/range/{prefix}"
 
         try:
-            response = self.get(endpoint, operation="HIBP password check")
+            _response = self.get(endpoint, operation="HIBP password check")
 
             # Response is plain text, not JSON
             # We need to handle this differently
             # For now, return 0 as we'd need to modify base client
-            logger.warning("Password check requires text response parsing")
+            logger.warning("Password check requires text response parsing - feature incomplete")
             return 0
 
         except Exception as e:

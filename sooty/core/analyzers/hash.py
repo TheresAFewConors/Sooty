@@ -146,7 +146,7 @@ class HashAnalyzer:
                     result["scan_date"] = vt_data.get("scan_date")
 
                     # Extract additional information
-                    scans = vt_data.get("scans", {})
+                    _scans = vt_data.get("scans", {})  # Reserved for future detailed scan analysis
                     result["file_names"] = [vt_data.get("sha256", file_hash)]
                     result["file_type"] = vt_data.get("type")
 
@@ -194,7 +194,7 @@ class HashAnalyzer:
             ValidationError: If hash format is invalid
         """
         self._validate_hash_format(file_hash)
-        hash_type = self._determine_hash_type(file_hash)
+        _hash_type = self._determine_hash_type(file_hash)  # Validated but not used in quick check
 
         logger.debug(f"Quick hash check: {file_hash}")
 

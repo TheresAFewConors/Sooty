@@ -122,8 +122,8 @@ class IPAnalyzer:
 
                 # Check if any detections
                 if (vt_data.get("detected_urls") or
-                    vt_data.get("detected_downloaded_samples") or
-                    vt_data.get("detected_communicating_samples")):
+                        vt_data.get("detected_downloaded_samples") or
+                        vt_data.get("detected_communicating_samples")):
                     result["is_malicious"] = True
                     logger.warning(f"IP {ip_address} has VirusTotal detections")
         except APIError as e:
