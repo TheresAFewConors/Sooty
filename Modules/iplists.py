@@ -12,6 +12,7 @@ import ipaddress
 import json
 import requests
 import sys
+from pathlib import Path
 
 
 class userInput:
@@ -29,8 +30,8 @@ class userInput:
         except ValueError:
             sys.exit("URLs are not (yet) supported")
 
-        except Exception as exc:
-            print(exc)
+        except (TypeError, AttributeError) as exc:
+            print(f"Error processing input: {exc}")
 
 
 class lookupLists:
@@ -47,13 +48,11 @@ class lookupLists:
 
         req = requests.get(self.listURL)
         if req.status_code == 200:
-            lines = req.text.splitlines()
+            lines = set(req.text.splitlines())  # Convert to set for O(1) lookup
 
-            # check if line matches with ip
-            for line in lines:
-                for ipObj in ipObjs:
-                    if ipObj.lookup == line:
-                        self.hitlist.add(ipObj.lookup)
+            # check if line matches with ip - optimized with set intersection
+            lookup_ips = {ipObj.lookup for ipObj in ipObjs}
+            self.hitlist = lines.intersection(lookup_ips)
 
     def reporter(self, ipObjs):
         # Lists without an entry in the hitlist are no further processed
@@ -70,7 +69,8 @@ def main(userInputList):
         ipObj.urlOrIP()
 
     # get the blacklist URLs and details
-    with open("config/iplists.json") as settings:
+    config_path = Path(__file__).parent.parent / "config" / "iplists.json"
+    with open(config_path) as settings:
         blacklists = json.load(settings)
 
     # Instantiate the blacklists
@@ -87,7 +87,7 @@ def main(userInputList):
 
     # For each list, perform a check on the ip-object (list of IPs)
     for listObj in blacklistObjs:
-        print("Checking " + listObj.name + "...")
+        print(f"Checking {listObj.name}...")
         listObj.blacklistCheck(ipObjs)
 
     # For each list, run the reporter on the ip-object (list of IPs)
@@ -95,21 +95,14 @@ def main(userInputList):
     for listObj in blacklistObjs:
         report = listObj.reporter(ipObjs)
         if len(listObj.hitlist) == 0:
-            print(listObj.name + " - no result")
+            print(f"{listObj.name} - no result")
         else:
             print(
-                listObj.category,
-                ":",
-                listObj.name,
-                "-",
-                str(len(listObj.hitlist)),
-                "hit(s) - max age",
-                listObj.period,
-                ":",
-                listObj.desc,
+                f"{listObj.category}: {listObj.name} - {len(listObj.hitlist)} hit(s) - "
+                f"max age {listObj.period}: {listObj.desc}"
             )
             for ip in report:
-                print("     " + ip)
+                print(f"     {ip}")
 
 
 if __name__ == "__main__":

@@ -65,11 +65,10 @@ def download_json(db_file):
         return True
 
     # In case of failure, passing False through so that the program continues with the API
-    except Exception as exc:
+    except (requests.RequestException, OSError, IOError) as exc:
         print(
-            "The following error occured when downloading: "
-            + exc
-            + "\nContinuing without a local database."
+            f"The following error occurred when downloading: {exc}\n"
+            "Continuing without a local database."
         )
         return False
 
@@ -115,10 +114,8 @@ def urlcheck_db(local_db, db_file, url, domain):
         print("No direct entries found.\n\nRelated entries:")
         for url in related_urls:
             print(
-                "  Details page "
-                + url["phish_detail_page"]
-                + " for the following URL: "
-                + url["url"]
+                f"  Details page {url['phish_detail_page']} "
+                f"for the following URL: {url['url']}"
             )
     else:
         print("No results found")
@@ -146,23 +143,23 @@ def urlcheck_online(local_db, user_agent, api_key, url):
             reply = response.json()
             urlReport(local_db, reply["results"])
         else:
-            print("Error reaching PhishTank. Status code " + str(response.status_code))
-    except Exception as exc:
-        print(exc)
+            print(f"Error reaching PhishTank. Status code {response.status_code}")
+    except (requests.RequestException, KeyError, ValueError) as exc:
+        print(f"Error checking URL: {exc}")
 
 
 def urlReport(local_db, result):  # Purely a printing function
     print("\nPhishTank Report:")
-    print("   URL:           " + str(result["url"]))
-    print("   In Database:   " + str(result["in_database"]))
-    if result["in_database"] == True:
-        print("   Phish ID:      " + str(result["phish_id"]))
-        print("   Phish Details: " + str(result["phish_detail_page"]))
-        print("   Verified:      " + str(result["verified"]))
-        print("   Verified At:   " + str(result["verified_at"]))
-        print("   Online:        " + str(result["valid"]))
-    if local_db == True:  # This data is not returned from the API
-        print("   Target:        " + str(result["target"]))
+    print(f"   URL:           {result['url']}")
+    print(f"   In Database:   {result['in_database']}")
+    if result["in_database"] is True:
+        print(f"   Phish ID:      {result['phish_id']}")
+        print(f"   Phish Details: {result['phish_detail_page']}")
+        print(f"   Verified:      {result['verified']}")
+        print(f"   Verified At:   {result['verified_at']}")
+        print(f"   Online:        {result['valid']}")
+    if local_db is True:  # This data is not returned from the API
+        print(f"   Target:        {result['target']}")
 
 
 def main(local_db, user_agent, api_key, url):
@@ -171,8 +168,8 @@ def main(local_db, user_agent, api_key, url):
         # Check for the subdirectory's existence
         try:
             os.mkdir("data")
-        except Exception:
-            pass
+        except FileExistsError:
+            pass  # Directory already exists
         db_file = "data/phishtank.json"
     else:
         local_db = False
