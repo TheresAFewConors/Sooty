@@ -1,8 +1,8 @@
 """
-Logging configuration for Sooty.
+Sooty Logging Module
 
-Provides centralized logging functionality with support for both
-console and file output.
+Provides centralized logging configuration for the application with support
+for both console and file output.
 """
 
 import logging
@@ -11,9 +11,10 @@ from pathlib import Path
 from typing import Optional
 
 
-# Default log format
-LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+# Default logging configuration
+DEFAULT_LOG_LEVEL = logging.INFO
+DEFAULT_LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+DEFAULT_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # Global flag to track if logging has been initialized
 _initialized = False
@@ -45,7 +46,7 @@ def setup_logging(
     root_logger.handlers.clear()
 
     # Create formatter
-    formatter = logging.Formatter(LOG_FORMAT, DATE_FORMAT)
+    formatter = logging.Formatter(DEFAULT_LOG_FORMAT, DEFAULT_DATE_FORMAT)
 
     # Add console handler
     if console:
@@ -67,12 +68,18 @@ def setup_logging(
     _initialized = True
 
 
-def get_logger(name: str) -> logging.Logger:
+def get_logger(
+    name: str,
+    level: Optional[int] = None,
+    log_format: Optional[str] = None,
+) -> logging.Logger:
     """
-    Get a logger instance.
+    Get a configured logger instance.
 
     Args:
         name: Logger name (typically __name__)
+        level: Logging level (defaults to INFO)
+        log_format: Custom log format string
 
     Returns:
         Configured logger instance
@@ -81,4 +88,37 @@ def get_logger(name: str) -> logging.Logger:
     if not _initialized:
         setup_logging()
 
-    return logging.getLogger(name)
+    logger = logging.getLogger(name)
+
+    # Only configure if specific settings are requested and no handlers exist
+    if (level or log_format) and not logger.handlers:
+        # Set level
+        logger.setLevel(level or DEFAULT_LOG_LEVEL)
+
+        # Create console handler
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setLevel(level or DEFAULT_LOG_LEVEL)
+
+        # Create formatter
+        formatter = logging.Formatter(
+            log_format or DEFAULT_LOG_FORMAT,
+            datefmt=DEFAULT_DATE_FORMAT,
+        )
+        handler.setFormatter(formatter)
+
+        # Add handler to logger
+        logger.addHandler(handler)
+
+    return logger
+
+
+def set_log_level(level: int) -> None:
+    """
+    Set global log level for all Sooty loggers.
+
+    Args:
+        level: Logging level (e.g., logging.DEBUG, logging.INFO)
+    """
+    logging.getLogger("sooty").setLevel(level)
+    for handler in logging.getLogger("sooty").handlers:
+        handler.setLevel(level)

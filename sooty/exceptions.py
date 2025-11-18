@@ -1,6 +1,7 @@
 """
-Custom exceptions for Sooty.
+Sooty Exception Classes
 
+Custom exceptions for error handling across the application.
 Provides a hierarchy of exception classes for better error handling
 throughout the application.
 """
@@ -11,13 +12,8 @@ class SootyError(Exception):
     pass
 
 
-class ValidationError(SootyError):
-    """Raised when input validation fails."""
-    pass
-
-
 class APIError(SootyError):
-    """Raised when an API request fails."""
+    """Base exception for API-related errors."""
 
     def __init__(self, message: str, status_code: int = None, response: str = None):
         """
@@ -38,8 +34,33 @@ class APIError(SootyError):
         return super().__str__()
 
 
+class APIConnectionError(APIError):
+    """Raised when unable to connect to an API."""
+    pass
+
+
+class APIAuthenticationError(APIError):
+    """Raised when API authentication fails (401/403)."""
+    pass
+
+
+class APIRateLimitError(APIError):
+    """Raised when API rate limit is exceeded (429)."""
+    pass
+
+
+class APITimeoutError(APIError):
+    """Raised when API request times out."""
+    pass
+
+
+class ValidationError(SootyError):
+    """Raised when input validation fails."""
+    pass
+
+
 class ConfigurationError(SootyError):
-    """Raised when configuration is invalid or missing."""
+    """Raised when configuration is missing or invalid."""
     pass
 
 

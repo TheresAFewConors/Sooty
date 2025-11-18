@@ -1,28 +1,41 @@
 """
-Sooty - SOC Analyst Toolkit
+Sooty - SOC Analyst CLI Workflow Tool
 
-A collection of tools and utilities for SOC analysts.
+A comprehensive toolkit for SOC analysts to automate and speed up their workflow.
+Provides tools and utilities for analyzing emails, URLs, IPs, hashes, and more.
 """
 
-from sooty.email_analyzer import EmailAnalyzer
+__version__ = "2.0.0"
+
 from sooty.exceptions import (
     SootyError,
-    ValidationError,
     APIError,
+    APIConnectionError,
+    APIAuthenticationError,
+    APIRateLimitError,
+    APITimeoutError,
+    ValidationError,
     ConfigurationError,
     NetworkError,
 )
-from sooty.logger import get_logger, setup_logging
 
-__version__ = "1.0.0"
+from sooty.logger import get_logger, setup_logging, set_log_level
 
 __all__ = [
-    "EmailAnalyzer",
+    # Version
+    "__version__",
+    # Exceptions
     "SootyError",
-    "ValidationError",
     "APIError",
+    "APIConnectionError",
+    "APIAuthenticationError",
+    "APIRateLimitError",
+    "APITimeoutError",
+    "ValidationError",
     "ConfigurationError",
     "NetworkError",
+    # Logger
     "get_logger",
     "setup_logging",
+    "set_log_level",
 ]
