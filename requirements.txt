@@ -12,6 +12,7 @@ pyOpenSSL==19.0.0
 PySocks==1.7.0
 pywin32==301; sys_platform == 'win32'
 requests==2.22.0
+ruamel.yaml==0.17.32
 six==1.12.0
 strictyaml==1.0.6
 urllib3==1.25.9
