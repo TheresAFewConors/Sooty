@@ -1,4 +1,4 @@
-FROM python:3.10.20-slim-trixie
+FROM python:3.11.15-slim-trixie
 RUN apt-get update
 RUN apt-get install g++ tk -y
 RUN mkdir /app
